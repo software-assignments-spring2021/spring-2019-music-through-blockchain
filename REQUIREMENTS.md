@@ -23,5 +23,7 @@ Chris is a 26 years old music enthusiast who works as a marketing analyst in New
   
 bMusic would solve Chris's needs as it is an extra way for him to grow his capital that is alternative to stock investing. It will also allow him to put his good music taste to generate extra income.
 
+## Use Cases 
+
 ## Domain Modeling 
 ![Model](bMusic.jpg)
