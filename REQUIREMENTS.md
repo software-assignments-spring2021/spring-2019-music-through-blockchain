@@ -1,3 +1,12 @@
+# Requirements
+
+## Interviews 
+
+Our main stakeholders are Amos Bloomberg and Wei Kai. Based on the interviews, some of the things we will have to keep in mind are:
+
+1. The application has to be aesthetically pleasing to appeal to artists
+2. The application has to make the artists' payment process more 
+convenient.
 
 ## End - User Observation
 - Sonya - Independent Artist 
