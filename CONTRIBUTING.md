@@ -1,8 +1,8 @@
 ## Standup Schedule
-**Tuesday** 2pm + collaborative work session
-**Wednesday** 6pm
-**Thursday** 12:15pm
-**Sunday** 9pm 
+**Tuesday:** *2pm + collaborative work session*
+**Wednesday:** *6pm*
+**Thursday:** *12:15pm*
+**Sunday:** *9pm* 
 
 ## Rules of Contributing
 - Be familiar with our repository and all the files
