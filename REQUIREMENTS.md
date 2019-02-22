@@ -26,5 +26,23 @@ bMusic would solve Chris's needs as it is an extra way for him to grow his capit
 ## Use Cases 
 ![Use Cases](useCases.png)
 
+**Title**: Upload Songs
+
+**Actor**: Artist
+
+Scenario: Artist clicks on a button to upload a song. A modal pops up for artist to enter song name, price and max % of song they are willing to give up. System creates a smart contract given the input and stores the smart contract in a database. System adds the song to listings and closes the modal
+
+**Title**: Sign Up
+
+**Actor**: Artist and Client
+
+**Scenario**: A new user enters the site and clicks “sign up” button. System loads a modal for the new user to enter personal information to register for the bMusic platform. Personal information includes email, name and role (either artist or user). User submits the information and the system stores the information in a database to enable future login.
+
+**Title**: Log In
+
+**Actor**: Artist and Client
+
+**Scenario**: A registered user enters the site and clicks “log in” button. System loads a modal for the user to login information. System checks with the database to verify that the user is registered. If user is registered, system displays home page to user. If use is not registered or the email and password combination is incorrect, system denies user access and prompts them to reenter email and password combination.
+
 ## Domain Modeling 
 ![Model](bMusic.jpg)
