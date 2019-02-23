@@ -53,5 +53,23 @@ Scenario: Artist clicks on a button to upload a song. A modal pops up for artist
 
 **Scenario**: A registered user enters the site and clicks “log in” button. System loads a modal for the user to login information. System checks with the database to verify that the user is registered. If user is registered, system displays home page to user. If use is not registered or the email and password combination is incorrect, system denies user access and prompts them to reenter email and password combination.
 
+**Title**: View Songs up for Sale
+
+**Actor**: Client
+
+**Scenario 1**: Client enters a link to our website homepage into the browser. System loads some songs up for sale into view.
+
+**Scenario 2**: Client is on artist’s profile. Client presses “homepage” button and is directed to the homepage. System loads some songs up for sale into view.
+
+**Scenario 3**: Client enters a link to an artist’s profile into the browser. Client is directed to the artist’s profile, and the system loads up some of that artist’s songs up for sale into view.
+
+**Scenario 4**: Client is on homepage. System loads up some links to artists’ profiles. Client clicks on a link to an artist’s profile, and is directed to that artist’s profile. System uploads some of that artist’s songs up for sale into view.
+
+**Title**: Purchase % of Song
+
+**Actor**: Client
+
+**Scenario**: Client clicks on a song up for sale. System loads a modal containing a purchase form. Client fills out form and presses “submit”. System removes money from client’s wallet and puts that money into wallet of the song’s artist. System updates smart contract of the song. System sends artist notification of the purchase.
+
 ## Domain Modeling 
 ![Model](bMusic.jpg)
