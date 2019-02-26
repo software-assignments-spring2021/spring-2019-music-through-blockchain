@@ -1,0 +1,31 @@
+{
+  "name": "bmusic",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "firebase": "^5.8.4",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "react-redux": "^6.0.1",
+    "react-redux-firebase": "^2.2.6",
+    "react-scripts": "2.1.5",
+    "redux": "^4.0.1",
+    "redux-firestore": "^0.7.0",
+    "redux-thunk": "^2.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
