@@ -26,5 +26,5 @@ We will create unit tests to make sure that the system is behaving the way it is
 We will also test the software with potential end-users consisting of artists, music aficionados, and our project's stakeholders. We will iterate and evolve from each of this interviews to bring the best possible product.
 
 ## Relevant Information
-[CONTRIBUTING.md](https://github.com/nyu-software-engineering/music-through-blockchain/blob/master/CONTRIBUTING.md)
-[REQUIREMENTS.MD](https://github.com/nyu-software-engineering/music-through-blockchain/blob/master/REQUIREMENTS.md)
+ - [CONTRIBUTING.md](https://github.com/nyu-software-engineering/music-through-blockchain/blob/master/CONTRIBUTING.md)
+ - [REQUIREMENTS.MD](https://github.com/nyu-software-engineering/music-through-blockchain/blob/master/REQUIREMENTS.md)
