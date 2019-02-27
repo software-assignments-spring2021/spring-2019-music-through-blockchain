@@ -1,5 +1,5 @@
 ## Standup Schedule
-- Tuesday: 2pm + collaborative work session
+- Tuesday: 2:30pm + collaborative work session
 - Wednesday: 6pm
 - Thursday: 12:15pm
 - Sunday: 9pm
@@ -22,7 +22,16 @@ We are using a branching development structure:
 `git checkout -b {FEATURE} development`
 4) Set an upstream branch to `{FEATURE}` using the command:
 `git push origin {FEATURE}`
-5) Do work on the feature branch 
+5) Do work on the `{FEATURE}` branch and then`git add` and `git commit` the files
+6) Switch back to the `development` branch using the command 
+`git checkout dev`
+`git merge --no-ff {FEATURE}`
+7) Push changes on both branches to the server
+`git push origin dev`
+`git push origin {FEATURE}`
+
+### If creating a new feature go back to *Step 3* and repeat
+
 **INSTRUCTIONS IN PROGRESS**
 
 ## How to Contribute
