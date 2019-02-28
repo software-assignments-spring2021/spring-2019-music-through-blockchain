@@ -10,13 +10,13 @@
 - Code in the style that we have established 
 - Be knowledgeable about git commands and agile workflow
 
-## Team Workflow (IN PROGRESS)
+## Team Workflow 
 We are using a branching development structure:
 ![Workflow](branchworkflow.jpg)
 
 1) Branch off *master* to *development* branch using the command:  
 `git checkout -b development master`  
-2) Set an remote upstream branch to `development` using the command:  
+2) Set an remote upstream branch to *development* using the command:  
 `git push origin development`
 3) When developing a new feature checkout a branch off *development* called *{FEATURE}* (replacing with the name of your feature ex. logoutbutton)  using command:  
 `git checkout -b {FEATURE} development`
