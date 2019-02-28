@@ -1,5 +1,5 @@
 ## Standup Schedule
-- Tuesday: 2pm + collaborative work session
+- Tuesday: 2:30pm + collaborative work session
 - Wednesday: 6pm
 - Thursday: 12:15pm
 - Sunday: 9pm
@@ -9,6 +9,30 @@
 - Have a clear understanding about the language you are contributing in 
 - Code in the style that we have established 
 - Be knowledgeable about git commands and agile workflow
+
+## Team Workflow (IN PROGRESS)
+We are using a branching development structure:
+![Workflow](branchworkflow.jpg)
+
+1) Branch off *master* to *development* branch using the command:  
+`git checkout -b development master`  
+2) Set an remote upstream branch to `development` using the command:  
+`git push origin development`
+3) When developing a new feature checkout a branch off *development* called *{FEATURE}* (replacing with the name of your feature ex. logoutbutton)  using command:  
+`git checkout -b {FEATURE} development`
+4) Set an upstream branch to *{FEATURE}* using the command:  
+`git push origin {FEATURE}`   
+5) Do work on the *{FEATURE}* branch and then`git add` and `git commit` the files   
+6) Switch back to the *development* branch using the command:  
+`git checkout dev`  
+`git merge --no-ff {FEATURE}`  
+7) Push changes on both branches to the server using the commands:  
+`git push origin dev`  
+`git push origin {FEATURE}`  
+
+### If creating a new feature go back to *Step 3* and repeat
+
+**INSTRUCTIONS IN PROGRESS**
 
 ## How to Contribute
 1) Fork the **bMusic** repository
