@@ -4,8 +4,7 @@ import { connect } from 'react-redux'
 export class Homepage extends Component {
   render() {
     console.log('Visit Homepage')
-    console.log(this.state)
-    console.log(this.props)
+    console.log('props', this.props)
     return (
       <div>
         <h1>bMusic</h1>

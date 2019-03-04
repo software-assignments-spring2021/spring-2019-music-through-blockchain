@@ -10,12 +10,11 @@ import Navbar from './components/Navbar'
 
 class App extends Component {
   render() {
-    console.log('Visit App')
     return (
       <BrowserRouter>
         <div className="App">
           <Navbar />
-          
+
           <Switch>
             <Route exact path='/' component={Homepage} />
             <Route path='/song/:id' component={SongDetails} />

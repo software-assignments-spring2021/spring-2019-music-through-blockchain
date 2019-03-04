@@ -40,6 +40,8 @@ export class SignupComponent extends Component {
       fullNameInputError: '',
       emailInputError: '',
       passwordInputError: '',
+      artistNameInput: '',
+      artistNameInputError: '',
     }
     this.handleForm = this.handleForm.bind(this)
   }
@@ -87,7 +89,7 @@ export class SignupComponent extends Component {
 
   handleForm = () => {
 
-    const { fullNameInput, emailInput, passwordInput, confirmInput } = this.state
+    const { artistNameInput, fullNameInput, emailInput, passwordInput, confirmInput } = this.state
     const { register } = this.props
 
     let error = false
@@ -118,6 +120,14 @@ export class SignupComponent extends Component {
       error = true
     }
 
+    /* Check artist name */
+    if (artistNameInput === '') {
+        this.setState({
+            artistNameInputError: 'Please enter a valid artist name'
+        })
+        error = true
+      }
+
     if (confirmInput === '') {
       this.setState({
         confirmInputError: 'Confirm password incorrect'
@@ -134,6 +144,7 @@ export class SignupComponent extends Component {
     if (!error) {
     register({
         email: emailInput,
+        artistName: artistNameInput,
         password: passwordInput,
         fullName: fullNameInput
       })
@@ -166,6 +177,16 @@ export class SignupComponent extends Component {
                   error={this.state.fullNameInputError.trim() !== ''}
                   name='fullNameInput'
                   label='Full Name'
+                  type='text'
+                /><br />
+                <TextField
+                  className={classes.textField}
+                  autoFocus
+                  onChange={this.handleInputChange}
+                  helperText={this.state.artistNameInputError}
+                  error={this.state.artistNameInputError.trim() !== ''}
+                  name='artistNameInput'
+                  label='Artist Name'
                   type='text'
                 /><br />
                 <TextField
