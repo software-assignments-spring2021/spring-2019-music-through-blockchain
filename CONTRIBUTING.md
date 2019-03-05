@@ -30,9 +30,12 @@ We are using a branching development structure:
 `git push origin development`  
 `git push origin {FEATURE}`  
 
+**Delete remote and local *{FEATURE}* branch using command:**  
+Remote : `git push origin --delete {FEATURE}`  
+Local: `git branch -D {FEATURE}`  
+
 ### If creating a new feature go back to *Step 3* and repeat
 
-**INSTRUCTIONS IN PROGRESS**
 
 ## How to Contribute
 1) Fork the **bMusic** repository
