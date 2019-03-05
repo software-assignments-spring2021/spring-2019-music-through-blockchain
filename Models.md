@@ -1,7 +1,7 @@
 # Models
 
 Date: Feb 27, 2019
-
+```
 user: 
             {
               // this userId links to firebase's user
@@ -21,7 +21,7 @@ user:
               "password" : ""
               */
             }
-
+```
     song: 
             {
               songId: "songOne" <string> ,
