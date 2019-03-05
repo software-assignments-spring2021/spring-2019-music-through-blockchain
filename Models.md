@@ -33,6 +33,7 @@ user:
               remainingShare: "20" <number>
             }
 //helper table to support many to many relationship between artist and song;
+```
     song_artist: 
             {
               songId: "songOne", <string>
@@ -40,5 +41,5 @@ user:
               //quick link between artist and song to get ownership %
     	  artistId: "artistOne" <string>
             }
-
+```
 reference: //https://angularfirebase.com/lessons/firestore-nosql-data-modeling-by-example/#Structuring-Likes-Hearts-Thumbs-Up-Votes-Etc
