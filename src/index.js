@@ -20,6 +20,7 @@ const store = createStore(rootReducer,
 );
 
 store.firebaseAuthIsReady.then(() => {
+    console.log('firebase is ready')
     ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
     serviceWorker.unregister();
 })
