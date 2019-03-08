@@ -17,6 +17,20 @@ In order to contribute to this project, add any issues that you see in the code 
 
 
 ## Building and testing the project (once the project reaches that stage)
+
+To Install: 
+- clone the repository
+- make sure you have yarn installed and run the following:
+
+```
+yarn install 
+```
+To Build:
+ 
+```
+yarn start 
+```
+
 In order to build and test the project, we are going to use two methods:
 
 ### Unit Tests
