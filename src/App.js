@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import SongDetails from './containers/SongDetails'
+import SongDetails from './components/SongDetails'
 import SigninComponent from './containers/SigninComponent'
 import SignupComponent from './containers/SignupComponent'
 import Homepage from './containers/Homepage'
