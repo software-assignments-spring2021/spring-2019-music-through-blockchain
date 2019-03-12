@@ -16,19 +16,49 @@ The music industry has seen a big change in the last decade thanks to the massiv
 In order to contribute to this project, add any issues that you see in the code or the system through github. You can also contact us through our Slack channel: #group_bmusic.
 
 
-## Building and testing the project (once the project reaches that stage)
+## Commands for Building and testing the project 
 
 To Install: 
 - clone the repository
-- make sure you have yarn installed and run the following:
+- make sure you have a package manager, either yarn or npm, installed and run the following:
 
 ```
+// for yarn: 
 yarn install 
+
+// for npm
+
+npm install
+
 ```
 To Build:
  
 ```
+// for yarn: 
 yarn start 
+
+// for npm
+
+npm start
+```
+
+To Test Front - End:
+
+```
+// for yarn: 
+yarn test 
+
+// for npm
+
+npm test
+```
+
+To Test Back - End:
+
+```
+cd bcContracts
+truffle test
+
 ```
 
 In order to build and test the project, we are going to use two methods:
