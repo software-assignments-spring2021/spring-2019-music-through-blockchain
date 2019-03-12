@@ -26,8 +26,7 @@ To Install:
 // for yarn: 
 yarn install 
 
-// for npm
-
+// for npm:
 npm install
 
 ```
@@ -37,8 +36,7 @@ To Build:
 // for yarn: 
 yarn start 
 
-// for npm
-
+// for npm:
 npm start
 ```
 
@@ -48,8 +46,7 @@ To Test Front - End:
 // for yarn: 
 yarn test 
 
-// for npm
-
+// for npm:
 npm test
 ```
 
@@ -57,6 +54,7 @@ To Test Back - End:
 
 ```
 cd bcContracts
+
 truffle test
 
 ```
