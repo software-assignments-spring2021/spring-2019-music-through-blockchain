@@ -3,6 +3,7 @@ node_js:
   - "10"
 install:
   - npm install
+  - yarn install
 before_script:
   - cd bcContracts
 script:
