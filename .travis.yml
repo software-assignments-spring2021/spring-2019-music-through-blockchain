@@ -3,5 +3,10 @@ node_js:
   - "10"
 install:
   - npm install
+before_script:
+  - cd bcContracts
 script:
+  - truffle develop
+  - test
+  - .exit
   - npm test
