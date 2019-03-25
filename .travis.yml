@@ -3,6 +3,9 @@ sudo: required
 language: node_js
 node_js:
   - "10"
+  
+notifications:
+  slack: nyu-agile-software:aKXwHNwk04WKc4mCV3S0AViB
 
 matrix:
   include:
@@ -19,9 +22,6 @@ matrix:
   
 install:
   - bash ./bin/travis-install.sh
-
-before_script:
- - cd bcContracts
  
 script:
   - bash ./bin/test.sh
