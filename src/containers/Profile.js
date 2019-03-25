@@ -5,7 +5,7 @@ import Card from '@material-ui/core/Card'
 import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
-  root: {
+  root: {   
       display: 'flex',
       justifyContent:'center',
       alignItems: 'center', 
@@ -23,7 +23,7 @@ const styles = theme => ({
   rowOne: {
       position: 'absolute',
       top: 65,
-      width: '98%',
+      width: 1000,
       maxWidth: 960,
       height: 240,
       border: '3px solid blue',
@@ -33,7 +33,7 @@ const styles = theme => ({
       position: 'absolute',
       top: 310,
       height: 500,
-      width: '98%',
+      width: 1000,
       maxWidth: 960,
       border: '3px solid blue',
   },
@@ -72,6 +72,7 @@ const styles = theme => ({
 
   topRight: {
     position: 'absolute',
+    backgroundColor: 'lightgrey',
     top: 0,
     right: 0,
     height: '100%',
