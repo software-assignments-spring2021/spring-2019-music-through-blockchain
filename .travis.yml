@@ -18,8 +18,6 @@ matrix:
       - rm -rf node_modules
   
 install:
-  - npm install
-  - yarn install
   - bash ./bin/travis-install.sh
   
 script:
