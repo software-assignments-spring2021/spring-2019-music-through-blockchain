@@ -22,8 +22,6 @@ install:
   - yarn install
   - bash ./bin/travis-install.sh
   
-before_script:
-  - cd bcContracts
 script:
   - bash ./bin/test.sh
   - npm test
