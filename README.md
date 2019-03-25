@@ -1,5 +1,7 @@
 # Distributing Music Through the Blockchain
 
+[![Build Status](https://travis-ci.com/nyu-software-engineering/music-through-blockchain.svg?branch=master)](https://travis-ci.com/nyu-software-engineering/music-through-blockchain)
+
 ### Authors:
 - Kalea Palmer
 - Ann Dang
