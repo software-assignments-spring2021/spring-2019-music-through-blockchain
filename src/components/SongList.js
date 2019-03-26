@@ -9,8 +9,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
+
 
 import {firestoreConnect} from 'react-redux-firebase';
 import {compose} from 'redux'
@@ -18,34 +17,21 @@ import {compose} from 'redux'
 const styles = theme => ({
   paper: {
     width:'80%', 
-    margin: '20px', 
-    justify: 'center'
+    marginTop: '20px',
+    justify: 'center', 
+    overflowX: 'auto'
   },
-  root: {
-    width: '100%',
-    height: '100vh'
-  },
-  gridList: {
-    width: '100%',
-    height: '100vh',
-    padding: '5vh 5vw',
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    position: 'relative'
-  }, 
-  tile: {
-    margin: '5px',
-    cursor: 'pointer',
-    overflow: 'hidden',
-    width: '18vw',
-    height: '18vw',
-    img: {
-        width: '100%'
-    }
-  }, 
   table: {
+    minWidth: 700,    
     width: '100%',
+  },
+  image: {
+    height:150, 
+    width: 'auto'
+  }, 
+  tablecell: {
+    fontSize: '20pt', 
+    marginTop: 50
   }
 
 });
@@ -53,9 +39,10 @@ const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
+    paddingRight: '100px'
   },
   body: {
-    fontSize: 14,
+    fontSize: 50,
   },
 }))(TableCell);
 
@@ -63,26 +50,41 @@ export class SongList extends Component {
   render() {
     const {classes, songs, artistPage  } = this.props
     if (songs) {
-      if (artistPage) {
         return (
           <Grid container justify="center"> 
           <Paper className={classes.paper}>
-                  <Table className={classes.table}> 
+                <Table className={classes.table}> 
+                  <colgroup>
+                    <col style={{width:'5%'}}/>
+                    <col style={{width:'19%'}}/>
+                    <col style={{width:'19%'}}/>
+                    <col style={{width:'19%'}}/>
+                    <col style={{width:'19%'}}/>
+                   </colgroup>
               <TableHead>
-                <TableRow>
-                  <CustomTableCell numeric>Song</CustomTableCell>
-                  <CustomTableCell numeric>Artist</CustomTableCell>
-                  <CustomTableCell numeric>Price</CustomTableCell>
-                  <CustomTableCell numeric>% Royalty</CustomTableCell>
-                </TableRow>
+              <TableRow>
+                <CustomTableCell align="center" >Song</CustomTableCell>
+                <CustomTableCell align="right">Artist</CustomTableCell>
+                <CustomTableCell align="right">Price</CustomTableCell>
+                <CustomTableCell align="right">% Royalty</CustomTableCell>
+              </TableRow>
               </TableHead>
               <TableBody>
                   { songs && songs.map(song => (
-                  <TableRow key={song.id}>
-                    <CustomTableCell numeric>{song.title}</CustomTableCell>
-                    <CustomTableCell numeric>{song.artist}</CustomTableCell>
-                    <CustomTableCell numeric>{song.price}</CustomTableCell>
-                    <CustomTableCell numeric>{song.remainingShare}</CustomTableCell>
+                  <TableRow key={song.id} className={classes.tablecell}>
+                  <TableCell>
+                    <Grid container wrap="nowrap" spacing={16}>
+                        <Grid item>
+                          <img className={classes.image} src ={song.cover} />
+                        </Grid>
+                      <Grid item xs zeroMinWidth alignContent="center">
+                        <Typography className={classes.tablecell}>{song.title}</Typography>
+                      </Grid>
+                    </Grid>
+                  </TableCell>
+                    <TableCell align="right" className={classes.tablecell} >{song.artist || 'anonymous'}</TableCell>
+                    <TableCell align="right" className={classes.tablecell} style={{paddingRight: '120px'}}> {song.price}$ </TableCell>
+                    <TableCell align="right">{song.remainingShare}% </TableCell>
                   </TableRow>          
                   ))}
             </TableBody>
@@ -90,21 +92,8 @@ export class SongList extends Component {
           </Paper>
           </Grid>
           )
-        } else {
-        return (
-          <div className={classes.root}>
-          <Typography>Trending</Typography>
 
-          <GridList cellHeight={'100%'} className={classes.gridList} cols={5} >
-            {songs.map(({ title, cover }) => (
-              <GridListTile key={title} className = {classes.tile} >
-                <img src={cover} alt={title}/>
-              </GridListTile>
-            ))}
-          </GridList>
-          </div>
-        )
-      }
+      
     } else {
       return ( 
         <div> </div>
