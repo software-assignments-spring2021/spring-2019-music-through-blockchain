@@ -41,16 +41,29 @@ const styles = theme => ( {
         display: 'inline-block',
         margin: 15,
         backgroundColor: 'white',
-        width: 130,
-        height: 130,
         elevation: 3,
-        overflow: 'hidden'
+        overflow: 'hidden',
+    },
+
+    title: {
+        position: 'absolute',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        left: 0,
+        right: 0,
+        top: -15,
+        textAlign: 'center',
+        zIndex: 1
     },
 
     subtitle: {
-        position: 'relative',
-        bottom: 19,
+        position: 'absolute',
         textAlign: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        left: 0,
+        right: 0,
+        top: '13.5%',
         zIndex: 1
     },
 
@@ -63,22 +76,17 @@ const styles = theme => ( {
         display: 'flex',
         position: 'absolute',
         bottom: 49,
-        left: 35,
+        width: '100%',
+        contentAlign: 'center',
         alignItems: 'center',
         zIndex: 3,
       },
-
-    playIcon: {
-        color: 'white',
-        width: 30,
-        height: 30
-    },
 
 })
 
 //e-motion components
 const Title = styled.h4({
-    fontSize: 16,
+
     fontFamily: "Helvetica",
     transform: "translate3d(0,50px,0)",
     transition: "transform 350ms ease",
@@ -86,7 +94,6 @@ const Title = styled.h4({
 
 const SubTitle = styled.p({
     fontFamily: "Helvetica",
-    fontSize: 14,
     transform: "translate3d(0,50px,0)",
     transition: "transform 350ms ease",
   });
@@ -145,30 +152,37 @@ export class SongBox extends Component {
     };
     onMouseOut = () => {
         this.setState({ shadow: 1 })
-    };
+    }
 
     render() {
-        const {classes, theme, title, artist, coverArt} = this.props
+        const {classes, theme, title, artist, coverArt, size} = this.props
+        const cardSize = (size==='large') ? 300 : 130
+        const titleSize = (size==='large') ? 30 : 17
+        const subtitleSize = (size==='large') ? 22 : 14
+        const iconSize = (size==='large') ? 48 : 30
+        
         return (
         <Card 
             className={classes.root} 
             onMouseOver={this.onMouseOver}
             onMouseOut={this.onMouseOut}
             elevation={this.state.shadow}
+            style={{width: cardSize, height: cardSize, 
+        }}
         >
-        <Background>
-            <img className={classes.cover} src={coverArt}></img>
-            <DisplayOver>
-                <Hover>
-                    <Title>{title}</Title>
-                    <SubTitle className={classes.subtitle}>{artist}</SubTitle>
-                    <PlayButtons className={classes.controls}>
-                        <IconButton aria-label="Play/pause">
-                            <PlayArrowIcon className={classes.playIcon} />
-                        </IconButton>
-                    </PlayButtons>
-                </Hover>
-            </DisplayOver>
+            <Background>
+                <img className={classes.cover} src={coverArt}></img>
+                <DisplayOver>
+                    <Hover>
+                        <Title style={{fontSize: titleSize}} className={classes.title}>{title}</Title>
+                        <SubTitle style={{fontSize: subtitleSize}} className={classes.subtitle}>{artist}</SubTitle>
+                        <PlayButtons className={classes.controls}>
+                            <IconButton aria-label="Play/pause" style={{margin: 'auto'}}>
+                                <PlayArrowIcon style={{width: iconSize, height: iconSize, color: 'white'}} />
+                            </IconButton>
+                        </PlayButtons>
+                    </Hover>
+                </DisplayOver>
             </Background>          
          </Card>
         )
