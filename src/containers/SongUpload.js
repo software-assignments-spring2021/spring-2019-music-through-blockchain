@@ -8,6 +8,7 @@ import {signUp} from '../store/actions/authActions'
 import { Grid } from '@material-ui/core'
 import { Redirect } from 'react-router-dom'
 import {SignupComponent} from "./SignupComponent";
+import {upload} from '../store/actions/songUploadActions'
 
 
 const styles = (theme) => ({
@@ -39,7 +40,9 @@ export class SongUploadComponent extends Component {
             artistNameInput: '',
             artistNameInputError: '',
             priceInput: '',
-            priceInputError: ''
+            priceInputError: '',
+            songFileInput: '',
+            songFileInputError: ''
         }
         this.handleForm = this.handleForm.bind(this)
     }
@@ -68,6 +71,11 @@ export class SongUploadComponent extends Component {
                     priceInputError: ''
                 })
                 break
+            case 'songFileInput':
+                this.setState({
+                    songFileInputError: ''
+                })
+                break
             default:
 
         }
@@ -75,7 +83,7 @@ export class SongUploadComponent extends Component {
 
     handleForm = () => {
 
-        const { songNameInput, artistNameInput, priceInput}= this.state
+        const { songNameInput, artistNameInput, priceInput, songFileInput}= this.state
         const { register } = this.props
 
         let error = false
@@ -101,12 +109,6 @@ export class SongUploadComponent extends Component {
        /* Check artist name*/
         let intPrice = parseInt(priceInput)
 
-        if (isNaN(intPrice)) {
-            this.setState({
-                priceInputError: 'Please enter a valid a price'
-            })
-            error = true
-        }
 
         if (isNaN(intPrice)) {
             if (intPrice && intPrice > 1) {
@@ -117,14 +119,6 @@ export class SongUploadComponent extends Component {
             }
         }
 
-        //    
-        // if (intPrice && intPrice > 1) {
-        //     this.setState({
-        //         priceInputError: 'Please enter a valid a price'
-        //     })
-        //     error = true
-        // }
-
         if (!error) {
             register({
                 title: songNameInput,
@@ -134,13 +128,17 @@ export class SongUploadComponent extends Component {
         }
     }
 
+    onChange(e) {
+        this.setState({file:e.target.files[0]})
+    }
+
     render() {
 
         const { classes, auth } = this.props
-        // if (auth.uid){
-        //     this.props.history.push('/')
-        //     return <Redirect to='/' />
-        // }
+        if (auth.uid){
+            this.props.history.push('/')
+            return <Redirect to='/' />
+        }
 
         return (
             <Grid container spacing={24}>
@@ -149,7 +147,7 @@ export class SongUploadComponent extends Component {
                         <Paper className={classes.paper} elevation={1} >
                             <div style={{ padding: '48px 40px 36px' }}>
                                 <div style={{ paddingLeft: '40px', paddingRight: '40px'}}>
-                                    <h2>bMusic Sign Up</h2>
+                                    <h2>bMusic Song Upload</h2>
                                 </div>
                                 <TextField
                                     className={classes.textField}
@@ -183,6 +181,15 @@ export class SongUploadComponent extends Component {
                                 <br />
                                 <div>
                                     <div>
+                                        <input
+                                               onChange={this.handleInputChange}
+                                               error={this.state.songFileInputError.trim() !== ''}
+                                               accept='.mp3'
+                                               name='songFileInput'
+                                               type="file"
+                                        />
+                                    </div>
+                                    <div>
                                         <Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>
                                     </div>
                                 </div>
@@ -206,9 +213,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        // register: (userRegister) => {
-        //     dispatch(signUp(userRegister))
-        // },
+        upload: (userRegister) => {
+            dispatch(upload(userRegister))
+        },
     }
 }
 

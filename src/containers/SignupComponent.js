@@ -235,6 +235,7 @@ const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
         profile: state.firebase.profile
+        
     }
 }
 
