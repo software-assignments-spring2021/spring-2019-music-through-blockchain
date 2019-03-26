@@ -17,7 +17,7 @@ const styles = theme => ( {
     slider: {
         position: 'relative',
         bottom: 10,
-        backgroundColor: 'transparent',
+        backgroundColor: 'lightgrey',
         width: '90%',
         zIndex: 3,
         margin: 'auto'
