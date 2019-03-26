@@ -14,6 +14,7 @@ user:
               // to retrieve songs that user has posted, return array where song owner matches the song's ownerId 
               songsOwned: ["songOne", "songTwo"] Array<string>
               artistName: "Some Band or Artist Name" <string> 
+              biography: "biography" <string>
               walletAddress: " " <string>
               /*other fields that will be inherited from the firebase's
                user auth  model:
