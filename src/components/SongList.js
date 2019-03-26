@@ -31,8 +31,8 @@ const styles = theme => ({
     objectFit: 'cover'
   }, 
   tablecell: {
-    fontSize: '50pt', 
-    marginTop: 30
+    fontSize: '12pt', 
+    marginTop: 25
   }
 
 });
@@ -41,10 +41,10 @@ const CustomTableCell = withStyles(theme => ({
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
     paddingRight: '100px', 
-    fontSize: 100
+    fontSize: 14
   },
   body: {
-    fontSize: 50,
+    fontSize: 12,
   },
 }))(TableCell);
 
@@ -77,7 +77,7 @@ export class SongList extends Component {
                   <TableCell>
                     <Grid container wrap="nowrap" spacing={16}>
                         <Grid item>
-                          <div style={{width: 200, height:200, backgroundColor: 'lightgrey'}}>
+                          <div style={{width: 75, height:75, backgroundColor: 'lightgrey'}}>
                             <img className={classes.image} src ={song.cover} />
                           </div>
                         </Grid>
