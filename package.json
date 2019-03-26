@@ -14,7 +14,7 @@
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-localize-redux": "^3.5.2",
-    "react-redux": "^6.0.1",
+    "react-redux": "^5.1.1",
     "react-redux-firebase": "^2.2.6",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
@@ -41,6 +41,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "nyc": "^13.3.0"
+    "nyc": "^13.3.0",
+    "react-redux-firebase": "^2.2.6"
   }
 }
