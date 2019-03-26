@@ -19,7 +19,7 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={Homepage} />
             <Route path='/song/:id' component={SongDetails} />
-            <Route path='/songs' render={(routeProps) => (<SongList {...routeProps} artistPage={false}/>)} />
+            <Route path='/songs' component={SongList} />
             <Route path='/signin' component={SigninComponent} />
             <Route path='/signup' component={SignupComponent} />
             <Route path='/profile/:uid' component={Profile} />

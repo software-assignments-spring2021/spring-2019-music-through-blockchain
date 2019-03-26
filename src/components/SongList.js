@@ -26,12 +26,13 @@ const styles = theme => ({
     width: '100%',
   },
   image: {
-    height:150, 
-    width: 'auto'
+    height:'100%', 
+    width: '100%', 
+    objectFit: 'cover'
   }, 
   tablecell: {
-    fontSize: '20pt', 
-    marginTop: 50
+    fontSize: '50pt', 
+    marginTop: 30
   }
 
 });
@@ -39,7 +40,8 @@ const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    paddingRight: '100px'
+    paddingRight: '100px', 
+    fontSize: 100
   },
   body: {
     fontSize: 50,
@@ -75,16 +77,18 @@ export class SongList extends Component {
                   <TableCell>
                     <Grid container wrap="nowrap" spacing={16}>
                         <Grid item>
-                          <img className={classes.image} src ={song.cover} />
+                          <div style={{width: 200, height:200, backgroundColor: 'lightgrey'}}>
+                            <img className={classes.image} src ={song.cover} />
+                          </div>
                         </Grid>
                       <Grid item xs zeroMinWidth alignContent="center">
-                        <Typography className={classes.tablecell}>{song.title}</Typography>
+                        <Typography className={classes.tablecell}>{song.title || 'song X'}</Typography>
                       </Grid>
                     </Grid>
                   </TableCell>
                     <TableCell align="right" className={classes.tablecell} >{song.artist || 'anonymous'}</TableCell>
                     <TableCell align="right" className={classes.tablecell} style={{paddingRight: '120px'}}> {song.price}$ </TableCell>
-                    <TableCell align="right">{song.remainingShare}% </TableCell>
+                    <TableCell align="right" className={classes.tablecell}>{song.remainingShare}% </TableCell>
                   </TableRow>          
                   ))}
             </TableBody>
