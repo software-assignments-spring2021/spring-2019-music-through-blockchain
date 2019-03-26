@@ -9,10 +9,10 @@ const Navbar = (props) => {
     const links = auth.uid ? <SignedInLinks profile={profile}/> : <SignedOutLinks />
     return (
         <nav style={{backgroundColor:'lightgrey', height:65}}>
-            <div>
-                <Link to='/'>bMusic</Link>
+            <h4>
+                <Link to='/' style={{position: 'absolute', left: 30, top: 40, fontSize: 20, textDecoration: 'none', color: 'blue', zIndex: 3}}>bMusic</Link>
                 {links}
-            </div>
+            </h4>
         </nav>  
     )
 

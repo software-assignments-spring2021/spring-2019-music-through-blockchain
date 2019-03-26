@@ -7,6 +7,10 @@ import Typography from '@material-ui/core/Typography'
 const styles = theme => ({
   root: {   
       display: 'flex',
+      position: 'relative',
+      bottom: 42,
+      width: 1100,
+      margin: 'auto',
       justifyContent:'center',
       alignItems: 'center', 
   },
@@ -23,7 +27,7 @@ const styles = theme => ({
   rowOne: {
       position: 'absolute',
       top: 65,
-      width: 1000,
+      width: '100%',
       maxWidth: 960,
       height: 240,
       border: '3px solid blue',
@@ -33,7 +37,7 @@ const styles = theme => ({
       position: 'absolute',
       top: 310,
       height: 500,
-      width: 1000,
+      width: '100%',
       maxWidth: 960,
       border: '3px solid blue',
   },
@@ -56,7 +60,11 @@ const styles = theme => ({
   },
 
   avatar: {
-    height: '95%',
+    position: 'absolute',
+    bottom: 27,
+    left: 27,
+    height: 180,
+    width: 180,
     borderRadius: '50%',
     border: '3px solid green',
   },

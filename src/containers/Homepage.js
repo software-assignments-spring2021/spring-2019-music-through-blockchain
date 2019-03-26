@@ -1,13 +1,40 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withStyles } from '@material-ui/core/styles'
 
 // import project components
 import SongBoxGrid from '../components/SongBoxGrid'
+import Carousel from '../components/Carousel'
 import coverArt from '../img/albumArt.png'
 import coverArtTwo from '../img/tameImpala.jpg'
 
+//import css scripts
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
+
+const styles = {
+  root: {
+    width: 1100,
+    margin: 'auto',
+  },
+  centerCol: {
+    width: '76%',
+    margin: 'auto'
+  },
+  slider: {
+    position: 'relative',
+    bottom: 10,
+    backgroundColor: 'lightgrey',
+    width: '90%',
+    zIndex: 3,
+    margin: 'auto'
+  },
+  
+}
+
 export class Homepage extends Component {
   render() {
+    const { classes } = this.props
     const songs = {
       '1': {
         artist: 'Artist 1',
@@ -34,11 +61,29 @@ export class Homepage extends Component {
         title: 'song 5',
         coverArt: coverArt
       },
+      '6': {
+        artist: 'Artist 6',
+        title: 'song 6',
+        coverArt: coverArt
+      },
+      '7': {
+        artist: 'Artist 7',
+        title: 'song 7',
+        coverArt: coverArtTwo
+      },
+      '8': {
+        artist: 'Artist 8',
+        title: 'song 8',
+        coverArt: coverArt
+      },
     }
     return (
-      <div>
-        <h1>bMusic</h1>
-        <SongBoxGrid songs={songs}/>
+      <div className={classes.root}>
+        <Carousel songs={songs}/>
+        <h1 style={{position: 'relative', right: '40%', top: 10}}>Recent</h1>
+        <div className={classes.centerCol}>
+          <SongBoxGrid songs={songs}/>
+        </div>
       </div>
     )
   }
@@ -51,4 +96,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, null)(Homepage)
+export default connect(mapStateToProps, null)(withStyles(styles)(Homepage))
