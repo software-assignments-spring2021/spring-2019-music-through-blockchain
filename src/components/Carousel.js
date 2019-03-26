@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import SongBox from '../components/SongBox'
 import { withStyles } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
 
+import CarouselItem from '../components/CarouselItem'
 import Slider from "react-slick"
 import coverArt from '../img/albumArt.png'
 import coverArtTwo from '../img/tameImpala.jpg'
@@ -47,7 +47,7 @@ export class Carousel extends Component {
                 <Slider {...settings} className={classes.slider}>
                     {(songs && Object.keys(songs).length > 0) ? Object.keys(songs).map((songId) => (
                     <div key={songId}>
-                        <SongBox title={songs[songId]['title']} artist={songs[songId]['artist']} coverArt={songs[songId]['coverArt']} size='large' />
+                        <CarouselItem title={songs[songId]['title']} artist={songs[songId]['artist']} coverArt={songs[songId]['coverArt']} />
                     </div>
                     )) : ''}
                 </Slider>

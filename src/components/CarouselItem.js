@@ -81,21 +81,27 @@ const styles = theme => ( {
         alignItems: 'center',
         zIndex: 3,
       },
+    icon: {
+        width: 48, 
+        height: 48, 
+        color: 'white'
+    }
 
 })
 
 //e-motion components
 const Title = styled.h4({
-
     fontFamily: "Helvetica",
     transform: "translate3d(0,50px,0)",
     transition: "transform 350ms ease",
+    fontSize: 30
 });
 
 const SubTitle = styled.p({
     fontFamily: "Helvetica",
     transform: "translate3d(0,50px,0)",
     transition: "transform 350ms ease",
+    fontSize: 22
   });
 
 const PlayButtons = styled.div({
@@ -155,11 +161,7 @@ export class SongBox extends Component {
     }
 
     render() {
-        const {classes, theme, title, artist, coverArt, size} = this.props
-        const cardSize = 130
-        const titleSize = 17
-        const subtitleSize = 14
-        const iconSize = 30
+        const {classes, theme, title, artist, coverArt } = this.props
         
         return (
         <Card 
@@ -167,18 +169,18 @@ export class SongBox extends Component {
             onMouseOver={this.onMouseOver}
             onMouseOut={this.onMouseOut}
             elevation={this.state.shadow}
-            style={{width: cardSize, height: cardSize, 
+            style={{width: 300, height: 300, 
         }}
         >
             <Background>
                 <img className={classes.cover} src={coverArt}></img>
                 <DisplayOver>
                     <Hover>
-                        <Title style={{fontSize: titleSize}} className={classes.title}>{title}</Title>
-                        <SubTitle style={{fontSize: subtitleSize}} className={classes.subtitle}>{artist}</SubTitle>
+                        <Title style={{}} className={classes.title}>{title}</Title>
+                        <SubTitle className={classes.subtitle}>{artist}</SubTitle>
                         <PlayButtons className={classes.controls}>
                             <IconButton aria-label="Play/pause" style={{margin: 'auto'}}>
-                                <PlayArrowIcon style={{width: iconSize, height: iconSize, color: 'white'}} />
+                                <PlayArrowIcon className={classes.icon} />
                             </IconButton>
                         </PlayButtons>
                     </Hover>
