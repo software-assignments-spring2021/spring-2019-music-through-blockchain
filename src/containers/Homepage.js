@@ -14,7 +14,8 @@ import "slick-carousel/slick/slick-theme.css"
 
 const styles = {
   root: {
-
+    width: 1100,
+    margin: 'auto',
   },
   centerCol: {
     width: '76%',
@@ -60,9 +61,24 @@ export class Homepage extends Component {
         title: 'song 5',
         coverArt: coverArt
       },
+      '6': {
+        artist: 'Artist 6',
+        title: 'song 6',
+        coverArt: coverArt
+      },
+      '7': {
+        artist: 'Artist 7',
+        title: 'song 7',
+        coverArt: coverArtTwo
+      },
+      '8': {
+        artist: 'Artist 8',
+        title: 'song 8',
+        coverArt: coverArt
+      },
     }
     return (
-      <div>
+      <div className={classes.root}>
         <Carousel songs={songs}/>
         <h1 style={{position: 'relative', right: '40%', top: 10}}>Recent</h1>
         <div className={classes.centerCol}>

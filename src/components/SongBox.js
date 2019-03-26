@@ -42,7 +42,7 @@ const styles = theme => ( {
         margin: 15,
         backgroundColor: 'white',
         elevation: 3,
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
 
     title: {
@@ -152,21 +152,23 @@ export class SongBox extends Component {
     };
     onMouseOut = () => {
         this.setState({ shadow: 1 })
-    };
+    }
 
     render() {
         const {classes, theme, title, artist, coverArt, size} = this.props
         const cardSize = (size==='large') ? 300 : 130
-        const titleSize = (size==='large') ? 30 : 18
+        const titleSize = (size==='large') ? 30 : 17
         const subtitleSize = (size==='large') ? 22 : 14
         const iconSize = (size==='large') ? 48 : 30
+        
         return (
         <Card 
             className={classes.root} 
             onMouseOver={this.onMouseOver}
             onMouseOut={this.onMouseOut}
             elevation={this.state.shadow}
-            style={{width: cardSize, height: cardSize,}}
+            style={{width: cardSize, height: cardSize, 
+        }}
         >
             <Background>
                 <img className={classes.cover} src={coverArt}></img>

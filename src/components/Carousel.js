@@ -37,6 +37,8 @@ export class Carousel extends Component {
         speed: 500,
         slidesToShow: 3,
         slidesToScroll: 1,
+        autoplaySpeed: 5000,
+        autoplay: true
       };
     return (
         <div>
@@ -44,8 +46,8 @@ export class Carousel extends Component {
                 <h1 style={{position: 'relative', right: '40%', top: 10}}>Featured</h1>
                 <Slider {...settings} className={classes.slider}>
                     {(songs && Object.keys(songs).length > 0) ? Object.keys(songs).map((songId) => (
-                    <div>
-                        <SongBox key={songId} title={songs[songId]['title']} artist={songs[songId]['artist']} coverArt={songs[songId]['coverArt']} size='large' />
+                    <div key={songId}>
+                        <SongBox title={songs[songId]['title']} artist={songs[songId]['artist']} coverArt={songs[songId]['coverArt']} size='large' />
                     </div>
                     )) : ''}
                 </Slider>
