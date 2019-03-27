@@ -5,12 +5,19 @@ import { signOut } from '../store/actions/authActions'
 
 const SignedInLinks = (props) => {
     return (
-        <ul>
-            <li><NavLink to='/create'>Upload Song</NavLink></li>
-            <li><NavLink to='/' onClick={props.signOut}>Log Out</NavLink></li>
-        </ul>
+        <div style={{position: 'relative', top: 20, }}>
+            <h3 style={{display:'inline', padding: 15}}><NavLink to='/create' style={{textDecoration: 'none', color: 'blue'}}>Upload Song</NavLink></h3>
+            <h3 style={{display:'inline', padding: 15}}><NavLink to='/' onClick={props.signOut} style={{textDecoration: 'none', color: 'blue'}}>Log Out</NavLink></h3>
+            <h3 style={{display:'inline', padding: 15}}><NavLink to={`/profile/${props.uid}`} style={{textDecoration: 'none', color: 'blue'}}>Profile</NavLink></h3>
+        </div>
     )
+}
 
+const mapStateToProps = (state, ownProps) => {
+    const uid = state.firebase.auth.uid
+    return {
+        uid: uid
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -19,4 +26,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(SignedInLinks)
+export default connect(mapStateToProps, mapDispatchToProps)(SignedInLinks)

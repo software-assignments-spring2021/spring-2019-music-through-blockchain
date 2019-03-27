@@ -24,15 +24,18 @@ We are using a branching development structure:
 `git push origin {FEATURE}`   
 5) Do work on the *{FEATURE}* branch and then`git add` and `git commit` the files   
 6) Switch back to the *development* branch using the command:  
-`git checkout dev`  
+`git checkout development`  
 `git merge --no-ff {FEATURE}`  
 7) Push changes on both branches to the server using the commands:  
-`git push origin dev`  
+`git push origin development`  
 `git push origin {FEATURE}`  
+
+**Delete remote and local *{FEATURE}* branch using command:**  
+Remote : `git push origin --delete {FEATURE}`  
+Local: `git branch -D {FEATURE}`  
 
 ### If creating a new feature go back to *Step 3* and repeat
 
-**INSTRUCTIONS IN PROGRESS**
 
 ## How to Contribute
 1) Fork the **bMusic** repository
