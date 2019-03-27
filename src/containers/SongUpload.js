@@ -135,7 +135,7 @@ export class SongUploadComponent extends Component {
     render() {
 
         const { classes, auth } = this.props
-        if (auth.uid){
+        if (!auth.uid){
             this.props.history.push('/')
             return <Redirect to='/' />
         }
@@ -181,16 +181,29 @@ export class SongUploadComponent extends Component {
                                 <br />
                                 <div>
                                     <div>
+                                        <div>Choose mp3 file to upload</div>
                                         <input
                                                onChange={this.handleInputChange}
                                                error={this.state.songFileInputError.trim() !== ''}
                                                accept='.mp3'
+                                               label='Choose mp3 file to upload'
                                                name='songFileInput'
                                                type="file"
                                         />
                                     </div>
                                     <div>
-                                        <Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>
+                                        <div>Choose cover art to upload</div>
+                                        <input
+                                            onChange={this.handleInputChange}
+                                            error={this.state.songFileInputError.trim() !== ''}
+                                            label='Choose cover art to upload'
+                                            name='coverArtInput'
+                                            type="file"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Button variant='contained' color='primary'>Upload Song</Button>
+                                        {/*<Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>*/}
                                     </div>
                                 </div>
                             </div>
