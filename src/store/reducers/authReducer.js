@@ -28,17 +28,6 @@ const authReducer = (state = initState, payload) => {
             return {
                 ...state,
             }
-        case 'SIGNUP_ERROR':
-            console.log('signup error');
-            return {
-                ...state,
-            }
-        case 'SIGNUP_ERROR':
-            console.log('signup error');
-            return {
-                ...state,
-            }
-            
         default:
             return state;
         }

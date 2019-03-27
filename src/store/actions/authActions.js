@@ -30,7 +30,6 @@ export const signUp = (newUser) => {
     return  (dispatch, getState, {getFirebase, getFirestore}) => {
     const firebase = getFirebase();
     const firestore = getFirestore();
-    const database = firebase.database();
 
     firebase.auth().createUserWithEmailAndPassword(
         newUser.email,
