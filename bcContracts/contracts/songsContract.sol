@@ -42,10 +42,10 @@ contract SongsContract{
         //check if buyer was already an owner
         if(!isOwner(songAddress, newOwner)){
             //not an owner
-            Owner memory newOwner;
-            newOwner.owner = msg.sender;
+            Owner memory newestOwner;
+            newestOwner.owner = msg.sender;
             songs[songAddress].ownersSize += 1;
-            songs[songAddress].owners[msg.sender] = newOwner;
+            songs[songAddress].owners[msg.sender] = newestOwner;
         }    
         return true;
     }
