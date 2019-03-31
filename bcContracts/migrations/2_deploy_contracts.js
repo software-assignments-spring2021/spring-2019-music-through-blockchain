@@ -1,5 +1,5 @@
-var songSale = artifacts.require("songSale");
+var songsContract = artifacts.require("songsContract");
 
 module.exports = function(deployer){
-    deployer.deploy(songSale);
+    deployer.deploy(songsContract);
 }

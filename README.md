@@ -60,7 +60,6 @@ cd bcContracts
 truffle test
 
 ```
-
 In order to build and test the project, we are going to use two methods:
 
 ### Unit Tests

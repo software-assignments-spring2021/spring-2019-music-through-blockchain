@@ -8,6 +8,14 @@ import React from 'react'
 const EnzymeAdapter = require('enzyme-adapter-react-16');
 Enzyme.configure({ adapter: new Adapter() })
 
+window.matchMedia = window.matchMedia || function() {
+    return {
+    matches : false,
+    addListener : function() {},
+    removeListener: function() {}
+};
+};
+
 describe('LandingPage', () => {
     let componentWrapper;
     it('should render landing page', () => {
