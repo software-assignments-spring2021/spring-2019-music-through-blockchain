@@ -57,11 +57,11 @@ contract('SongsContract', function (accounts){
         await contract.registerSong(song3, {value: 0, from: artist3});
         await contract.buy(song3, {value: 8000000000000000, from: customer4});
         await contract.buy(song3, {value: 8000000000000000, from: customer1});
-        const isAuthorized = await contract.isListener({value: 0, from: customer4});
+        const isAuthorized = await contract.isListener(song3,{value: 0, from: customer4});
         assert.equal(isAuthorized, true, "User did not buy the song");
-        const isAuthorized2 = await contract.isListener({value: 0, from: customer1});
+        const isAuthorized2 = await contract.isListener(song3,{value: 0, from: customer1});
         assert.equal(isAuthorized2, true, "User did not buy the song");
-        const isNotAuthorized = await contract.isListener({value: 0, from: artist1});
+        const isNotAuthorized = await contract.isListener(song3, {value: 0, from: artist1});
         assert.equal(isNotAuthorized, false, "User did bought the song");
     });
     it("transfers money to song owner when owner withdraws the money", async function(){

@@ -14,14 +14,13 @@ contract SongsContract{
         address creator;
         uint ownersSize;
         mapping (address => Owner) owners;
-        
+        mapping (address => bool) authorizedListeners; //People who bought the song
     }
 
     uint public constant songPrice = 8000000000000000; // approximately 1 dollar represented in wei (1 eth = 10^17 wei)
     uint16 public constant MAX_ROYALTY_POINTS = 10000;
 
     mapping (address => Song) public songs ;
-    mapping (address => bool) public authorizedListeners; //People who bought the song
     mapping (address => uint) public royaltiesPayable; //ether payable to royalty sellers;
 
     function registerSong(address songAddress) public returns (bool success){
@@ -55,7 +54,7 @@ contract SongsContract{
         require(isSongRegistered(songAddress), "The song is not registered");
         require(msg.value == songPrice);
         songs[songAddress].balance += msg.value;
-        authorizedListeners[msg.sender] = true;
+        songs[songAddress].authorizedListeners[msg.sender] = true;
         return true;
     }
     
@@ -171,9 +170,9 @@ contract SongsContract{
         return(songs[songAddress].balance);
     }
 
-    function isListener() public view returns(bool){
+    function isListener(address songAddress) public view returns(bool){
         //"You have not bought this song yet."
-        if(authorizedListeners[msg.sender]){
+        if(songs[songAddress].authorizedListeners[msg.sender]){
             return true;
         }
         else{
