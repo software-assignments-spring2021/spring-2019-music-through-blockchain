@@ -31,10 +31,13 @@ import Grow from '@material-ui/core/Grow'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Zoom from '@material-ui/core/Zoom'
 import styled from "@emotion/styled/macro";
-
+import Modal from '@material-ui/core/Modal'
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
+import DialogContent from '@material-ui/core/DialogContent';
+
+import SongDetails from './SongDetails'
 
 const styles = theme => ( {
     root: {
@@ -81,6 +84,13 @@ const styles = theme => ( {
         alignItems: 'center',
         zIndex: 3,
       },
+      
+    modal: {
+        margin: 'auto',
+        width: 400,
+        padding: '13% 0',
+        tabIndex: "-1"
+    }
 
 })
 
@@ -144,7 +154,10 @@ const Hover = styled.div({
 export class SongBox extends Component {
     constructor(props) {
         super(props);
-        this.state = { shadow: 1 }
+        this.state = { 
+            shadow: 1, 
+            detailsOpen: false 
+        }
     }
 
     onMouseOver = () => {
@@ -152,6 +165,12 @@ export class SongBox extends Component {
     };
     onMouseOut = () => {
         this.setState({ shadow: 1 })
+    }
+    handleOpenModal = () => {
+        this.setState({ detailsOpen: true })
+    }
+    handleCloseModal = () => {
+        this.setState({ detailsOpen: false })
     }
 
     render() {
@@ -162,29 +181,36 @@ export class SongBox extends Component {
         const iconSize = 30
         
         return (
-        <Card 
-            className={classes.root} 
-            onMouseOver={this.onMouseOver}
-            onMouseOut={this.onMouseOut}
-            elevation={this.state.shadow}
-            style={{width: cardSize, height: cardSize, 
-        }}
-        >
-            <Background>
-                <img className={classes.cover} src={coverArt}></img>
-                <DisplayOver>
-                    <Hover>
-                        <Title style={{fontSize: titleSize}} className={classes.title}>{title}</Title>
-                        <SubTitle style={{fontSize: subtitleSize}} className={classes.subtitle}>{artist}</SubTitle>
-                        <PlayButtons className={classes.controls}>
-                            <IconButton aria-label="Play/pause" style={{margin: 'auto'}}>
-                                <PlayArrowIcon style={{width: iconSize, height: iconSize, color: 'white'}} />
-                            </IconButton>
-                        </PlayButtons>
-                    </Hover>
-                </DisplayOver>
-            </Background>          
-         </Card>
+        <div style={{display: 'inline'}}>
+            <Card 
+                className={classes.root} 
+                onMouseOver={this.onMouseOver}
+                onMouseOut={this.onMouseOut}
+                elevation={this.state.shadow}
+                onClick={this.handleOpenModal}
+                style={{width: cardSize, height: cardSize }}
+            >
+                <Background>
+                    <img className={classes.cover} src={coverArt}></img>
+                    <DisplayOver>
+                        <Hover>
+                            <Title style={{fontSize: titleSize}} className={classes.title}>{title}</Title>
+                            <SubTitle style={{fontSize: subtitleSize}} className={classes.subtitle}>{artist}</SubTitle>
+                            <PlayButtons className={classes.controls}>
+                                <IconButton aria-label="Play/pause" style={{margin: 'auto'}}>
+                                    <PlayArrowIcon style={{width: iconSize, height: iconSize, color: 'white'}} />
+                                </IconButton>
+                            </PlayButtons>
+                        </Hover>
+                    </DisplayOver>
+                </Background>    
+            </Card>
+            <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
+                <DialogContent>
+                    <SongDetails title={title} artist={artist} coverArt={coverArt}/>
+                </DialogContent>
+            </Modal>
+         </div>
         )
     }
 }
