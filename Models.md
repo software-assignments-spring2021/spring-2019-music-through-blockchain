@@ -9,10 +9,9 @@ user:
               name : "Johnny" <string> 
               artistName: "Some Band or Artist Name" <string> 
               photoUrl: "https://bMusic.com/img/tom.jpg", <string>
-              // songs owned is an array with song ids. 
-              // to retrieve songs that user purhchased, just return the whole array with array-contains
-              // to retrieve songs that user has posted, return array where song owner matches the song's ownerId 
+              // songsWithRoaylties is an array with song ids that user has listed for sale
               songsWithRoyalties: ["songOne", "songTwo"] Array<string>
+              // songsCanListenTo is an array with song ids that user can listen to
               songsCanListenTo:  ["songOne", "songTwo"] Array<string>
               walletAddress: " " <string>
               /*other fields that will be inherited from the firebase's
@@ -27,8 +26,8 @@ user:
             {
               songId: "songOne" <string> ,
               title: "Title", <string>, 
-              //value in dollars
-              prices: {userId: (percentage: 5% <number>, totalPrice: 5$ <number>) } //dictionary since each user gives difference
+              //dictionary that allows retrieval of song price by ownerId and songId
+              prices: {userId: (percentage: 5% <number>, totalPrice: 5$ <number>) },
               songFile: " " <string>
             }
 
