@@ -25,7 +25,7 @@ const styles = (theme) => ({
         minWidth: 337,
         textAlign: 'center',
         display: 'block',
-        margin: 'auto'
+        margin: 'auto',
     }
 })
 
@@ -141,7 +141,7 @@ export class SongUploadComponent extends Component {
         }
 
         return (
-            <Grid container spacing={24}>
+            <Grid container spacing={24} style={{display: 'inline', backgroundColor: 'grey'}}>
                 <Grid item xs={12} className={classes.contain}>
                     <div>
                         <Paper className={classes.paper} elevation={1} >

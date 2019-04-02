@@ -95,7 +95,6 @@ const styles = theme => ( {
         margin: 'auto',
         width: 400,
         padding: '13% 0',
-        tabIndex: "-1"
     }
 
 })
@@ -161,7 +160,7 @@ const Hover = styled.div({
 export class SongBox extends Component {
     constructor(props) {
         super(props);
-        this.state = { shadow: 1 }
+        this.state = { shadow: 1, detailsOpen: false}
     }
 
     onMouseOver = () => {

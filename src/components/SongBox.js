@@ -89,7 +89,6 @@ const styles = theme => ( {
         margin: 'auto',
         width: 400,
         padding: '13% 0',
-        tabIndex: "-1"
     }
 
 })
