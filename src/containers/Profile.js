@@ -7,6 +7,9 @@ import Modal from '@material-ui/core/Modal'
 import DialogContent from '@material-ui/core/DialogContent';
 
 import SongUpload from './SongUpload'
+import EditProfile from '../components/EditProfile'
+import SongList from '../components/SongList'
+import { connect } from 'react-redux'
 
 const styles = theme => ({
   root: {   
@@ -77,22 +80,15 @@ const styles = theme => ({
     left: '25%',
     height: '80%',
     width: '40%',
-    backgroundColor: 'lightgrey',
   },
 
   topRight: {
     position: 'absolute',
     backgroundColor: 'lightgrey',
-    top: 0,
+    top: '2%',
     right: 0,
-    height: '100%',
+    height: '96%',
     width: '33%',
-  },
-
-  uploadButton: {
-    position: 'absolute',
-    bottom: 5,
-    left: 5,
   },
 
   modal: {
@@ -100,6 +96,17 @@ const styles = theme => ({
     width: 470,
     margin: 'auto',
     padding: '8% 0',
+  },
+
+  name: {
+    position: 'absolute',
+    top: 15, 
+    left: 5
+  },
+  artistName: {
+    position: 'absolute',
+    top: 45, 
+    left: 5
   }
 })
 
@@ -107,41 +114,57 @@ export class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-        modalOpen: false 
+        uploadModalOpen: false,
+        editProfileOpen: false
     }
   }
 
-  handleOpenModal = () => {
-    this.setState({ modalOpen: true })
+  handleOpenUpload = () => {
+    this.setState({ uploadModalOpen: true })
   }
-  handleCloseModal = () => {
-    this.setState({ modalOpen: false })
+  handleCloseUpload = () => {
+    this.setState({ uploadModalOpen: false })
+  } 
+  handleOpenEditProfile = () => {
+    this.setState({ editProfileOpen: true })
+  }
+  handleCloseEditProfile = () => {
+    this.setState({ editProfileOpen: false })
   } 
 
   render() {
-    const {classes} = this.props
-    console.log('Modal state: ', this.state.modalOpen)
+    const {classes, auth, match} = this.props
+    console.log('profile props: ', this.props)
     return (
       <div className={classes.root}>
         <div className={classes.rowOne}>
           <div className={classes.topLeft}>
             <div className={classes.avatar}><img className={classes.avatarPhoto} src='https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png' alt='no photo'></img></div>
           </div>
-          <Typography className={classes.topCenter}>
-
-          </Typography>
+          <div className={classes.topCenter}>
+            <h3 className={classes.name}>Name</h3>
+            <h3 className={classes.artistName}>Artist Name</h3>
+            {(match.params.uid === auth.uid) ? 
+              <div style={{display: 'inline', position: 'absolute', bottom: 5, left: 5}}>
+                <Button style={{backgroundColor: 'lightgrey', marginRight: 10}} onClick={this.handleOpenEditProfile}>Edit Profile</Button> 
+                <Button style={{backgroundColor: 'lightgrey'}} onClick={this.handleOpenUpload}>Upload Song</Button> 
+              </div> : ''}
+          </div>
           <Card className={classes.topRight}>
-            <Button className={classes.uploadButton} onClick={this.handleOpenModal}>upload</Button>
           </Card>
         </div>
         <div className={classes.rowTwo}>
           <div className={classes.songList}> 
-
           </div>
         </div> 
-        <Modal className={classes.modal} open={this.state.modalOpen} onClose={this.handleCloseModal}>
+        <Modal className={classes.modal} open={this.state.uploadModalOpen} onClose={this.handleCloseUpload}>
             <DialogContent>
                 <SongUpload />
+            </DialogContent>
+        </Modal>
+        <Modal className={classes.modal} open={this.state.editProfileOpen} onClose={this.handleCloseEditProfile}>
+            <DialogContent>
+                <EditProfile />
             </DialogContent>
         </Modal>
       </div>
@@ -149,4 +172,11 @@ export class Profile extends Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Profile)
+const mapStateToProps = (state) => {
+  return {
+      auth: state.firebase.auth,
+      profile: state.firebase.profile
+  }
+}
+
+export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(Profile))
