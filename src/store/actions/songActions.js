@@ -1,16 +1,23 @@
 import { showMessage } from './globalActions'
 
-import {songService} from '../../server/songDbActions'
+import { songService } from '../../server/songDbActions'
 
 /* _____________ CRUD DB Functions _____________ */
 
 /**
  * Upload song
  */
-export let dbUploadSong = (song, callBack, groupId) => {
+export let dbUploadSong = (song, image, imageName, callBack) => {
     return (dispatch, getState, {getFirebase}) => {
-      const fb = getFirebase();
-      return songService.uploadSong(song, fb).then((songId) => {
+      console.log('dbUploadSong called')
+      const firebase = getFirebase();
+      const fb = firebase.firestore()
+      const storage = firebase.storage()
+      const state = getState()
+      const uid = state.firebase.auth.uid
+      song['ownerId'] = uid
+
+      return songService.uploadSong(song, image, imageName, fb, storage).then((songId) => {
         dispatch(addSong(song.ownerId, {
           ...song,
           id: songId})
@@ -26,7 +33,8 @@ export let dbUploadSong = (song, callBack, groupId) => {
  */
 export const dbUpdateSong = (updatedSong, callBack) => {
     return (dispatch, getState, {getFirebase}) => {
-      const fb = getFirebase();
+      const firebase = getFirebase();
+      const fb = firebase.firestore()
       return songService.updateSong(updatedSong, fb).then(() => {
         dispatch(updateSong(updatedSong))
         callBack()
@@ -42,7 +50,8 @@ export const dbUpdateSong = (updatedSong, callBack) => {
  */
 export const dbDeleteSong = (song) => {
     return (dispatch, getState, {getFirebase}) => {
-      const fb = getFirebase();
+      const firebase = getFirebase();
+      const fb = firebase.firestore()
         return songService.deleteSong(song.id, fb).then(() => {
             dispatch(deleteSong(song.ownerId, song.id))
         })
@@ -57,7 +66,8 @@ export const dbDeleteSong = (song) => {
  */
 export const dbGetSongs = (page = 0, limit = 10, sortBy = '') => {
     return (dispatch, getState, {getFirebase}) => {
-      const fb = getFirebase();
+      const firebase = getFirebase();
+      const fb = firebase.firestore()
       const state = getState()
       const uid = state.firebase.auth
       const stream = state.song.stream
@@ -95,9 +105,10 @@ export const dbGetSongs = (page = 0, limit = 10, sortBy = '') => {
  */
 export const getSongsByUserId = (userId, page = 0, limit = 10, type = '', sortBy = '') => {
     return (dispatch, getState, {getFirebase}) => {
-      const fb = getFirebase();
+      const firebase = getFirebase();
+      const fb = firebase.firestore()
       const state = getState()
-      const uid = state.firebase.auth
+      const uid = state.firebase.auth.uid
       const stream = state.song.stream
       const lastPageRequest = stream[userId].lastPageRequest
       const lastSongId = stream[userId].lastSongId

@@ -8,8 +8,7 @@ import {signUp} from '../store/actions/authActions'
 import { Grid } from '@material-ui/core'
 import { Redirect } from 'react-router-dom'
 import {SignupComponent} from "./SignupComponent";
-import {upload} from '../store/actions/songUploadActions'
-
+import {dbUploadSong} from '../store/actions/songActions'
 
 const styles = (theme) => ({
     textField: {
@@ -84,7 +83,7 @@ export class SongUploadComponent extends Component {
     handleForm = () => {
 
         const { songNameInput, artistNameInput, priceInput, songFileInput}= this.state
-        const { register } = this.props
+        const { upload } = this.props
 
         let error = false
 
@@ -120,15 +119,22 @@ export class SongUploadComponent extends Component {
         }
 
         if (!error) {
-            register({
+            upload({
                 title: songNameInput,
                 artistName: artistNameInput,
                 price: priceInput,
-            })
+            }, 
+            this.state.file,
+            this.state.file.name,
+            () => {return <Redirect to='/' />})
+        }
+        else {
+            console.log('form input error')
         }
     }
 
-    onChange(e) {
+    onChange = (e) => {
+        console.log(e.target.files)
         this.setState({file:e.target.files[0]})
     }
 
@@ -194,7 +200,7 @@ export class SongUploadComponent extends Component {
                                     <div>
                                         <div>Choose cover art to upload</div>
                                         <input
-                                            onChange={this.handleInputChange}
+                                            onChange={this.onChange}
                                             error={this.state.songFileInputError.trim() !== ''}
                                             label='Choose cover art to upload'
                                             name='coverArtInput'
@@ -202,7 +208,7 @@ export class SongUploadComponent extends Component {
                                         />
                                     </div>
                                     <div>
-                                        <Button variant='contained' color='primary'>Upload Song</Button>
+                                        <Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>
                                         {/*<Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>*/}
                                     </div>
                                 </div>
@@ -226,9 +232,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        upload: (userRegister) => {
-            dispatch(upload(userRegister))
-        },
+        upload: (song, image, imageName, callBack) => { dispatch(dbUploadSong(song, image, imageName, callBack)) },
     }
 }
 

@@ -1,26 +1,44 @@
 
 // - Import react components
-export class songService {
+export const songService = {
     /**
    * Update song
    */
-    uploadSong = (song, db) => {
+    uploadSong: (song, db, storage, image, imageName) => {
         return new Promise((resolve, reject) => {
+            const songData = {}
+            const batch = db.batch()
             let songRef = db.collection(`songs`).doc()
-            songRef.set({ ...song, id: songRef.id })
+            const storageFile = storage.child(`images/${imageName}`)
+            
+            batch.put(storageFile, image).then((result) => {
+              result.ref.getDownloadURL()
+              .then((downloadURL) => {
+                songData['imageData'] = {url: downloadURL, fullPath: result.metadata.fullPath}
+              })
+              .catch((error) => {
+                reject(error)
+              })
+            }).catch((error) => {
+              reject(error)
+            })
+            batch.set(songRef, { ...song, id: songRef.id })
             .then(() => {
-                resolve(songRef.id)
+              songData['id'] = songRef.id
             })
             .catch((error) => {
-                reject()
+                reject(error)
+            })
+            batch.commit().then(() => {
+              resolve(songData)
             })
         })
-    }
+    },
     
   /**
    * Update song
    */
-  updateSong = (song, db) => {
+  updateSong: (song, db) => {
       return new Promise((resolve, reject) => {
         const batch = db.batch()
         let songRef = db.doc(`songs/${song.id}`)
@@ -33,12 +51,12 @@ export class songService {
             reject()
           })
       })
-    }
+    },
 
   /**
    * Delete post
    */
-  deleteSong = (songId, db) => {
+  deleteSong: (songId, db) => {
       return new Promise((resolve, reject) => {
         const batch = db.batch()
         let songRef = db.doc(`songs/${songId}`)
@@ -50,13 +68,13 @@ export class songService {
             reject()
           })
       })
-    }
+    },
 
 /**
  * Get list of songs for homepage
  * 
  */
-getSongs = (userId, lastSongId, page, limit, type, sortBy, db) => {
+getSongs: (userId, lastSongId, page, limit, type, sortBy, db) => {
     return new Promise((resolve, reject) => {
         let parsedData = []
         let query = db.collection('songs')
@@ -86,3 +104,4 @@ getSongs = (userId, lastSongId, page, limit, type, sortBy, db) => {
         })
     }
 }
+
