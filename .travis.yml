@@ -27,4 +27,3 @@ before_script:
 - cd bcContracts
 script:
 - bash ../bin/test.sh
-- npm test
