@@ -8,8 +8,7 @@ import {signUp} from '../store/actions/authActions'
 import { Grid } from '@material-ui/core'
 import { Redirect } from 'react-router-dom'
 import {SignupComponent} from "./SignupComponent";
-import {upload} from '../store/actions/songUploadActions'
-
+import {dbUploadSong} from '../store/actions/songActions'
 
 const styles = (theme) => ({
     textField: {
@@ -42,7 +41,8 @@ export class SongUploadComponent extends Component {
             priceInput: '',
             priceInputError: '',
             songFileInput: '',
-            songFileInputError: ''
+            songFileInputError: '',
+            songFile: null
         }
         this.handleForm = this.handleForm.bind(this)
     }
@@ -84,7 +84,7 @@ export class SongUploadComponent extends Component {
     handleForm = () => {
 
         const { songNameInput, artistNameInput, priceInput, songFileInput}= this.state
-        const { register } = this.props
+        const { upload } = this.props
 
         let error = false
 
@@ -111,25 +111,43 @@ export class SongUploadComponent extends Component {
 
 
         if (isNaN(intPrice)) {
-            if (intPrice && intPrice > 1) {
+            if (!intPrice || intPrice <= 0) {
                 this.setState({
-                    priceInputError: 'Please enter a valid a price'
+                    priceInputError: 'Please enter a valid price'
                 })
                 error = true
             }
         }
 
         if (!error) {
-            register({
+            const songInfo = {
                 title: songNameInput,
                 artistName: artistNameInput,
-                price: priceInput,
-            })
+                price: priceInput}
+            const callBack = () => {
+                this.props.history.push('/')
+                return <Redirect to='/' />
+            }
+            upload(
+                songInfo,
+                this.state.file,
+                this.state.file.name,
+                this.state.songFile,
+                this.state.songFile.name,
+                callBack
+            )
+        }
+        else {
+            console.log('form input error')
         }
     }
 
-    onChange(e) {
+    onImageChange = (e) => {
         this.setState({file:e.target.files[0]})
+    }
+
+    onSongChange = (e) => {
+        this.setState({songFile:e.target.files[0]})
     }
 
     render() {
@@ -183,7 +201,7 @@ export class SongUploadComponent extends Component {
                                     <div>
                                         <div>Choose mp3 file to upload</div>
                                         <input
-                                               onChange={this.handleInputChange}
+                                               onChange={this.onSongChange}
                                                error={this.state.songFileInputError.trim() !== ''}
                                                accept='.mp3'
                                                label='Choose mp3 file to upload'
@@ -194,7 +212,7 @@ export class SongUploadComponent extends Component {
                                     <div>
                                         <div>Choose cover art to upload</div>
                                         <input
-                                            onChange={this.handleInputChange}
+                                            onChange={this.onImageChange}
                                             error={this.state.songFileInputError.trim() !== ''}
                                             label='Choose cover art to upload'
                                             name='coverArtInput'
@@ -202,8 +220,7 @@ export class SongUploadComponent extends Component {
                                         />
                                     </div>
                                     <div>
-                                        <Button variant='contained' color='primary'>Upload Song</Button>
-                                        {/*<Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>*/}
+                                        <Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>
                                     </div>
                                 </div>
                             </div>
@@ -226,9 +243,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        upload: (userRegister) => {
-            dispatch(upload(userRegister))
-        },
+        upload: (songInfo, image, imageName, song, songName, callBack) => { dispatch(dbUploadSong(songInfo, image, imageName, song, songName, callBack)) },
     }
 }
 

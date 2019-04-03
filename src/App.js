@@ -8,6 +8,7 @@ import SignupComponent from './containers/SignupComponent'
 import Homepage from './containers/Homepage'
 import Profile from './containers/Profile'
 import Navbar from './components/Navbar'
+import Master from './containers/Master'
 import SongUploadComponent from './containers/SongUpload'
 
 class App extends Component {
@@ -16,6 +17,7 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
           <Navbar />
+          <Master />
 
           <Switch>
             <Route exact path='/' component={Homepage} />

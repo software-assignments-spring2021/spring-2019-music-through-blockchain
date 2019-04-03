@@ -44,9 +44,9 @@ const styles = theme => ({
       position: 'absolute',
       top: 30,
       bottom: 30,
+      backgroundColor: 'lightgrey',
       left: '10%',
       width: '80%',
-      backgroundColor: 'lightgrey',
   },
 
   topLeft: {
@@ -155,6 +155,7 @@ export class Profile extends Component {
         </div>
         <div className={classes.rowTwo}>
           <div className={classes.songList}> 
+              <SongList />
           </div>
         </div> 
         <Modal className={classes.modal} open={this.state.uploadModalOpen} onClose={this.handleCloseUpload}>

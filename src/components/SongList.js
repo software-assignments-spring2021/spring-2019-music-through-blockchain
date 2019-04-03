@@ -106,4 +106,19 @@ export class SongList extends Component {
       )}
     }}
 
-export default withStyles(styles)(SongList);
+
+const mapStateToProps = (state) => {
+  return {
+    songs: state.firestore.ordered.songs
+  }
+}
+
+
+export default compose(
+    connect(mapStateToProps),
+    firestoreConnect([{
+      collection: 'songs'
+     // ordrerBy
+    }]), 
+    withStyles(styles)
+  )(SongList)
