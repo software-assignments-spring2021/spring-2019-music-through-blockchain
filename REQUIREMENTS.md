@@ -1,10 +1,13 @@
 # Requirements
+Wireframes
+([Artist Profile](https://wireframe.cc/O03Qzz))
+([Song Information](https://wireframe.cc/VPFxkU))
 
 ## Interviews 
 
 Our main stakeholders are Amos Bloomberg and Wei Kai. Based on the interviews, some of the things we will have to keep in mind are:
 
-1. The application has to be aesthetically pleasing to appeal to artists ([Wireframe](https://wireframe.cc/O03Qzz))
+1. The application has to be aesthetically pleasing to appeal to artists 
 2. The application has to make the artists' payment process more 
 convenient.
 
