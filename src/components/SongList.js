@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -107,18 +106,5 @@ export class SongList extends Component {
     }}
 
 
-const mapStateToProps = (state) => {
-  return {
-    songs: state.firestore.ordered.songs
-  }
-}
 
-
-export default compose(
-    connect(mapStateToProps),
-    firestoreConnect([{
-      collection: 'songs'
-     // ordrerBy
-    }]), 
-    withStyles(styles)
-  )(SongList)
+export default withStyles(styles)(SongList);
