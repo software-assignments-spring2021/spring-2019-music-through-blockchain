@@ -41,7 +41,8 @@ export class SongUploadComponent extends Component {
             priceInput: '',
             priceInputError: '',
             songFileInput: '',
-            songFileInputError: ''
+            songFileInputError: '',
+            songFile: null
         }
         this.handleForm = this.handleForm.bind(this)
     }
@@ -110,32 +111,43 @@ export class SongUploadComponent extends Component {
 
 
         if (isNaN(intPrice)) {
-            if (intPrice && intPrice > 1) {
+            if (!intPrice || intPrice <= 0) {
                 this.setState({
-                    priceInputError: 'Please enter a valid a price'
+                    priceInputError: 'Please enter a valid price'
                 })
                 error = true
             }
         }
 
         if (!error) {
-            upload({
+            const songInfo = {
                 title: songNameInput,
                 artistName: artistNameInput,
-                price: priceInput,
-            }, 
-            this.state.file,
-            this.state.file.name,
-            () => {return <Redirect to='/' />})
+                price: priceInput}
+            const callBack = () => {
+                this.props.history.push('/')
+                return <Redirect to='/' />
+            }
+            upload(
+                songInfo,
+                this.state.file,
+                this.state.file.name,
+                this.state.songFile,
+                this.state.songFile.name,
+                callBack
+            )
         }
         else {
             console.log('form input error')
         }
     }
 
-    onChange = (e) => {
-        console.log(e.target.files)
+    onImageChange = (e) => {
         this.setState({file:e.target.files[0]})
+    }
+
+    onSongChange = (e) => {
+        this.setState({songFile:e.target.files[0]})
     }
 
     render() {
@@ -189,7 +201,7 @@ export class SongUploadComponent extends Component {
                                     <div>
                                         <div>Choose mp3 file to upload</div>
                                         <input
-                                               onChange={this.handleInputChange}
+                                               onChange={this.onSongChange}
                                                error={this.state.songFileInputError.trim() !== ''}
                                                accept='.mp3'
                                                label='Choose mp3 file to upload'
@@ -200,7 +212,7 @@ export class SongUploadComponent extends Component {
                                     <div>
                                         <div>Choose cover art to upload</div>
                                         <input
-                                            onChange={this.onChange}
+                                            onChange={this.onImageChange}
                                             error={this.state.songFileInputError.trim() !== ''}
                                             label='Choose cover art to upload'
                                             name='coverArtInput'
@@ -209,7 +221,6 @@ export class SongUploadComponent extends Component {
                                     </div>
                                     <div>
                                         <Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>
-                                        {/*<Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>*/}
                                     </div>
                                 </div>
                             </div>
@@ -232,7 +243,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        upload: (song, image, imageName, callBack) => { dispatch(dbUploadSong(song, image, imageName, callBack)) },
+        upload: (songInfo, image, imageName, song, songName, callBack) => { dispatch(dbUploadSong(songInfo, image, imageName, song, songName, callBack)) },
     }
 }
 

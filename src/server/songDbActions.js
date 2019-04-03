@@ -1,44 +1,58 @@
+import { db, storageRef } from "../fbconfig"
+import firebase from 'firebase'
 
 // - Import react components
 export const songService = {
-    /**
-   * Update song
-   */
-    uploadSong: (song, db, storage, image, imageName) => {
-        return new Promise((resolve, reject) => {
-            const songData = {}
-            const batch = db.batch()
-            let songRef = db.collection(`songs`).doc()
-            const storageFile = storage.child(`images/${imageName}`)
-            
-            batch.put(storageFile, image).then((result) => {
-              result.ref.getDownloadURL()
-              .then((downloadURL) => {
-                songData['imageData'] = {url: downloadURL, fullPath: result.metadata.fullPath}
+  /**
+  * Upload song
+  */
+  uploadSong: (uid, songInfo, image, imageName, song, songName) => {
+    return new Promise((resolve, reject) => {
+        let songData = {}
+        let songRef = db.collection(`songs`).doc()
+        let userRef = db.collection(`users`).doc(uid)
+        const imageStorageFile = storageRef.child(`images/${imageName}`)
+        const songStorageFile = storageRef.child(`songs/${songName}`)
+
+        //cloud storage --> store cover art
+        imageStorageFile.put(image).then((imageResult) => {
+          imageResult.ref.getDownloadURL()
+          .then((imageDownloadURL) => {
+
+            //cloud storage --> store song
+            songStorageFile.put(song).then((songResult) => {
+              songResult.ref.getDownloadURL()
+              .then((songDownloadURL) => {
+                songData = {...songInfo, 
+                  imageUrl: imageDownloadURL,
+                  imageFullPath: imageResult.metadata.fullPath,
+                  songUrl: songDownloadURL, 
+                  songFullPath: songResult.metadata.fullPath}
+                
+                //firestore --> save song info
+                songRef.set(songData).then(() => {
+                  //add song id to songs owned by user
+                  userRef.update({songsOwned: firebase.firestore.FieldValue.arrayUnion(songRef.id)})
+                  
+                  //add songId to songInfo and resolve
+                  .then(() => {
+                    songData['id'] = songRef.id
+                    resolve(songData)
+                  })
+                })
               })
-              .catch((error) => {
-                reject(error)
-              })
-            }).catch((error) => {
-              reject(error)
             })
-            batch.set(songRef, { ...song, id: songRef.id })
-            .then(() => {
-              songData['id'] = songRef.id
-            })
-            .catch((error) => {
-                reject(error)
-            })
-            batch.commit().then(() => {
-              resolve(songData)
-            })
+          }).catch((error) => {
+            reject(error)
+          })
         })
+      })
     },
     
   /**
    * Update song
    */
-  updateSong: (song, db) => {
+  updateSong: (song) => {
       return new Promise((resolve, reject) => {
         const batch = db.batch()
         let songRef = db.doc(`songs/${song.id}`)
@@ -54,9 +68,9 @@ export const songService = {
     },
 
   /**
-   * Delete post
+   * Delete song
    */
-  deleteSong: (songId, db) => {
+  deleteSong: (songId) => {
       return new Promise((resolve, reject) => {
         const batch = db.batch()
         let songRef = db.doc(`songs/${songId}`)
@@ -74,7 +88,7 @@ export const songService = {
  * Get list of songs for homepage
  * 
  */
-getSongs: (userId, lastSongId, page, limit, type, sortBy, db) => {
+getSongs: (userId, lastSongId, page, limit, type, sortBy) => {
     return new Promise((resolve, reject) => {
         let parsedData = []
         let query = db.collection('songs')
