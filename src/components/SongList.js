@@ -54,7 +54,6 @@ export class SongList extends Component {
   }
   render() {
     const {classes, songs, userId  } = this.props
-    console.log("songs: !! ", songs[0].prices[userId][1])
     if (songs) {
         return (
           <Grid container justify="center"> 
