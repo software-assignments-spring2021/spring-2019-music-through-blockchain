@@ -14,6 +14,7 @@ user:
               // songsCanListenTo is an array with song ids that user can listen to
               songsCanListenTo:  ["songOne", "songTwo"] Array<string>
               walletAddress: " " <string>
+              biography: <string>,
               /*other fields that will be inherited from the firebase's
                user auth  model:
               userId: "userOne" <string>
