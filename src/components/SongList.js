@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -11,12 +10,12 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
 
-import {firestoreConnect} from 'react-redux-firebase';
-import {compose} from 'redux'
+//USAGE:
+// <SongList songs={songs} userId={1}/>
 
 const styles = theme => ({
   paper: {
-    width:'80%', 
+    width:'100%', 
     marginTop: '20px',
     justify: 'center', 
     overflowX: 'auto'
@@ -49,8 +48,11 @@ const CustomTableCell = withStyles(theme => ({
 }))(TableCell);
 
 export class SongList extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
-    const {classes, songs, artistPage  } = this.props
+    const {classes, songs, userId  } = this.props
     if (songs) {
         return (
           <Grid container justify="center"> 
@@ -78,7 +80,7 @@ export class SongList extends Component {
                     <Grid container wrap="nowrap" spacing={16}>
                         <Grid item>
                           <div style={{width: 75, height:75, backgroundColor: 'lightgrey'}}>
-                            <img className={classes.image} src ={song.cover} />
+                            <img className={classes.image} src ={song.coverArt} />
                           </div>
                         </Grid>
                       <Grid item xs zeroMinWidth alignContent="center">
@@ -87,8 +89,8 @@ export class SongList extends Component {
                     </Grid>
                   </TableCell>
                     <TableCell align="right" className={classes.tablecell} >{song.artist || 'anonymous'}</TableCell>
-                    <TableCell align="right" className={classes.tablecell} style={{paddingRight: '120px'}}> {song.price}$ </TableCell>
-                    <TableCell align="right" className={classes.tablecell}>{song.remainingShare}% </TableCell>
+                    <TableCell align="right" className={classes.tablecell} style={{paddingRight: '120px'}}> {song.prices[userId][1] || 0 }$ </TableCell>
+                    <TableCell align="right" className={classes.tablecell}>{song.prices[userId][0] || 0}% </TableCell>
                   </TableRow>          
                   ))}
             </TableBody>
@@ -96,27 +98,12 @@ export class SongList extends Component {
           </Paper>
           </Grid>
           )
-
-      
     } else {
       return ( 
         <div> </div>
       )}
-  
     }}
 
-const mapStateToProps = (state) => {
-  return {
-    songs: state.firestore.ordered.songs
-  }
-}
 
 
-export default compose(
-    connect(mapStateToProps),
-    firestoreConnect([{
-      collection: 'songs'
-     // ordrerBy
-    }]), 
-    withStyles(styles)
-  )(SongList)
+export default withStyles(styles)(SongList);
