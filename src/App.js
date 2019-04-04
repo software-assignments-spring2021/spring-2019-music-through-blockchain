@@ -10,6 +10,7 @@ import Profile from './containers/Profile'
 import Navbar from './components/Navbar'
 import Master from './containers/Master'
 import SongUploadComponent from './containers/SongUpload'
+import LandingPage from './containers/LandingPage'
 
 class App extends Component {
   render() {
@@ -26,6 +27,7 @@ class App extends Component {
             <Route path='/signup' component={SignupComponent} />
             <Route path='/profile/:uid' component={Profile} />
             <Route path='/create' component={SongUploadComponent} />
+            <Route path='/landing-page' component ={LandingPage}/>
           </Switch>
         </div>
       </BrowserRouter>
