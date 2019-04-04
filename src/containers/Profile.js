@@ -10,6 +10,7 @@ import SongUpload from './SongUpload'
 import EditProfile from '../components/EditProfile'
 import SongList from '../components/SongList'
 import { connect } from 'react-redux'
+import {songs} from './mock.js'
 
 const styles = theme => ({
   root: {   
@@ -155,7 +156,7 @@ export class Profile extends Component {
         </div>
         <div className={classes.rowTwo}>
           <div className={classes.songList}> 
-              <SongList />
+              <SongList songs= {songs} userId={1}/>
           </div>
         </div> 
         <Modal className={classes.modal} open={this.state.uploadModalOpen} onClose={this.handleCloseUpload}>
