@@ -26,7 +26,7 @@ class App extends Component {
             <Route path='/signup' component={SignupComponent} />
             <Route path='/profile/:uid' component={Profile} />
             <Route path='/create' component={SongUploadComponent} />
-            <Route path='/landingPage' component ={LandingPage}/>
+            <Route path='/landing-page' component ={LandingPage}/>
           </Switch>
         </div>
       </BrowserRouter>
