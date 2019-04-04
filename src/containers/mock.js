@@ -1,6 +1,6 @@
 import coverArt from '../img/albumArt.png'
 import coverArtTwo from '../img/tameImpala.jpg'
-const songs =[
+export const songs =[
     {
         title: 'song1',
         coverArt: coverArt ,
