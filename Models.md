@@ -13,6 +13,9 @@ user:
               songsWithRoyalties: ["songOne", "songTwo"] Array<string>
               // songsCanListenTo is an array with song ids that user can listen to
               songsCanListenTo:  ["songOne", "songTwo"] Array<string>
+
+              biography: "biography" <string>
+
               walletAddress: " " <string>
               biography: <string>,
               /*other fields that will be inherited from the firebase's
