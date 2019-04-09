@@ -12,6 +12,8 @@ import coverArtTwo from '../img/tameImpala.jpg'
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 
+import { dbGetSongs } from '../store/actions/songActions'
+
 const styles = {
   root: {
     width: 1100,
@@ -33,6 +35,9 @@ const styles = {
 }
 
 export class Homepage extends Component {
+  componentWillMount() {
+    this.props.loadDataStream()
+  }
   render() {
     const { classes } = this.props
     const songs = {
@@ -96,4 +101,11 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, null)(withStyles(styles)(Homepage))
+const mapDispatchToProps = (dispatch, ownProps) => {
+
+  return {
+    loadDataStream: () => dispatch(dbGetSongs()),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Homepage))
