@@ -23,13 +23,13 @@ class App extends Component {
           <Master />
 
           <Switch>
-            <Route exact path='/' component={Homepage} />
+            <Route exact path='/home' component={Homepage} />
             <Route path='/song/:uid' component={SongPage} />
             <Route path='/signin' component={SigninComponent} />
             <Route path='/signup' component={SignupComponent} />
             <Route path='/profile/:uid' component={Profile} />
             <Route path='/create' component={SongUploadComponent} />
-            <Route path='/landing-page' component ={LandingPage}/>
+            <Route path='/' component ={LandingPage}/>
             <Route component={NotFound} />
 
           </Switch>

@@ -155,7 +155,7 @@ export class SongPage extends Component {
               </Grid>
         </div> )
     } else {
-      return <Redirect to='/signin' />
+      return <Redirect to='/' />
     }
     
   }
