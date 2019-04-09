@@ -53,21 +53,16 @@ export class NotFound extends Component {
         return(
           <div>
             
-          <Typography variant='h1' style={{paddingTop: 100, paddingBottom: 100}}> 404 Page Not Found</Typography> 
+          <Typography variant='h3' style={{paddingTop: 100, paddingBottom: 100}}> 404 Page Not Found</Typography> 
         
                       <Grid container spacing={24} >
                         <Grid item xs={6}> 
-                          <Typography variant='h2'  style={{paddingTop: 100}} > No Music to be found here  </Typography> 
-                          <Typography variant='h4' style={{paddingTop: 200}}> Find your way back to good music  </Typography> 
+                          <Typography variant='h4'  style={{paddingTop: 50}} > No Music to be found here  </Typography> 
+                          <Typography variant='h5' style={{paddingTop: 100}}> Find your way back to good music  </Typography> 
                           <Button style={{background: 'linear-gradient(45deg, #647DEE 30%, #7F53AC 90%)', color:'white', marginTop: 50, height: 60, width: 200, fontSize: 24}} onClick={this.goHome}>Go Back</Button> 
                         </Grid>
                         <Grid item xs={6}>
-                          {/* <img 
-                                  data-image="black"
-                                  src={notFound}
-                                  alt=""
-                                  style={{paddingTop: 100}}
-                          /> */}
+
                           <div style ={{paddingTop: '50%', position: 'relative', marginRight: 100}}>
                           <iframe 
                           src="https://gifer.com/embed/8ddl" 
