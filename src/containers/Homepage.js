@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
+import { Redirect } from 'react-router-dom';
 
 // import project components
 import SongBoxGrid from '../components/SongBoxGrid'
 import Carousel from '../components/Carousel'
 import coverArt from '../img/albumArt.png'
 import coverArtTwo from '../img/tameImpala.jpg'
-
+import LandingPage from './LandingPage'
 //import css scripts
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
@@ -39,7 +40,7 @@ export class Homepage extends Component {
     this.props.loadDataStream()
   }
   render() {
-    const { classes } = this.props
+    const { classes, auth } = this.props
     const songs = {
       '1': {
         artist: 'Artist 1',
@@ -82,15 +83,20 @@ export class Homepage extends Component {
         coverArt: coverArt
       },
     }
-    return (
-      <div className={classes.root}>
-        <Carousel songs={songs}/>
-        <h1 style={{position: 'relative', right: '40%', top: 10}}>Recent</h1>
-        <div className={classes.centerCol}>
-          <SongBoxGrid songs={songs}/>
+    if(auth.uid){
+      return (
+        <div className={classes.root}>
+          <Carousel songs={songs}/>
+          <h1 style={{position: 'relative', right: '40%', top: 10}}>Recent</h1>
+          <div className={classes.centerCol}>
+            <SongBoxGrid songs={songs}/>
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
+    else{
+      return <LandingPage/>
+    }
   }
 }
 

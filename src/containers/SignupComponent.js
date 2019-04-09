@@ -156,7 +156,7 @@ export class SignupComponent extends Component {
     const { classes, auth } = this.props
     if (auth.uid){
         this.props.history.push('/')
-        return <Redirect to='/' />
+        return <Redirect to='/home' />
     }
 
     return (
