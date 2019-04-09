@@ -10,7 +10,7 @@ const Navbar = (props) => {
     return (
         <nav style={{backgroundColor:'lightgrey', height:65, position: 'relative', width: '100%', bottom: 22}}>
             <h4>
-                <Link to='/home' style={{position: 'absolute', left: 30, top: 20, fontSize: 20, textDecoration: 'none', color: 'blue', zIndex: 3}}>bMusic</Link>
+                <Link to='/' style={{position: 'absolute', left: 30, top: 20, fontSize: 20, textDecoration: 'none', color: 'blue', zIndex: 3}}>bMusic</Link>
                 {links}
             </h4>
         </nav>  
