@@ -229,7 +229,6 @@ export class SongUploadComponent extends Component {
                 </Grid>
             </Grid>
         )
-
     }
 
 }

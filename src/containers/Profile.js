@@ -5,6 +5,7 @@ import Card from '@material-ui/core/Card'
 import Typography from '@material-ui/core/Typography'
 import Modal from '@material-ui/core/Modal'
 import DialogContent from '@material-ui/core/DialogContent';
+import { Redirect } from 'react-router-dom';
 
 import SongUpload from './SongUpload'
 import EditProfile from '../components/EditProfile'
@@ -136,6 +137,9 @@ export class Profile extends Component {
   render() {
     const {classes, auth, match} = this.props
     console.log('profile props: ', this.props)
+    if(!auth.uid){
+      return <Redirect to='/' />
+    }
     return (
       <div className={classes.root}>
         <div className={classes.rowOne}>
