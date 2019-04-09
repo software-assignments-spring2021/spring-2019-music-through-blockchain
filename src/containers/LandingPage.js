@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
+import { Typography } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 
 // import project components
 import SongBoxGrid from '../components/SongBoxGrid'
+
 
 import coverArt from '../img/albumArt.png'
 import coverArtTwo from '../img/tameImpala.jpg'
@@ -28,7 +31,9 @@ const styles = {
   infoSection: {
     display: 'flex',
     "flex-direction": "column",
-    margin: "0 5%"
+    margin: "0 5%",
+    "align-content": "space-around",
+    "justify-content": "center"
   },
   svg:{
     left: "5%",
@@ -55,7 +60,36 @@ const styles = {
   siteInfo:{
     display: "flex",
     "flex-direction":"column"
-  }
+  },
+  subtitle: {
+    fontSize: 25,
+    color: "#358ED7",
+    letterSpacing: "1px",
+    textTransform: "uppercase",
+    textDecoration: "none"
+  },
+  title: {
+    fontWeight: 300,
+    fontSize: 40,
+    color: "#43484D",
+    letterSpacing: "-2px"
+  },
+  button: {
+    background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
+    width: 300,
+    color: 'white !important',
+    marginTop: 20,
+    fontSize: 16
+
+  },
+  description: {
+    textAlign: "center",
+    fontSize: 16,
+    color: "#86939E",
+    letterSpacing: "-1px",
+    fontWeight: 300,
+    lineHeight: "24px"
+  },
 }
 
 export class LandingPage extends Component {
@@ -97,12 +131,22 @@ export class LandingPage extends Component {
       <div className={classes.root}>
         <div  className={classes.infoSectionContainer}>
           <div className={classes.infoSection}>
-            <h2><b>Get your Favorite Songs</b></h2>
-            <p>Buy songs that you love directly from artists. Listen to them whenever you want.</p>
+            <div className={classes.infoSubSection}>
+              <Typography variant="h3" className={classes.title}>Do More. Be More. bMusic.</Typography>
+              <br></br>
+              <br></br>
+              <Typography variant="h4" className={classes.subtitle}>Get your Favorite Songs</Typography>
+              <br></br>
+              <Typography variant="p" className={classes.description}>Buy songs that you love directly from artists. Listen to them whenever you want.</Typography>
+            </div>
             <br></br>
-            <h3>Are you also an artist?</h3>
-            <p>Upload your songs and directly sell them to your fans. Split payments between owners without the need of intermediaries.</p>
-            <p></p>
+            <br></br>
+            <br></br>
+            <div className={classes.infoSubSection}>
+              <Typography variant="h4" className={classes.subtitle}>Are you also an artist?</Typography>
+              <br></br>
+              <Typography variant="p" className={classes.description}>Upload your songs and directly sell them to your fans. Split payments between owners without the need of intermediaries.</Typography>
+            </div>
           </div>
           <div className={classes.infoSection}>
             <SongBoxGrid songs={songs}/>
@@ -133,16 +177,19 @@ export class LandingPage extends Component {
               </svg>
           </div>
           <div className={classes.infoSection}>
-            <h2>Invest in Music</h2>
-            <p>Buy and sell phonogram royalties of your favorite songs. Pre-register owners and get funded for your music</p>
+            <div className={classes.infoSubSection}>
+              <Typography variant="h2" className={classes.title}>Invest in Music</Typography>
+              <br></br>
+              <Typography variant="p" className={classes.description}>Buy and sell phonogram royalties of your favorite songs. Pre-register owners and get funded for your music</Typography>
+            </div>
           </div>
         </div>
         <div className={classes.footerContainer}>
           <div className={classes.footerSection}>
             <ul className = {classes.siteInfo} style={{"list-style-type": "none", textAlign: "start"}}>
-              <a href=""><li>About bMusic</li></a>
-              <a href=""><li>Contact us</li></a>
-              <a href=""><li>Privacy, Terms and Conditions</li></a>
+              <a href=""><li><Typography variant="p" className={classes.description}>About bMusic</Typography></li></a>
+              <a href=""><li><Typography variant="p" className={classes.description}>Contact us</Typography></li></a>
+              <a href=""><li><Typography variant="p" className={classes.description}>Privacy, Terms and Conditions</Typography></li></a>
             </ul>
           </div>
           <div className={classes.footerSection}>
