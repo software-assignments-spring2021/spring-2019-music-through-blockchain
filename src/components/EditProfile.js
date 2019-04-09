@@ -7,8 +7,8 @@ import { withStyles } from '@material-ui/core/styles'
 import {signUp} from '../store/actions/authActions'
 import { Grid } from '@material-ui/core'
 import { Redirect } from 'react-router-dom'
-import {SignupComponent} from "./SignupComponent";
 import {upload} from '../store/actions/songUploadActions'
+import {dbEditProfile} from '../store/actions/userActions'
 
 
 const styles = (theme) => ({
@@ -29,7 +29,7 @@ const styles = (theme) => ({
     }
 })
 
-export class editProfileComponent extends Component {
+export class EditProfileComponent extends Component {
 
     constructor(props) {
         super(props)
@@ -41,8 +41,9 @@ export class editProfileComponent extends Component {
             editArtistNameInputError: '',
             userInfoInput: '',
             userInfoInputError: '',
-            profilePictureFileInputError: null,
-            profilePictureFileInput: ''
+            profilePictureFileInput: null,
+            profilePictureFileInputError: '',
+
         }
         this.handleForm = this.handleForm.bind(this)
     }
@@ -88,20 +89,28 @@ export class editProfileComponent extends Component {
 
         let error = false
 
-        // Validate full name
         let songNameCheck = editNameInput.trim().toLowerCase()
 
-        if (songNameCheck.length < 2) {
+        /*check name input*/
+        if (editNameInput.length < 1) {
             this.setState({
                 songNameInputError: 'Please enter a valid name'
             })
             error = true
         }
 
-        /* Check userbio */
-        if (userInfoInput === '') {
+        /*check artist name input*/
+        if (editArtistNameInput.length < 1) {
             this.setState({
-                artistNameInputError: 'Please enter a valid artist name'
+                songNameInputError: 'Please enter a valid artist name'
+            })
+            error = true
+        }
+
+        /* Check userbio */
+        if (userInfoInput.trim().length > 2000) {
+            this.setState({
+                artistNameInputError: 'Please enter no more than 2000 characters'
             })
             error = true
         }
@@ -109,14 +118,15 @@ export class editProfileComponent extends Component {
 
         if (!error) {
             editProfile({
-                name: editNameInput,
+                accountOwner: editNameInput,
                 artistName: editArtistNameInput,
+                biography: userInfoInput,
                 photo: profilePictureFileInput,
             })
         }
     }
 
-    onChange(e) {
+    onImageChange = (e) => {
         this.setState({file:e.target.files[0]})
     }
 
@@ -135,14 +145,14 @@ export class editProfileComponent extends Component {
                         <Paper className={classes.paper} elevation={1} >
                             <div style={{ padding: '48px 40px 36px' }}>
                                 <div style={{ paddingLeft: '40px', paddingRight: '40px'}}>
-                                    <h2>bMusic Song Upload</h2>
+                                    <h2>Edit Your Profile</h2>
                                 </div>
                                 <TextField
                                     className={classes.textField}
                                     autoFocus
                                     onChange={this.handleInputChange}
-                                    helperText={this.state.songNameInputError}
-                                    error={this.state.songNameInputError.trim() !== ''}
+                                    helperText={this.state.editNameInputError}
+                                    error={this.state.editNameInputError.trim() !== ''}
                                     name='editNameInput'
                                     label='Name'
                                     type='text'
@@ -151,8 +161,8 @@ export class editProfileComponent extends Component {
                                     className={classes.textField}
                                     autoFocus
                                     onChange={this.handleInputChange}
-                                    helperText={this.state.artistNameInputError}
-                                    error={this.state.artistNameInputError.trim() !== ''}
+                                    helperText={this.state.editArtistNameInputError}
+                                    error={this.state.editArtistNameInputError.trim() !== ''}
                                     name='editArtistNameInput'
                                     label='Artist Name'
                                     type='text'
@@ -160,8 +170,8 @@ export class editProfileComponent extends Component {
                                 <TextField
                                     className={classes.textField}
                                     onChange={this.handleInputChange}
-                                    helperText={this.state.priceInputError}
-                                    error={this.state.priceInputError.trim() !== ''}
+                                    helperText={this.state.userInfoInputError}
+                                    error={this.state.userInfoInputError.trim() !== ''}
                                     name='userInfoInput'
                                     label='Biography'
                                     type='textarea'
@@ -171,17 +181,17 @@ export class editProfileComponent extends Component {
                                     <div>
                                         <div>Choose profile picture file to upload</div>
                                         <input
-                                            onChange={this.handleInputChange}
-                                            error={this.state.songFileInputError.trim() !== ''}
+                                            onChange={this.onImageChange}
+                                            error={this.state.profilePictureFileInputError.trim() !== ''}
                                             accept=''
-                                            label='Choose profile picture file to upload'
+                                            label='Choose a profile picture to upload'
                                             name='profilePictureFileInput'
                                             type="file"
                                         />
                                     </div>
 
                                     <div>
-                                        <Button variant='contained' color='primary'>Upload Song</Button>
+                                        <Button variant='contained' color='primary'>Save Changes</Button>
                                         {/*<Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>*/}
                                     </div>
                                 </div>
@@ -206,9 +216,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         editProfile: (userRegister) => {
-            dispatch(upload(userRegister))
+            dispatch(dbEditProfile(userRegister))
         },
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(editProfileComponent))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(EditProfileComponent))
