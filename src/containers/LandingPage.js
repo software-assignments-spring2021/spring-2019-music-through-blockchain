@@ -132,7 +132,10 @@ export class LandingPage extends Component {
         <div  className={classes.infoSectionContainer}>
           <div className={classes.infoSection}>
             <div className={classes.infoSubSection}>
-              <Typography variant="h3" className={classes.title}>Get your Favorite Songs</Typography>
+              <Typography variant="h3" className={classes.title}>Do More. Be More. bMusic.</Typography>
+              <br></br>
+              <br></br>
+              <Typography variant="h4" className={classes.subtitle}>Get your Favorite Songs</Typography>
               <br></br>
               <Typography variant="p" className={classes.description}>Buy songs that you love directly from artists. Listen to them whenever you want.</Typography>
             </div>
