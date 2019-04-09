@@ -5,6 +5,10 @@ import Grid from "@material-ui/core/Grid";
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import RoyaltyList from "./RoyaltyList";
+import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+
+
 let id = 0;
 function createData(seller, pricePerRoyalty, amount, totalPrice) {
   id += 1;
@@ -95,61 +99,73 @@ export class SongPage extends Component {
   }
   render() {
     const { classes, auth, match } = this.props;
-    console.log("profile props: ", this.props);
-    return (
-      <div className={classes.root}>
-        <Grid container spacing={24} className={classes.grid}>
-          <Grid item xs={6}>
-            <div className={classes.leftColumn}>
-              <img
-                className={classes.cover}
-                data-image="black"
-                src={coverArt}
-                alt=""
-              />
-            </div>
-          </Grid>
-          <Grid item xs={6}>
-            <div>
-              <div>
-                <Typography className={classes.artist} variant="subtitle2">
-                  Ariana Grande
-                </Typography>
-                <Typography className={classes.songName} variant="h4">
-                  Thank u, next
-                </Typography>
-                <p className={classes.description}>
-                  Lorem ipsum dolor sit amet et delectus accommodare his consul
-                  copiosae legendos at vix ad putent delectus delicata usu.
-                  Vidit dissentiet eos cu eum an brute copiosae hendrerit. Eos
-                  erant dolorum an. Per facer affert ut. Mei iisque mentitum
-                  moderatius cu. 
-                </p>
-              </div>
-            </div>
-            <div>
-              <Button className ={classes.button} onClick={this.scrollToBottom}>Purchase Song</Button>
-            </div>
-          </Grid>
-          <Grid item xs={12}>
-            <div className={classes.royalties}>
-              <Typography variant="h4" align="center" style={{ marginTop: 5 }}>
-                Interested in investing in this song's royalties?
-              </Typography>
-              <Typography
-                variant="subtitle2"
-                align="center"
-                style={{ marginTop: 25, marginBottom: 25 }}
-              >
-                Buy royalty packages from current song owners
-              </Typography>
-              <RoyaltyList royalties={royalties} />
-            </div>
-          </Grid>
-        </Grid>
-      </div>
-    );
+    console.log("SongPage props: ", this.props);
+    console.log(auth.uid)
+    if (auth.uid) {
+        return (
+            <div className={classes.root}>
+              <Grid container spacing={24} className={classes.grid}>
+                <Grid item xs={6}>
+                  <div className={classes.leftColumn}>
+                    <img
+                      className={classes.cover}
+                      data-image="black"
+                      src={coverArt}
+                      alt=""
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div>
+                    <div>
+                      <Typography className={classes.artist} variant="subtitle2">
+                        Ariana Grande
+                      </Typography>
+                      <Typography className={classes.songName} variant="h4">
+                        Thank u, next
+                      </Typography>
+                      <p className={classes.description}>
+                        Lorem ipsum dolor sit amet et delectus accommodare his consul
+                        copiosae legendos at vix ad putent delectus delicata usu.
+                        Vidit dissentiet eos cu eum an brute copiosae hendrerit. Eos
+                        erant dolorum an. Per facer affert ut. Mei iisque mentitum
+                        moderatius cu. 
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <Button className ={classes.button} onClick={this.scrollToBottom}>Purchase Song</Button>
+                  </div>
+                </Grid>
+                <Grid item xs={12}>
+                  <div className={classes.royalties}>
+                    <Typography variant="h4" align="center" style={{ marginTop: 5 }}>
+                      Interested in investing in this song's royalties?
+                    </Typography>
+                    <Typography
+                      variant="subtitle2"
+                      align="center"
+                      style={{ marginTop: 25, marginBottom: 25 }}
+                    >
+                      Buy royalty packages from current song owners
+                    </Typography>
+                    <RoyaltyList royalties={royalties} />
+                  </div>
+                </Grid>
+              </Grid>
+        </div> )
+    } else {
+      return <Redirect to='/signin' />
+    }
+    
   }
 }
 
-export default withStyles(styles, { withTheme: true })(SongPage);
+const mapStateToProps = (state) => {
+    return {
+        auth: state.firebase.auth,
+        profile: state.firebase.profile
+    }
+  }
+
+  export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(SongPage))
