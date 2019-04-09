@@ -8,7 +8,7 @@ import SongBoxGrid from '../components/SongBoxGrid'
 import Carousel from '../components/Carousel'
 import coverArt from '../img/albumArt.png'
 import coverArtTwo from '../img/tameImpala.jpg'
-
+import LandingPage from './LandingPage'
 //import css scripts
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
@@ -95,7 +95,7 @@ export class Homepage extends Component {
       )
     }
     else{
-      return <Redirect to='/'/>
+      return <LandingPage/>
     }
   }
 }
