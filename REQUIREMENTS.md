@@ -1,10 +1,13 @@
 # Requirements
 Wireframes
-([Artist Profile](https://wireframe.cc/O03Qzz))
-([Song Information](https://wireframe.cc/VPFxkU))
-([Landing Page](https://wireframe.cc/6OkyTT))
-([404 Page](https://wireframe.cc/zwMuRi))
+ - ([Artist Profile](https://wireframe.cc/O03Qzz))
+ - ([Song Information](https://wireframe.cc/VPFxkU))
+ - ([Landing Page](https://wireframe.cc/6OkyTT))
+ - ([404 Page](https://wireframe.cc/zwMuRi))
 
+UI Map
+
+![UI Map](UI Map-1.png)
 
 ## Interviews 
 
