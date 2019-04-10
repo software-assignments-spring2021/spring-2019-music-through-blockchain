@@ -7,7 +7,7 @@ Wireframes
 
 UI Map
 
-![UI Map](UI Map-1.png)
+![UI Map](UI-Map.png)
 
 ## Interviews 
 
