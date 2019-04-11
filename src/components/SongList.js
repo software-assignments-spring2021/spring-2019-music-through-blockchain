@@ -8,6 +8,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom';
+
 
 
 //USAGE:
@@ -51,6 +54,7 @@ export class SongList extends Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     const {classes, songs, userId  } = this.props
     if (songs) {
@@ -66,7 +70,7 @@ export class SongList extends Component {
                     <col style={{width:'19%'}}/>
                    </colgroup>
               <TableHead>
-              <TableRow>
+              <TableRow > 
                 <CustomTableCell align="center" >Song</CustomTableCell>
                 <CustomTableCell align="right">Artist</CustomTableCell>
                 <CustomTableCell align="right">Price</CustomTableCell>
@@ -75,7 +79,7 @@ export class SongList extends Component {
               </TableHead>
               <TableBody>
                   { songs && songs.map(song => (
-                  <TableRow key={song.id} className={classes.tablecell}>
+                  <TableRow key={song.id} className={classes.tablecell} onClick = {() => this.props.viewDetails(song.id)}>
                   <TableCell>
                     <Grid container wrap="nowrap" spacing={16}>
                         <Grid item>
@@ -104,6 +108,21 @@ export class SongList extends Component {
       )}
     }}
 
+    const mapStateToProps = (state) => {
+      return {
+          auth: state.firebase.auth,
+          profile: state.firebase.profile
+      }
+    }
+    const mapDispatchToProps = (dispatch, ownProps) => {
+      return {
+        viewDetails: (id) => {
+          console.log('hello')
+          ownProps.history.push(`/song/${id}`);
+        }
+      }
+    }    
+    
 
 
-export default withStyles(styles)(SongList);
+    export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SongList)))
