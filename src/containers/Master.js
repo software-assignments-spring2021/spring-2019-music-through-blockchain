@@ -70,6 +70,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   
   const mapStateToProps = (state) => {
     return {
+      ...state,
       global: state.global,
       progress: state.global.progress,
       authed: state.firebase.auth

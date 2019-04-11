@@ -188,6 +188,7 @@ export class LoginComponent extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        ...state,
         auth: state.firebase.auth,
         profile: state.firebase.profile
     }

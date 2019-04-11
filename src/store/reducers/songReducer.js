@@ -2,8 +2,8 @@ const initState = {
     info: {},
     stream: {
         'hasMoreData': null,
-        'lastPageRequest': 0,
-        'lastPostId': null
+        'lastPageRequest': null,
+        'lastSongId': null
     },
     profile: {}
 }
@@ -47,7 +47,7 @@ export let songReducer = (state = initState, action) => {
       return {...state, 'stream': {...state.stream, 'lastPageRequest': payload.page}}
 
     case 'LAST_SONG_STREAM':
-      return {...state, 'stream': {...state.stream, 'lastPostId': payload.lastPostId}}
+      return {...state, 'stream': {...state.stream, 'lastSongId': payload.lastSongId}}
 
     case 'HAS_MORE_DATA_PROFILE':
       return {...state, 'stream': {...state.profile, [payload.userId]: {...state.profile.userId, 'hasMoreData': true}}}
@@ -59,7 +59,7 @@ export let songReducer = (state = initState, action) => {
       return {...state, 'stream': {...state.profile, [payload.userId]: {...state.profile.userId, 'lastPageRequest': payload.page}}}
 
     case 'LAST_SONG_PROFILE':
-      return {...state, 'stream': {...state.profile, [payload.userId]: {...state.profile.userId, 'lastPostId': payload.lastPostId}}}
+      return {...state, 'stream': {...state.profile, [payload.userId]: {...state.profile.userId, 'lastSongId': payload.lastSongId}}}
 
     default:
       return state

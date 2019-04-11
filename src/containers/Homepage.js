@@ -8,7 +8,10 @@ import SongBoxGrid from '../components/SongBoxGrid'
 import Carousel from '../components/Carousel'
 import coverArt from '../img/albumArt.png'
 import coverArtTwo from '../img/tameImpala.jpg'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import LandingPage from './LandingPage'
+import InfiniteScroll from 'react-infinite-scroller';
+
 //import css scripts
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
@@ -36,60 +39,45 @@ const styles = {
 }
 
 export class Homepage extends Component {
-  componentWillMount() {
+  constructor (props) {
+    super(props)
+    this.state = {
+      loadIters: 0,
+    }
+  }
+  scrollLoad = (page) => {
+    console.log('scrollLoad')
+    const { loadStream } = this.props
+    this.props.loadDataStream()
+    this.setState({...this.state, loadIters: this.state.loadIters+1})
+  }
+
+  componentDidMount() {
     this.props.loadDataStream()
   }
+
   render() {
-    const { classes, auth } = this.props
-    const songs = {
-      '1': {
-        artist: 'Artist 1',
-        title: 'song 1',
-        coverArt: coverArt
-      },
-      '2': {
-        artist: 'Tame Impala',
-        title: 'The Moment',
-        coverArt: coverArtTwo
-      },
-      '3': {
-        artist: 'Artist 3',
-        title: 'song 3',
-        coverArt: coverArt
-      },
-      '4': {
-        artist: 'Artist 4',
-        title: 'song 4',
-        coverArt: coverArtTwo
-      },
-      '5': {
-        artist: 'Artist 5',
-        title: 'song 5',
-        coverArt: coverArt
-      },
-      '6': {
-        artist: 'Artist 6',
-        title: 'song 6',
-        coverArt: coverArt
-      },
-      '7': {
-        artist: 'Artist 7',
-        title: 'song 7',
-        coverArt: coverArtTwo
-      },
-      '8': {
-        artist: 'Artist 8',
-        title: 'song 8',
-        coverArt: coverArt
-      },
-    }
+    const { classes, auth, song } = this.props
+    console.log('homepage props: ', this.props)
+    console.log('homepage state: ', this.state)
+    const songs = song.info;
+    const hasMoreData = song.stream.hasMoreData;
+    
     if(auth.uid){
       return (
         <div className={classes.root}>
           <Carousel songs={songs}/>
           <h1 style={{position: 'relative', right: '40%', top: 10}}>Recent</h1>
           <div className={classes.centerCol}>
-            <SongBoxGrid songs={songs}/>
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={this.scrollLoad}
+              hasMore={(hasMoreData && this.state.loadIters < 10)}
+              useWindow={true}
+              loader={<div key='load-more-progress'><CircularProgress size={30} thickness={5} style={{color: 'lightblue' }} /></div>}
+              >
+              <SongBoxGrid songs={songs}/>
+            </InfiniteScroll>
           </div>
         </div>
       )
@@ -102,6 +90,7 @@ export class Homepage extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        ...state,
         auth: state.firebase.auth,
         profile: state.firebase.profile
     }

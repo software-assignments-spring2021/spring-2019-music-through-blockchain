@@ -1,31 +1,6 @@
 import React, { Component } from 'react'
 import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardMedia from '@material-ui/core/CardMedia'
-import CardContent from '@material-ui/core/CardContent'
-import LinearProgress from '@material-ui/core/LinearProgress'
-import Typography from '@material-ui/core/Typography'
-import SvgShare from '@material-ui/icons/Share'
-import SvgComment from '@material-ui/icons/Comment'
-import SvgFavorite from '@material-ui/icons/Favorite'
-import ThumbUp from '@material-ui/icons/ThumbUp'
-import ThumbDown from '@material-ui/icons/ThumbDown'
-import SvgFavoriteBorder from '@material-ui/icons/FavoriteBorder'
-import Checkbox from '@material-ui/core/Checkbox'
-import Button from '@material-ui/core/Button'
-import Divider from '@material-ui/core/Divider'
-import { grey } from '@material-ui/core/colors'
-import Paper from '@material-ui/core/Paper'
-import Menu from '@material-ui/core/Menu'
-import MenuList from '@material-ui/core/MenuList'
-import MenuItem from '@material-ui/core/MenuItem'
-import TextField from '@material-ui/core/TextField'
-import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
 import { withStyles } from '@material-ui/core/styles'
 import Grow from '@material-ui/core/Grow'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
@@ -42,31 +17,33 @@ import SongDetails from './SongDetails'
 const styles = theme => ( {
     root: {
         display: 'inline-block',
-        margin: 15,
+        marginRight: 25,
+        marginTop: 25,
         backgroundColor: 'white',
         elevation: 3,
         overflow: 'hidden',
     },
 
     title: {
-        position: 'absolute',
+        position: 'relative',
         marginLeft: 'auto',
         marginRight: 'auto',
+        width: '98%',
         left: 0,
         right: 0,
-        top: -15,
+        bottom: 5,
         textAlign: 'center',
         zIndex: 1
     },
 
     subtitle: {
-        position: 'absolute',
+        position: 'relative',
         textAlign: 'center',
         marginLeft: 'auto',
         marginRight: 'auto',
         left: 0,
         right: 0,
-        top: '13.5%',
+        bottom: 20,
         zIndex: 1
     },
 
@@ -75,11 +52,14 @@ const styles = theme => ( {
         width: '100%',
     },
 
-    controls: {
+    audio: {
         display: 'flex',
         position: 'absolute',
-        bottom: 49,
-        width: '100%',
+        bottom: 0,
+        left: 43,
+        width: '50%',
+        margin: 'auto',
+        height: 50,
         contentAlign: 'center',
         alignItems: 'center',
         zIndex: 3,
@@ -106,11 +86,6 @@ const SubTitle = styled.p({
     transform: "translate3d(0,50px,0)",
     transition: "transform 350ms ease",
   });
-
-const PlayButtons = styled.div({
-    transform: "translate3d(0,50px,0)",
-    transition: "transform 350ms ease",
-});
 
 const DisplayOver = styled.div({
     height: "100%",
@@ -173,10 +148,10 @@ export class SongBox extends Component {
     }
 
     render() {
-        const {classes, theme, title, artist, coverArt, size} = this.props
+        const {classes, theme, title, artist, coverArt, size, media} = this.props
         const cardSize = 130
-        const titleSize = 17
-        const subtitleSize = 14
+        const titleSize = 14
+        const subtitleSize = 12
         const iconSize = 30
         
         return (
@@ -186,20 +161,15 @@ export class SongBox extends Component {
                 onMouseOver={this.onMouseOver}
                 onMouseOut={this.onMouseOut}
                 elevation={this.state.shadow}
-                onClick={this.handleOpenModal}
                 style={{width: cardSize, height: cardSize }}
             >
                 <Background>
                     <img className={classes.cover} src={coverArt}></img>
                     <DisplayOver>
                         <Hover>
-                            <Title style={{fontSize: titleSize}} className={classes.title}>{title}</Title>
-                            <SubTitle style={{fontSize: subtitleSize}} className={classes.subtitle}>{artist}</SubTitle>
-                            <PlayButtons className={classes.controls}>
-                                <IconButton aria-label="Play/pause" style={{margin: 'auto'}}>
-                                    <PlayArrowIcon style={{width: iconSize, height: iconSize, color: 'white'}} />
-                                </IconButton>
-                            </PlayButtons>
+                            <Title style={{fontSize: titleSize}} className={classes.title} onClick={this.handleOpenModal}>{title}</Title>
+                            <SubTitle style={{fontSize: subtitleSize}} className={classes.subtitle} onClick={this.handleOpenModal}>{artist}</SubTitle>
+                            <audio src={media} controls className={classes.audio}/>
                         </Hover>
                     </DisplayOver>
                 </Background>    
