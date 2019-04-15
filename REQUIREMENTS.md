@@ -1,10 +1,10 @@
 # Requirements
 ### Wireframes
  - ([Profile Page](https://wireframe.cc/O03Qzz))
- - ([Song Information](https://wireframe.cc/VPFxkU))
+ - ([Song Info Page](https://wireframe.cc/VPFxkU))
  - ([Landing Page](https://wireframe.cc/6OkyTT))
  - ([404 Page](https://wireframe.cc/zwMuRi))
- - ([How to page](https://wireframe.cc/cxDoyN))
+ - ([How to Use bMusic Page](https://wireframe.cc/cxDoyN))
  - ([Register Page](https://wireframe.cc/u1w8zQ))
  - ([Login Page](https://wireframe.cc/JMakfm))
  - ([Upload Song Page](https://wireframe.cc/IkKUbK))
