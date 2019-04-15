@@ -8,6 +8,7 @@ Wireframes
  - ([Register Page](https://wireframe.cc/u1w8zQ))
  - ([Login Page](https://wireframe.cc/JMakfm))
  - ([Upload Song Page](https://wireframe.cc/IkKUbK))
+ - ([Home Page](https://wireframe.cc/gxHwiu))
  
 
 UI Map
