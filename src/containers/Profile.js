@@ -144,9 +144,8 @@ export class Profile extends Component {
   } 
 
   render() {
-    const {classes, auth, match ,user} = this.props
-    console.log('profile props: ', this.props)
-    console.log("user.artistsname", user)
+    const {classes, auth, match,user} = this.props
+    const songs = user.user.songs;
     if(!auth.uid){
       return <Redirect to='/' />
     }
@@ -157,8 +156,7 @@ export class Profile extends Component {
             <div className={classes.avatar}><img className={classes.avatarPhoto} src='https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png' alt='no photo'></img></div>
           </div>
           <div className={classes.topCenter}>
-            <h3 className={classes.name}>Name</h3>
-            <h3 className={classes.artistName}>Artist Name</h3>
+            <h3 className={classes.artistName}>Artist Name: {user.user.artistName}</h3>
             {(match.params.uid === auth.uid) ? 
               <div style={{display: 'inline', position: 'absolute', bottom: 5, left: 5}}>
                 <Button style={{backgroundColor: 'lightgrey', marginRight: 10}} onClick={this.handleOpenEditProfile}>Edit Profile</Button> 
@@ -170,7 +168,7 @@ export class Profile extends Component {
         </div>
         <div className={classes.rowTwo}>
           <div className={classes.songList}> 
-              <SongList songs= {songs} userId={1}/>
+              <SongList songs= {songs} userId={auth.uid} />
           </div>
         </div> 
         <Modal className={classes.modal} open={this.state.uploadModalOpen} onClose={this.handleCloseUpload}>

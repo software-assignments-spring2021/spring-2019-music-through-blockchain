@@ -11,8 +11,9 @@ export const getUserInfo = (userId) => {
       const uid = state.firebase.auth.uid
       const stream = state.song.stream
   
-  
         return userService.dbGetUserInfo(userId).then((result) => {
+            
+
           dispatch(setUserProfile(result))
 
 

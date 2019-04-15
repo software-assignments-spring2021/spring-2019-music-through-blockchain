@@ -19,6 +19,7 @@ export let userReducer = (state = initState, action) => {
                     artistName: payload.user.artistName,
                     photoUrl: payload.user.photoUrl,  
                     songsOwned: payload.user.songsOwned,
+                    songs: payload.user.songs,
                     bio: payload.user.bio
             }
         }
