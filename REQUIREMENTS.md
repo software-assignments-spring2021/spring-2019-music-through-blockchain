@@ -5,6 +5,8 @@ Wireframes
  - ([Landing Page](https://wireframe.cc/6OkyTT))
  - ([404 Page](https://wireframe.cc/zwMuRi))
  - ([How to page](https://wireframe.cc/cxDoyN))
+ - ([Sign Up Page](https://wireframe.cc/u1w8zQ))
+ 
 
 UI Map
 
