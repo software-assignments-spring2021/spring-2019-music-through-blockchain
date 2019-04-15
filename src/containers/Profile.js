@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import Modal from '@material-ui/core/Modal'
 import DialogContent from '@material-ui/core/DialogContent';
 import { Redirect } from 'react-router-dom';
-
+import { getUserInfo } from '../store/actions/userActions'
 import SongUpload from './SongUpload'
 import EditProfile from '../components/EditProfile'
 import SongList from '../components/SongList'
@@ -120,7 +120,16 @@ export class Profile extends Component {
         editProfileOpen: false
     }
   }
+  componentDidMount = () => {
+    const {auth, loadProfile, match} = this.props;
 
+    if (match.params.uid) {
+      loadProfile((match.params.uid));
+    } 
+    else {
+      console.log("nothing to load")
+    }
+  }
   handleOpenUpload = () => {
     this.setState({ uploadModalOpen: true })
   }
@@ -135,8 +144,9 @@ export class Profile extends Component {
   } 
 
   render() {
-    const {classes, auth, match} = this.props
+    const {classes, auth, match ,user} = this.props
     console.log('profile props: ', this.props)
+    console.log("user.artistsname", user)
     if(!auth.uid){
       return <Redirect to='/' />
     }
@@ -182,8 +192,15 @@ const mapStateToProps = (state) => {
   return {
       ...state,
       auth: state.firebase.auth,
-      profile: state.firebase.profile
+      profile: state.firebase.profile,
+      user: state.user
+  }
+}
+const mapDispatchToProps = (dispatch , ownProps) => {
+  console.log("ownProps", ownProps)
+  return {
+    loadProfile: (uid) => dispatch(getUserInfo(uid))
   }
 }
 
-export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(Profile))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Profile))
