@@ -12,7 +12,7 @@ export let dbUploadSong = (songInfo, image, imageName, song, songName, callBack)
       console.log('dbUploadSong called')
       const state = getState()
       const uid = state.firebase.auth.uid
-      song['ownerId'] = uid
+      songInfo['ownerId'] = uid
 
       return songService.uploadSong(uid, songInfo, image, imageName, song, songName).then((songData) => {
         dispatch(addSong(song.ownerId, songData))
@@ -54,8 +54,8 @@ export const dbDeleteSong = (song) => {
 /**
  * Get songs from database
  */
-export const dbGetSongs = (page = 0, limit = 10, sortBy = '') => {
-    return (dispatch, getState, {getFirebase}) => {
+export const dbGetSongs = (page = 0, limit = 10, sortBy = '') => { 
+  return (dispatch, getState, {getFirebase}) => {
       const state = getState()
       const uid = state.firebase.auth
       const stream = state.song.stream
@@ -63,21 +63,22 @@ export const dbGetSongs = (page = 0, limit = 10, sortBy = '') => {
       const lastSongId = stream.lastSongId
       
       if (uid && lastPageRequest !== page) {
+        console.log('dbGetSongs called')
         return songService.getSongs('', lastSongId, page, limit, sortBy).then((result) => {
-          
+           console.log('result.newLastSongId, lastSongId', result.newLastSongId, lastSongId)
           // No more songs
-          if (!result.songs || !(result.songs.length > 0)) {
+          if (!result.songs || result.newLastSongId === lastSongId) {
+            console.log('all songs loaded')
             return dispatch(notMoreDataStream())
           }
   
-          // Store last song Id
-          dispatch(lastSongStream(result.newLastPostId))
-
+          dispatch(lastSongStream(result.newLastSongId))
+          
           let parsedData = {}
           result.songs.forEach((song) => {
             const songId = Object.keys(song)[0]
             const songData = song[songId]
-            songData.ownerId.songId = songData
+            parsedData[songId] = songData
           })
           dispatch(addSongs(parsedData))
         })

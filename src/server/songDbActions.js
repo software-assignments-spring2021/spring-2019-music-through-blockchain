@@ -11,8 +11,11 @@ export const songService = {
         let songData = {}
         let songRef = db.collection(`songs`).doc()
         let userRef = db.collection(`users`).doc(uid)
-        const imageStorageFile = storageRef.child(`images/${imageName}`)
-        const songStorageFile = storageRef.child(`songs/${songName}`)
+        const imageKey = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9);
+        const songKey = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9);
+
+        const imageStorageFile = storageRef.child(`images/${imageKey}_${imageName}`)
+        const songStorageFile = storageRef.child(`songs/${songKey}_${songName}`)
 
         //cloud storage --> store cover art
         imageStorageFile.put(image).then((imageResult) => {
@@ -90,14 +93,16 @@ export const songService = {
  */
 getSongs: (userId, lastSongId, page, limit, type, sortBy) => {
     return new Promise((resolve, reject) => {
+      console.log('dbGetSongs') 
         let parsedData = []
         let query = db.collection('songs')
         if (userId !== '') {
             query = query.where('ownerId', '==', userId)
         }
         if (lastSongId && lastSongId !== '') {
-            query = query.orderBy('id').orderBy('creationDate').startAfter(lastSongId).limit(limit)
+            query = query.orderBy('id').orderBy('creationDate').startAfter(lastSongId)
         }
+        query = query.limit(limit)
         query.get().then((songs) => {
             let newLastSongId = songs.size > 0 ? songs.docs[songs.docs.length - 1].id : ''
             songs.forEach((songResult) => {
