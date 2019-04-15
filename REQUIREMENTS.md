@@ -1,6 +1,6 @@
 # Requirements
 Wireframes
- - ([Artist Profile](https://wireframe.cc/O03Qzz))
+ - ([Profile Page](https://wireframe.cc/O03Qzz))
  - ([Song Information](https://wireframe.cc/VPFxkU))
  - ([Landing Page](https://wireframe.cc/6OkyTT))
  - ([404 Page](https://wireframe.cc/zwMuRi))
@@ -9,6 +9,7 @@ Wireframes
  - ([Login Page](https://wireframe.cc/JMakfm))
  - ([Upload Song Page](https://wireframe.cc/IkKUbK))
  - ([Home Page](https://wireframe.cc/gxHwiu))
+ - ([Edit Profile Modal](https://wireframe.cc/xAKLg7))
  
 
 UI Map
