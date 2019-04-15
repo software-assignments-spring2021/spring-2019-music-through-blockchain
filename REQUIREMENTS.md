@@ -1,5 +1,5 @@
 # Requirements
-Wireframes
+### Wireframes
  - ([Profile Page](https://wireframe.cc/O03Qzz))
  - ([Song Information](https://wireframe.cc/VPFxkU))
  - ([Landing Page](https://wireframe.cc/6OkyTT))
@@ -10,9 +10,11 @@ Wireframes
  - ([Upload Song Page](https://wireframe.cc/IkKUbK))
  - ([Home Page](https://wireframe.cc/gxHwiu))
  - ([Edit Profile Modal](https://wireframe.cc/xAKLg7))
+ - ([Royalties Modal](https://wireframe.cc/1oiNPo))
+ 
  
 
-UI Map
+### UI Map
 
 ![UI Map](UI-Map.png)
 
