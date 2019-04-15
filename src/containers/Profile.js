@@ -121,7 +121,7 @@ export class Profile extends Component {
     }
   }
   componentDidMount = () => {
-    const {auth, loadProfile, match} = this.props;
+    const {loadProfile, match} = this.props;
 
     if (match.params.uid) {
       loadProfile((match.params.uid));
@@ -200,6 +200,7 @@ const mapDispatchToProps = (dispatch , ownProps) => {
   console.log("ownProps", ownProps)
   return {
     loadProfile: (uid) => dispatch(getUserInfo(uid))
+    
   }
 }
 

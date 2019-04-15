@@ -10,8 +10,6 @@ const initState = {
 
 export let userReducer = (state = initState, action) => {
     const {payload} = action
-    console.log({payload}, "{}")
-    console.log(payload)
     switch (action.type) {
         case 'SET_USER':
             return {
@@ -23,7 +21,7 @@ export let userReducer = (state = initState, action) => {
                     songsOwned: payload.user.songsOwned,
                     bio: payload.user.bio
             }
-            }
+        }
         default:
             return state
     }

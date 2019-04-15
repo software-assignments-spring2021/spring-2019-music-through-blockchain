@@ -1,5 +1,6 @@
 import { userService } from '../../server/userDbActions'
 import { showMessage } from './globalActions'
+ 
 
 /**
  * Set user profile
@@ -13,6 +14,8 @@ export const getUserInfo = (userId) => {
   
         return userService.dbGetUserInfo(userId).then((result) => {
           dispatch(setUserProfile(result))
+
+
         })
           .catch((error) => {
             dispatch(showMessage(error.message))
