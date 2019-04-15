@@ -13,7 +13,7 @@ import { reactReduxFirebase, getFirebase } from 'react-redux-firebase'
 import fbconfig from './fbconfig'
 
 import {Drizzle} from "drizzle"
-import {SongsContract} from "./contracts/SongsContractjson"
+import SongsContract from "./contracts/SongsContract"
 
 const store = createStore(rootReducer, 
     compose(applyMiddleware(thunk.withExtraArgument({getFirebase, getFirestore})),
