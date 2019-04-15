@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
 
-import CarouselItem from '../components/CarouselItem'
+import CarouselItem from './CarouselItem'
 import Slider from "react-slick"
 import coverArt from '../img/albumArt.png'
 import coverArtTwo from '../img/tameImpala.jpg'
@@ -38,7 +38,8 @@ export class Carousel extends Component {
         slidesToShow: 3,
         slidesToScroll: 1,
         autoplaySpeed: 5000,
-        autoplay: true
+        autoplay: true,
+        infinite: (songs && Object.keys(songs).length > 2)
       };
     return (
         <div>
@@ -46,9 +47,7 @@ export class Carousel extends Component {
                 <h1 style={{position: 'relative', right: '40%', top: 10}}>Featured</h1>
                 <Slider {...settings} className={classes.slider}>
                     {(songs && Object.keys(songs).length > 0) ? Object.keys(songs).map((songId) => (
-                    <div key={songId}>
-                        <CarouselItem title={songs[songId]['title']} artist={songs[songId]['artist']} coverArt={songs[songId]['coverArt']} />
-                    </div>
+                        <CarouselItem key={songId} title={songs[songId]['title']} artist={songs[songId]['artistName']} coverArt={songs[songId]['imageUrl']} media={songs[songId]['songUrl']} />
                     )) : ''}
                 </Slider>
             </div>

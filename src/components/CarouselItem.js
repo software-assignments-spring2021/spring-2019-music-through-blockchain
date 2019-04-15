@@ -1,31 +1,6 @@
 import React, { Component } from 'react'
 import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardMedia from '@material-ui/core/CardMedia'
-import CardContent from '@material-ui/core/CardContent'
-import LinearProgress from '@material-ui/core/LinearProgress'
-import Typography from '@material-ui/core/Typography'
-import SvgShare from '@material-ui/icons/Share'
-import SvgComment from '@material-ui/icons/Comment'
-import SvgFavorite from '@material-ui/icons/Favorite'
-import ThumbUp from '@material-ui/icons/ThumbUp'
-import ThumbDown from '@material-ui/icons/ThumbDown'
-import SvgFavoriteBorder from '@material-ui/icons/FavoriteBorder'
-import Checkbox from '@material-ui/core/Checkbox'
-import Button from '@material-ui/core/Button'
-import Divider from '@material-ui/core/Divider'
-import { grey } from '@material-ui/core/colors'
-import Paper from '@material-ui/core/Paper'
-import Menu from '@material-ui/core/Menu'
-import MenuList from '@material-ui/core/MenuList'
-import MenuItem from '@material-ui/core/MenuItem'
-import TextField from '@material-ui/core/TextField'
-import Dialog from '@material-ui/core/Dialog'
 import IconButton from '@material-ui/core/IconButton'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
 import { withStyles } from '@material-ui/core/styles'
 import Grow from '@material-ui/core/Grow'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
@@ -36,7 +11,6 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import Modal from '@material-ui/core/Modal'
 import DialogContent from '@material-ui/core/DialogContent';
-
 
 import SongDetails from './SongDetails'
 const styles = theme => ( {
@@ -49,24 +23,23 @@ const styles = theme => ( {
     },
 
     title: {
-        position: 'absolute',
+        position: 'relative',
         marginLeft: 'auto',
         marginRight: 'auto',
+        width: '98%',
         left: 0,
         right: 0,
-        top: -15,
+        bottom: 15,
         textAlign: 'center',
         zIndex: 1
     },
 
     subtitle: {
-        position: 'absolute',
+        position: 'relative',
         textAlign: 'center',
         marginLeft: 'auto',
         marginRight: 'auto',
-        left: 0,
-        right: 0,
-        top: '13.5%',
+        bottom: 40,
         zIndex: 1
     },
 
@@ -75,15 +48,16 @@ const styles = theme => ( {
         width: '100%',
     },
 
-    controls: {
+    audio: {
         display: 'flex',
         position: 'absolute',
-        bottom: 49,
+        bottom: 5,
         width: '100%',
+        height: 50,
         contentAlign: 'center',
         alignItems: 'center',
         zIndex: 3,
-      },
+    },
 
     icon: {
         width: 48, 
@@ -113,11 +87,6 @@ const SubTitle = styled.p({
     transition: "transform 350ms ease",
     fontSize: 22
   });
-
-const PlayButtons = styled.div({
-    transform: "translate3d(0,50px,0)",
-    transition: "transform 350ms ease",
-});
 
 const DisplayOver = styled.div({
     height: "100%",
@@ -157,7 +126,7 @@ const Hover = styled.div({
   });
 
 // SongBox component
-export class SongBox extends Component {
+export class CarouselItem extends Component {
     constructor(props) {
         super(props);
         this.state = { shadow: 1, detailsOpen: false}
@@ -177,8 +146,7 @@ export class SongBox extends Component {
     }
 
     render() {
-        const {classes, theme, title, artist, coverArt } = this.props
-        
+        const {classes, theme, title, artist, coverArt, media } = this.props
         return (
         <div style={{display: 'inline'}}>
             <Card 
@@ -186,33 +154,29 @@ export class SongBox extends Component {
                 onMouseOver={this.onMouseOver}
                 onMouseOut={this.onMouseOut}
                 elevation={this.state.shadow}
-                onClick={this.handleOpenModal}
                 style={{width: 300, height: 300}}
             >
                 <Background>
                     <img className={classes.cover} src={coverArt}></img>
                     <DisplayOver>
                         <Hover>
-                            <Title style={{}} className={classes.title}>{title}</Title>
-                            <SubTitle className={classes.subtitle}>{artist}</SubTitle>
-                            <PlayButtons className={classes.controls}>
-                                <IconButton aria-label="Play/pause" style={{margin: 'auto'}}>
-                                    <PlayArrowIcon className={classes.icon} />
-                                </IconButton>
-                            </PlayButtons>
+                            <Title style={{}} className={classes.title} onClick={this.handleOpenModal}>{title}</Title>
+                            <SubTitle className={classes.subtitle} onClick={this.handleOpenModal}>{artist}</SubTitle>
+                            <audio src={media} controls className={classes.audio}/>
                         </Hover>
                     </DisplayOver>
                 </Background>   
                     
             </Card>
+
             <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
-            <DialogContent>
-                <SongDetails title={title} artist={artist} coverArt={coverArt}/>
-            </DialogContent>
+                <DialogContent>
+                    <SongDetails title={title} artist={artist} coverArt={coverArt}/>
+                </DialogContent>
             </Modal>  
          </div>
         )
     }
 }
 
-export default withStyles(styles, { withTheme: true })(SongBox)
+export default withStyles(styles, { withTheme: true })(CarouselItem)
