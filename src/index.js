@@ -12,6 +12,10 @@ import { reduxFirestore, getFirestore } from 'redux-firestore'
 import { reactReduxFirebase, getFirebase } from 'react-redux-firebase'
 import fbconfig from './fbconfig'
 
+import {Drizzle} from "drizzle"
+import SongsContract from "./contracts/SongsContract"
+
+
 const store = createStore(rootReducer, 
     compose(applyMiddleware(thunk.withExtraArgument({getFirebase, getFirestore})),
     reduxFirestore(fbconfig),
@@ -19,8 +23,21 @@ const store = createStore(rootReducer,
     )
 );
 
+const optionsDrizzle = {
+    contracts: [SongsContract],
+    web3: {
+        fallback : {
+            type: "ws",
+            url: ""
+        }
+    }
+}
+
+// setup drizzle
+const drizzle = new Drizzle(optionsDrizzle);
+
 store.firebaseAuthIsReady.then(() => {
     console.log('firebase is ready')
-    ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
+    ReactDOM.render(<Provider store={store}><App drizzle={drizzle}/></Provider>, document.getElementById('root'));
     serviceWorker.unregister();
 })

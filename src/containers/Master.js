@@ -14,7 +14,7 @@ class Master extends Component {
         super(props)
         this.state = {
             loading: true,
-            dataLoaded: false,
+            dataLoaded: false
         }
     }
     
@@ -25,6 +25,7 @@ class Master extends Component {
           hideMasterLoading,
           authed
         } = this.props
+
         if (authed) {
           hideMasterLoading()
           this.setState({
