@@ -26,15 +26,22 @@ dbGetUserInfo: (userId) => {
             const batch = db.batch()
             console.log(uid)
             let profileRef = db.doc(`users/${uid}`)
+            //ADD IMAGE TO THE PROFILE
             //
             console.log(profile)
-            batch.update(profileRef, {...profile})
-            batch.commit().then(() => {
-                resolve()
+            profileRef.update(profile).then(() => {
+                resolve(profile)
             })
                 .catch((error) => {
-                    reject()
+                    reject(error)
                 })
+            // batch.update(profileRef, {...profile})
+            // batch.commit().then(() => {
+            //     resolve()
+            // })
+            //     .catch((error) => {
+            //         reject()
+            //     })
         })
     },
 

@@ -35,10 +35,14 @@ export const dbEditProfile = (updatedProfile, image, imageName, callBack) => {
         const state = getState()
         const uid = state.firebase.auth.uid
         return userService.updateProfile(uid, updatedProfile).then((profileData) => {
+            console.log(profileData)
+            console.log("updated profile in database")
             dispatch(setEditedUserProfile(profileData))
-            callBack()
+            callBack(uid)
         })
             .catch((error) => {
+                console.log("there was an error in saving the profile")
+                console.log(error)
                 dispatch(showMessage(error.message))
             })
     }
