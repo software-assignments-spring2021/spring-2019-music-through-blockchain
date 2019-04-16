@@ -13,6 +13,7 @@ import NotFound from './components/NotFound'
 import Master from './containers/Master'
 import SongUploadComponent from './containers/SongUpload'
 import LandingPage from './containers/LandingPage'
+import EditProfileComponent from './components/EditProfile.js'
 
 class App extends Component {
   render() {
@@ -30,7 +31,7 @@ class App extends Component {
             <Route path='/profile/:uid' component={Profile} />
             <Route path='/create' component={SongUploadComponent} />
             <Route component={NotFound} />
-
+            <Route path='/edit-profile' component={EditProfileComponent} />
           </Switch>
         </div>
       </BrowserRouter>
