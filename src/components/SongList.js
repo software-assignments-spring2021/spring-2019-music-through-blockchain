@@ -56,9 +56,12 @@ export class SongList extends Component {
   }
 
   render() {
-    const {classes, songs, userId  } = this.props
+    const {classes, songs, songsOwned  } = this.props
+  
+    
 
-    if (songs) {
+    if (songs && (songs.length) > 0 && songsOwned) {
+      console.log(songs)
         return (
           <Grid container justify="center"> 
           <Paper className={classes.paper}>
@@ -79,24 +82,24 @@ export class SongList extends Component {
               </TableRow>
               </TableHead>
               <TableBody>
-                  { songs && songs.map(song => (
+                  { songs && songsOwned.map(id => (
                    
-                  <TableRow key={song.id} className={classes.tablecell} onClick = {() => this.props.viewDetails(song.id)}>
+                  <TableRow key={id} className={classes.tablecell} onClick = {() => this.props.viewDetails(id)}>
                   <TableCell>
                     <Grid container wrap="nowrap" spacing={16}>
                         <Grid item>
                           <div style={{width: 75, height:75, backgroundColor: 'lightgrey'}}>
-                            <img className={classes.image} src ={song.imageUrl} />
+                            <img className={classes.image} src ={songs[id].imageUrl} />
                           </div>
                         </Grid>
                       <Grid item xs zeroMinWidth alignContent="center">
-                        <Typography className={classes.tablecell}>{song.title}</Typography>
+                        <Typography className={classes.tablecell}>{songs[id].title}</Typography>
                       </Grid>
                     </Grid>
                   </TableCell>
-                    <TableCell align="right" className={classes.tablecell} >{song.artistName || 'anonymous'}</TableCell>
-                    <TableCell align="right" className={classes.tablecell} style={{paddingRight: '120px'}}> {song.price || 0 }$ </TableCell>
-                    <TableCell align="right" className={classes.tablecell}>{song.percentOwned || 0 }% </TableCell>
+                    <TableCell align="right" className={classes.tablecell} >{songs[id].artistName || 'anonymous'}</TableCell>
+                    <TableCell align="right" className={classes.tablecell} style={{paddingRight: '120px'}}> {songs[id].price || 0 }$ </TableCell>
+                    <TableCell align="right" className={classes.tablecell}>{songs[id].percentOwned || 0 }% </TableCell>
                   </TableRow>          
                   ))}
             </TableBody>

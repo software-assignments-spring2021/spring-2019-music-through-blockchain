@@ -13,16 +13,8 @@ dbGetUserInfo: (userId) => {
         let ref = db.collection('users').doc(userId)
         ref.get().then((user) => {
             let userInfo = user.data()
-            console.log(userInfo)
-
-            songService.getSongs(userId,null,  0, 10,'').then((result) => {
-                console.log(typeof(result))
-                console.log(result)
-                userInfo.songs = result.songs.filter(function(song)  {
-                    return song.ownerId = userId
-                }) //TODO: filter based on owner ID
-                console.log(userInfo, "after adding songs")
-            
+            songService.getSongs('',null,  0, 10,'').then((result) => {
+                userInfo.songs = result.songs //need to set songs and adjust song list
                 resolve({ user: userInfo }) }
             )
         })

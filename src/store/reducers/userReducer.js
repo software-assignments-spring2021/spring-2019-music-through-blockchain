@@ -1,5 +1,4 @@
 const initState = {
-    users: [], 
     user: {
         'artistName': null,
         'photoUrl': null, 

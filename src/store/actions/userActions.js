@@ -12,11 +12,7 @@ export const getUserInfo = (userId) => {
       const stream = state.song.stream
   
         return userService.dbGetUserInfo(userId).then((result) => {
-            
-
           dispatch(setUserProfile(result))
-
-
         })
           .catch((error) => {
             dispatch(showMessage(error.message))
