@@ -57,9 +57,6 @@ export class SongList extends Component {
 
   render() {
     const {classes, songs, songsOwned  } = this.props
-  
-    
-
     if (songs && (songs.length) > 0 && songsOwned) {
       console.log(songs)
         return (
