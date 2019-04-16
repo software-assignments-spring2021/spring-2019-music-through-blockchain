@@ -112,6 +112,8 @@ contract('SongsContract', function (accounts){
 
     it("Buys royalties", async function(){
         const contract = await songContract.deployed();
+        const previousRoyaltiesOffered = await contract.viewRoyaltyPointsOffered(song1, artist1, {value:0, from: customer2});
+        assert.equal(parseInt(previousRoyaltiesOffered), 1000, "1000 royalties are not being offered");
         await contract.buyRoyalties(song1, artist1, {value:8000000000000000000, from: customer2});
         const isNewOwner = await contract.checkOwnership(song1, {value:0, from: customer2});
         const newSellerRoyalties = await contract.checkRoyaltyPoints(song1, {value:0, from: artist1});
@@ -119,7 +121,7 @@ contract('SongsContract', function (accounts){
         const royaltiesOffered = await contract.viewRoyaltyPointsOffered(song1, artist1, {value:0, from: customer2});
         const priceRoyaltiesOffered = await contract.viewRoyaltyOfferedPrice(song1, artist1, {value:0, from: customer2});
         assert.equal(isNewOwner, true, "The buyer is not a new owner");
-        assert.equal(parseInt(newSellerRoyalties), 9000, "the royalty points of the seller were not updated");
+        assert.equal(parseInt(newSellerRoyalties), 7000, "the royalty points of the seller were not updated");
         assert.equal(parseInt(newBuyerRoyalties), 1000, "the royalty points of the buyer were not updated");
         assert.equal(parseInt(royaltiesOffered), 0, "The royalty points on sale of the seller were not updated to zero");
         assert.equal(parseInt(priceRoyaltiesOffered), 0, "The royalty points price of the seller was not updated to zero");
