@@ -27,6 +27,7 @@ export const songService = {
               songResult.ref.getDownloadURL()
               .then((songDownloadURL) => {
                 songData = {...songInfo, 
+                  market: {},
                   imageUrl: imageDownloadURL,
                   imageFullPath: imageResult.metadata.fullPath,
                   songUrl: songDownloadURL, 
@@ -37,7 +38,6 @@ export const songService = {
                   //add song id to songs owned by user
                   var usersUpdate = {};
                   usersUpdate[`songsOwned.${songRef.id}.percentOwned`] = 100;
-                  usersUpdate[`songsOwned.${songRef.id}.price`] = songInfo.price;
                   userRef.update(usersUpdate)
                   
                   //add songId to songInfo and resolve
@@ -92,7 +92,6 @@ export const songService = {
 
 /**
  * Get list of songs for homepage
- * 
  */
 getSongs: (userId, lastSongId, page, limit, type, sortBy) => {
     return new Promise((resolve, reject) => {
@@ -127,10 +126,9 @@ getSongs: (userId, lastSongId, page, limit, type, sortBy) => {
     },
 
 /**
- * Get details of song ownership, price
- * 
+ * Get details of song ownership
  */
-getSongDetails: (ownerIds, songId) => {
+getSongOwners: (ownerIds, songId) => {
   return new Promise((resolve, reject) => {
     console.log('dbGetSongDetails') 
       let parsedData = {}
@@ -141,6 +139,87 @@ getSongDetails: (ownerIds, songId) => {
         })
       })
       resolve(parsedData)
+    })
+  },
+
+  /**
+  * Put percent of song up for sale
+  */
+  putSongForSale: (songId, userId, percent, price, sellAllShares) => {
+    return new Promise((resolve, reject) => {
+      let songRef = db.doc(`songs/${songId}`)
+      var songUpdate = {};
+      songUpdate[`market.${userId}.percent`] = percent;
+      songUpdate[`market.${userId}.price`] = price;
+      songUpdate[`market.${userId}.sellAllShares`] = sellAllShares;
+      songRef.update(songUpdate)
+      resolve()
+    })
+  },
+
+  /**
+  * Remove your song up for sale
+  */
+ removeSongForSale: (songId, userId) => {
+  return new Promise((resolve, reject) => {
+      db.collection('songs').doc(songId).update({
+        ['market.' + userId]: firebase.firestore.FieldValue.delete()
+      })
+      resolve()
+    })
+  },
+
+  purchaseSong: (songId, sellerId, buyerId, sellAllShares) => {
+    return new Promise((resolve, reject) => {
+      let songRef = db.doc(`songs/${songId}`)
+      if (sellAllShares) {
+        songRef.update({
+          ownerId: firebase.firestore.FieldValue.arrayRemove(sellerId)
+        })
+      }
+      songRef.update({
+        ownerId: firebase.firestore.FieldValue.arrayUnion(buyerId)
+      })
+      .then(() => {
+        songRef.get().then((doc) => {
+
+          //get sale details
+          const saleInfo = doc.data()['market'][sellerId]
+          
+          //add song ownership to buyer
+          let buyerRef = db.doc(`users/${buyerId}`)
+          var buyerUpdate = {};
+          buyerUpdate[`songsOwned.${songId}.percentOwned`] = saleInfo.percent;
+          
+          buyerRef.update(buyerUpdate)
+  
+          //delete song ownership of seller
+          db.collection('songs').doc(songId).update({
+            ['market.' + sellerId]: firebase.firestore.FieldValue.delete()
+          }).then (() => {
+            if (sellAllShares) {
+              db.collection('users').doc(sellerId).update({
+                ['songsOwned.' + songId]: firebase.firestore.FieldValue.delete()
+              })
+
+            } 
+            else {
+              //update song ownership of seller
+              const sellerRef = db.doc(`users/${sellerId}`)
+              sellerRef.get().then((doc) => {
+                const ownStats = doc.data()['songsOwned'][songId]
+                var sellerUpdate = {};
+                sellerUpdate[`songsOwned.${songId}.percentOwned`] = ownStats.percentOwned - saleInfo.percent;
+                sellerRef.update(buyerUpdate)
+              })
+              
+
+            }     
+          })
+        })
+      })
+      
+      resolve()
     })
   }
 }

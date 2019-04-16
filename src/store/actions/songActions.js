@@ -127,17 +127,72 @@ export const getSongsByUserId = (userId, page = 0, limit = 10, type = '', sortBy
     }
   }
 
-export const dbGetSongDetails = (song, songId) => {
+export const dbGetSongOwners = (song, songId) => {
   return (dispatch, getState, {getFirebase}) => {
     const state = getState()
     const uid = state.firebase.auth.uid
     const songOwners = (song.ownerId)
     if (uid) {
-      return songService.getSongDetails(songOwners, songId).then((result) => {
+      return songService.getSongOwners(songOwners, songId).then((result) => {
         song['ownerDetails'] = result
         dispatch(updateSong(song))
       })
       .catch((error) => {
+        dispatch(showMessage(error.message))
+      })
+    }
+  }
+}
+
+export const dbPutSongForSale = (song, songId, percent, price, sellAllShares, callBack) => {
+  return (dispatch, getState, {getFirebase}) => {
+    const state = getState()
+    const uid = state.firebase.auth.uid
+    if (uid) {
+      return songService.putSongForSale(songId, uid, percent, price, sellAllShares).then((result) => {
+        song['market'][uid] = {'price': price, 'percent': percent, 'sellAllShares': sellAllShares}
+        dispatch(updateSong(song))
+        callBack()
+      })
+      .catch((error) => {
+        dispatch(showMessage(error.message))
+      })
+    }
+  }
+}
+
+export const dbRemoveSongForSale = (song, songId, callBack) => {
+  return (dispatch, getState, {getFirebase}) => {
+    const state = getState()
+    const uid = state.firebase.auth.uid
+    if (uid) {
+      return songService.removeSongForSale(songId, uid).then(() => {
+        delete song['market'][uid]
+        dispatch(updateSong(song))
+        callBack()
+      })
+    }
+  }
+}
+
+export const dbPurchaseSong = (song, songId, sellerId) => {
+  const sellAllShares = song['market'][sellerId].sellAllShares
+
+  console.log('purchasing song')
+  console.log('purchase song args:: ', 'song: ', song, 'songId: ', songId, 'sellerId: ', sellerId, 'sellAllShares: ', sellAllShares)
+
+  
+  return (dispatch, getState, {getFirebase}) => {
+    const state = getState()
+    const uid = state.firebase.auth.uid
+    if (uid) {
+      return songService.purchaseSong(songId, sellerId, uid, sellAllShares).then((result) => {
+        delete song['market'][sellerId]
+        song['ownerId'].push(uid)
+        //todo: update buyer and seller details here
+
+        dispatch(updateSong(song))
+      }).catch((error) => {
         dispatch(showMessage(error.message))
       })
     }

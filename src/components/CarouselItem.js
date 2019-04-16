@@ -16,7 +16,7 @@ import { connect } from 'react-redux'
 
 import SongDetails from './SongDetails'
 
-import { dbGetSongDetails } from '../store/actions/songActions'
+import { dbGetSongOwners } from '../store/actions/songActions'
 
 const styles = theme => ( {
     root: {
@@ -135,11 +135,13 @@ export class CarouselItem extends Component {
     constructor(props) {
         super(props);
         this.state = { shadow: 1, detailsOpen: false}
+        this.handleCloseModal = this.handleCloseModal.bind(this)
+
     }
 
     componentWillMount() {
         const { song, songId } = this.props
-        this.props.getSongDetails(song, songId)
+        this.props.getSongOwners(song, songId)
       }
 
     onMouseOver = () => {
@@ -186,7 +188,7 @@ export class CarouselItem extends Component {
 
             <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
                 <DialogContent>
-                    <SongDetails song={song} songId={songId} />
+                    <SongDetails song={song} closeModal={this.handleCloseModal} songId={songId} />
                 </DialogContent>
             </Modal>  
          </div>
@@ -195,11 +197,9 @@ export class CarouselItem extends Component {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-
     return {
-      getSongDetails: (song, songId) => dispatch(dbGetSongDetails(song, songId)),
+        getSongOwners: (song, songId) => dispatch(dbGetSongOwners(song, songId)),
     }
   }
-
 
 export default connect(null, mapDispatchToProps)(withStyles(styles, { withTheme: true })(CarouselItem))

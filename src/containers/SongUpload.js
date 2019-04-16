@@ -106,7 +106,7 @@ export class SongUploadComponent extends Component {
             error = true
         }
 
-       /* Check artist name*/
+       /* Check song price*/
         let intPrice = parseInt(priceInput)
 
 
