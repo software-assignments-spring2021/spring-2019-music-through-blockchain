@@ -151,7 +151,7 @@ export class SongUploadComponent extends Component {
     }
 
     render() {
-
+        console.log("song upload props", this.props);
         const { classes, auth } = this.props
         if (!auth.uid){
             this.props.history.push('/')

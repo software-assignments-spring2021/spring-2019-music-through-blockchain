@@ -14,8 +14,7 @@ class Master extends Component {
         super(props)
         this.state = {
             loading: true,
-            dataLoaded: false,
-            drizzleState: null
+            dataLoaded: false
         }
     }
     
@@ -24,22 +23,8 @@ class Master extends Component {
           global,
           clearData,
           hideMasterLoading,
-          authed, 
-          drizzle
+          authed
         } = this.props
-
-        // subscribe to changes in the store
-        this.unsubscribe = drizzle.store.subscribe(() => {
-
-          // every time the store updates, grab the state from drizzle
-          const drizzleState = drizzle.store.getState();
-          console.log(drizzle.store.getState());
-
-          // check to see if it's ready, if so, update local component state
-          if (drizzleState.drizzleStatus.initialized) {
-            this.setState({ loading: false, drizzleState });
-          }
-        });
 
         if (authed) {
           hideMasterLoading()
@@ -47,10 +32,6 @@ class Master extends Component {
             loading: false,
           })
         }
-    }
-
-    componentWillUnmount() {
-      this.unsubscribe();
     }
 
   render() {
@@ -93,8 +74,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       ...state,
       global: state.global,
       progress: state.global.progress,
-      authed: state.firebase.auth,
-      drizzle: state.drizzle
+      authed: state.firebase.auth
     }
   
   }

@@ -93,13 +93,18 @@ export class SongPage extends Component {
 
   componentDidMount() {
     const { drizzle, drizzleState } = this.props;
-    console.log(this.props);
-    console.log(this.state);
+    console.log(drizzle);
+    console.log(drizzleState);
   }
 
   componentDidUpdate() {
     this.scrollToBottom();
   }
+
+  buySong(){
+    
+  }  
+
   render() {
     const { classes, auth, match } = this.props;
     console.log("SongPage props: ", this.props);
