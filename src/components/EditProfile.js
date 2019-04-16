@@ -117,14 +117,27 @@ export class EditProfileComponent extends Component {
 
 
         if (!error) {
-            editProfile({
-                accountOwner: editNameInput,
+            const profileInfo = {
                 artistName: editArtistNameInput,
-                biography: userInfoInput,
-                photo: profilePictureFileInput,
-            })
+                accountOwner: editNameInput,
+                biography: userInfoInput
+            }
+            const callBack = () => {
+                this.props.history.push('/')
+                return <Redirect to='/'/>
+            }
+            editProfile(
+                profileInfo,
+                this.state.file,
+                this.state.file.name,
+                callBack
+            )
+        }
+        else {
+            console.log('form input error')
         }
     }
+
 
     onImageChange = (e) => {
         this.setState({file:e.target.files[0]})
@@ -215,8 +228,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        editProfile: (userRegister) => {
-            dispatch(dbEditProfile(userRegister))
+        editProfile: (profileInfo, image, imageName, callBack) => {
+            dispatch(dbEditProfile(profileInfo, image, imageName, callBack))
         },
     }
 }

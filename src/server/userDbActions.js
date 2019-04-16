@@ -19,6 +19,23 @@ dbGetUserInfo: (userId) => {
             )
         })
         })
-    }
+    },
+
+    updateProfile: (profile) => {
+        return new Promise((resolve, reject) => {
+            const batch = db.batch()
+            console.log(profile.id)
+            let profileRef = db.doc(`users/${profile.id}`)
+
+            batch.update(profile, {...profile})
+            batch.commit().then(() => {
+                resolve()
+            })
+                .catch((error) => {
+                    reject()
+                })
+        })
+    },
+
 }
 

@@ -1,5 +1,7 @@
 import { userService } from '../../server/userDbActions'
 import { showMessage } from './globalActions'
+import {songService} from "../../server/songDbActions";
+import {updateSong} from "./songActions";
  
 
 /**
@@ -26,3 +28,16 @@ export  const setUserProfile = (user) => {
         type: 'SET_USER',
         payload: user
 }}
+
+export const dbEditProfile = (profileInfo, image, imageName, callBack) => {
+    return (dispatch, getState, {getFirebase}) => {
+        console.log("dbEditProfile called")
+        // return songService.updateSong(updatedSong).then(() => {
+        //     dispatch(updateSong(updatedSong))
+        //     callBack()
+        // })
+        //     .catch((error) => {
+        //         dispatch(showMessage(error.message))
+        //     })
+    }
+}
