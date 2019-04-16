@@ -32,7 +32,9 @@ export  const setUserProfile = (user) => {
 export const dbEditProfile = (updatedProfile, image, imageName, callBack) => {
     return (dispatch, getState, {getFirebase}) => {
         console.log("dbEditProfile called")
-        return userService.updateProfile(updatedProfile).then((profileData) => {
+        const state = getState()
+        const uid = state.firebase.auth.uid
+        return userService.updateProfile(uid, updatedProfile).then((profileData) => {
             dispatch(setEditedUserProfile(profileData))
             callBack()
         })

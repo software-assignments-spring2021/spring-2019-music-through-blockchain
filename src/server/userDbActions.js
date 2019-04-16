@@ -21,12 +21,13 @@ dbGetUserInfo: (userId) => {
         })
     },
 
-    updateProfile: (profile) => {
+    updateProfile: (uid, profile) => {
         return new Promise((resolve, reject) => {
             const batch = db.batch()
-            console.log(profile.id)
-            let profileRef = db.doc(`users/${profile.id}`)
-
+            console.log(uid)
+            let profileRef = db.doc(`users/${uid}`)
+            //
+            console.log(profile)
             batch.update(profileRef, {...profile})
             batch.commit().then(() => {
                 resolve()
