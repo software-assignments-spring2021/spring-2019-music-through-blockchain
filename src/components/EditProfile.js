@@ -204,8 +204,8 @@ export class EditProfileComponent extends Component {
                                     </div>
 
                                     <div>
-                                        <Button variant='contained' color='primary'>Save Changes</Button>
-                                        {/*<Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>*/}
+                                        {/*<Button variant='contained' color='primary'>Save Changes</Button>*/}
+                                        <Button variant='contained' color='primary' onClick={this.handleForm}>Save Changes</Button>
                                     </div>
                                 </div>
                             </div>

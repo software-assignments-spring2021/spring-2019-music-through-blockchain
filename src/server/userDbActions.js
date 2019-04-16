@@ -27,7 +27,7 @@ dbGetUserInfo: (userId) => {
             console.log(profile.id)
             let profileRef = db.doc(`users/${profile.id}`)
 
-            batch.update(profile, {...profile})
+            batch.update(profileRef, {...profile})
             batch.commit().then(() => {
                 resolve()
             })

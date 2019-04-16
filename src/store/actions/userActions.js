@@ -29,15 +29,22 @@ export  const setUserProfile = (user) => {
         payload: user
 }}
 
-export const dbEditProfile = (profileInfo, image, imageName, callBack) => {
+export const dbEditProfile = (updatedProfile, image, imageName, callBack) => {
     return (dispatch, getState, {getFirebase}) => {
         console.log("dbEditProfile called")
-        // return songService.updateSong(updatedSong).then(() => {
-        //     dispatch(updateSong(updatedSong))
-        //     callBack()
-        // })
-        //     .catch((error) => {
-        //         dispatch(showMessage(error.message))
-        //     })
+        return userService.updateProfile(updatedProfile).then((profileData) => {
+            dispatch(setEditedUserProfile(profileData))
+            callBack()
+        })
+            .catch((error) => {
+                dispatch(showMessage(error.message))
+            })
     }
 }
+
+//call on the for the edited profile reducer
+export const setEditedUserProfile = (user) => {
+    return {
+        type: 'SET_EDIT_USER',
+        payload: user
+}}

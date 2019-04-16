@@ -22,6 +22,13 @@ export let userReducer = (state = initState, action) => {
                     bio: payload.user.bio
             }
         }
+        case 'SET_EDIT_USER':
+            return {
+                ...state,
+                user: {
+
+                }
+            }
         default:
             return state
     }
