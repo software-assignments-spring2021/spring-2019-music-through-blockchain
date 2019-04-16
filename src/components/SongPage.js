@@ -86,12 +86,15 @@ export class SongPage extends Component {
   constructor(props) {
     super(props);
   }
+  
   scrollToBottom = () => {
     window.scrollTo(0, 1000);
   };
 
   componentDidMount() {
-    this.scrollToBottom();
+    const { drizzle, drizzleState } = this.props;
+    console.log(this.props);
+    console.log(this.state);
   }
 
   componentDidUpdate() {
@@ -134,6 +137,7 @@ export class SongPage extends Component {
                     </div>
                   </div>
                   <div>
+                    <Button className ={classes.button} onClick={this.scrollToBottom}>See Song Price</Button>
                     <Button className ={classes.button} onClick={this.scrollToBottom}>Purchase Song</Button>
                   </div>
                 </Grid>

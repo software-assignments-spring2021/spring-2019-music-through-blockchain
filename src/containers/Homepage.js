@@ -44,6 +44,7 @@ export class Homepage extends Component {
     this.state = {
       loadIters: 0,
     }
+    console.log(this.state);
   }
   scrollLoad = (page) => {
     console.log('scrollLoad')

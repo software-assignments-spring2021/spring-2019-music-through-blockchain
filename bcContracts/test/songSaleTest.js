@@ -29,6 +29,17 @@ contract('SongsContract', function (accounts){
         assert.equal(isSongRegistered, true, "the song was not registered");
     });
 
+    it('Preregisters an owner', async function(){
+        const contract = await songContract.deployed();
+        await contract.preregisterOwner(song1, artist3, 2000, {value:0, from: artist1});
+        const isNewOwner = await contract.checkOwnership(song1, {value:0, from: artist3});
+        const creatorIsOwner = await contract.checkOwnership(song1, {value:0, from: artist1});
+        assert.equal(creatorIsOwner, true, "The creator is not a new owner");
+        assert.equal(isNewOwner, true, "Artist3 is not a new owner");
+    }
+
+    );
+
     it('Sees the song price', async function(){
         const contract = await songContract.deployed();
         const songPrice = await contract.viewSongPrice();
@@ -103,13 +114,13 @@ contract('SongsContract', function (accounts){
         const contract = await songContract.deployed();
         await contract.buyRoyalties(song1, artist1, {value:8000000000000000000, from: customer2});
         const isNewOwner = await contract.checkOwnership(song1, {value:0, from: customer2});
-        const newRoyaltiesSeller = await contract.checkRoyaltyPoints(song1, {value:0, from: artist1});
-        const newRoyaltiesBuyer = await contract.checkRoyaltyPoints(song1, {value:0, from: customer2});
+        const newSellerRoyalties = await contract.checkRoyaltyPoints(song1, {value:0, from: artist1});
+        const newBuyerRoyalties = await contract.checkRoyaltyPoints(song1, {value:0, from: customer2});
         const royaltiesOffered = await contract.viewRoyaltyPointsOffered(song1, artist1, {value:0, from: customer2});
         const priceRoyaltiesOffered = await contract.viewRoyaltyOfferedPrice(song1, artist1, {value:0, from: customer2});
         assert.equal(isNewOwner, true, "The buyer is not a new owner");
-        assert.equal(parseInt(newRoyaltiesSeller), 9000, "the royalty points of the seller were not updated");
-        assert.equal(parseInt(newRoyaltiesBuyer), 1000, "the royalty points of the buyer were not updated");
+        assert.equal(parseInt(newSellerRoyalties), 9000, "the royalty points of the seller were not updated");
+        assert.equal(parseInt(newBuyerRoyalties), 1000, "the royalty points of the buyer were not updated");
         assert.equal(parseInt(royaltiesOffered), 0, "The royalty points on sale of the seller were not updated to zero");
         assert.equal(parseInt(priceRoyaltiesOffered), 0, "The royalty points price of the seller was not updated to zero");
     });

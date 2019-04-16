@@ -15,7 +15,12 @@ import SongUploadComponent from './containers/SongUpload'
 import LandingPage from './containers/LandingPage'
 
 class App extends Component {
+
+
+
   render() {
+
+    //This should display once drizzle is ready and/or has loaded
     return (
       <BrowserRouter>
         <div className="App">
@@ -24,7 +29,7 @@ class App extends Component {
 
           <Switch>
             <Route exact path='/' component={Homepage} />
-            <Route path='/song/:uid' component={SongPage} />
+            <Route path='/song/:uid' drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()} component={SongPage} />
             <Route path='/signin' component={SigninComponent} />
             <Route path='/signup' component={SignupComponent} />
             <Route path='/profile/:uid' component={Profile} />

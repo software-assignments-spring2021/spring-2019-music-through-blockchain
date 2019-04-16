@@ -10,6 +10,7 @@ contract SongsContract{
     }
 
     struct Song {
+        bool wasReleased;
         uint balance;
         address creator;
         uint ownersSize;
@@ -27,25 +28,47 @@ contract SongsContract{
         require(!isSongRegistered(songAddress), "The song is already registered");
         Owner memory currentOwner = Owner(msg.sender, MAX_ROYALTY_POINTS,0,0);
 
-        Song memory currentSong = Song(0,msg.sender,0);
+        Song memory currentSong = Song(false,0,msg.sender,0);
         songs[songAddress] = currentSong;
         songs[songAddress].ownersSize += 1;
         songs[songAddress].owners[msg.sender] = currentOwner;
+        songs[songAddress].wasReleased = false;
+        songs[songAddress].creator = msg.sender;
 
         return true;
     }
 
     function registerOwner(address songAddress, address newOwner) internal returns (bool){
-        require(isSongRegistered(songAddress), "The song is already registered");
+        require(isSongRegistered(songAddress), "The song is not registered");
         
         //check if buyer was already an owner
         if(!isOwner(songAddress, newOwner)){
             //not an owner
             Owner memory newestOwner;
-            newestOwner.owner = msg.sender;
+            newestOwner.owner = newOwner;
             songs[songAddress].ownersSize += 1;
-            songs[songAddress].owners[msg.sender] = newestOwner;
+            songs[songAddress].owners[newOwner] = newestOwner;
         }    
+        return true;
+    }
+
+    //Transfers royalty points to owner of song 
+    function preregisterOwner(address songAddress, address newOwner, uint16 royalties) external returns (bool success){
+        require(isSongRegistered(songAddress), "The song is not registered");
+        require(isCreator(songAddress, msg.sender), "The caller is not the creator of the song");
+        require(songs[songAddress].wasReleased == false, "The preregistration can't happen after royalties started being sold to the public");
+        require(royalties <= viewMaxRoyaltyPoints(), "You can't transfer more royalties than the existing ones");
+        uint16 ownedRoyalties = viewOwnRoyaltyPoints(songAddress, msg.sender);
+        require(royalties <= ownedRoyalties, "You can't transfer more royalties than the ones you own");
+        require(royalties > 0, "You have to transfer at least one royalty point");
+
+        registerOwner(songAddress, newOwner);
+        //this should not be false at this point
+        assert(isOwner(songAddress, newOwner));
+
+        songs[songAddress].owners[msg.sender].royaltyPoints -= royalties;
+        songs[songAddress].owners[newOwner].royaltyPoints = royalties;
+
         return true;
     }
 
@@ -65,7 +88,8 @@ contract SongsContract{
         uint16 ownedRoyalties = viewOwnRoyaltyPoints(songAddress, msg.sender);
         require(royalties <= ownedRoyalties, "You can't sell more royalties than what you own");
         require(royalties > 0, "You have to sell at least one royalty point");
-
+        
+        songs[songAddress].wasReleased = true;
         songs[songAddress].owners[msg.sender].royaltyPointsOffered += royalties; 
         songs[songAddress].owners[msg.sender].pricePerRoyaltyPoint = newPricePerRoyaltyPoint;
 
@@ -89,7 +113,7 @@ contract SongsContract{
     function buyRoyalties(address songAddress, address seller) public payable returns (bool success){
         require(isOwner(songAddress, seller), "That seller is not an owner of the song");
         uint royaltiesPrice = viewRoyaltyOfferedPrice(songAddress, seller);
-        require(msg.value == royaltiesPrice);
+        require(msg.value == royaltiesPrice, "The money sent doesn't match the price");
 
         royaltiesPayable[seller] += msg.value;
 
@@ -141,6 +165,14 @@ contract SongsContract{
     function isOwner(address songAddress, address caller) internal view returns(bool){ 
         require(isSongRegistered(songAddress), "The song is not registered");
         if(songs[songAddress].owners[caller].owner == caller){
+            return true;
+        }
+        return false;
+    }
+
+    function isCreator(address songAddress, address caller) internal view returns(bool){
+        require(isSongRegistered(songAddress), "The song is not registered");
+        if(songs[songAddress].creator == caller){
             return true;
         }
         return false;
