@@ -18,7 +18,7 @@ export class SongBoxGrid extends Component {
     return (
       <div className={classes.root}>
         {(songs && Object.keys(songs).length > 0) ? Object.keys(songs).map((songId) => (
-            <SongBox key={songId} title={songs[songId]['title']} artist={songs[songId]['artistName']} coverArt={songs[songId]['imageUrl']} media={songs[songId]['songUrl']}/>
+            <SongBox key={songId} song ={songs[songId]} songId={songId}/>
         )) : ''}
       </div>
     )

@@ -7,12 +7,17 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Zoom from '@material-ui/core/Zoom'
 import styled from "@emotion/styled/macro";
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import Button from '@material-ui/core/Button';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import Modal from '@material-ui/core/Modal'
 import DialogContent from '@material-ui/core/DialogContent';
+import { connect } from 'react-redux'
 
 import SongDetails from './SongDetails'
+
+import { dbGetSongDetails } from '../store/actions/songActions'
+
 const styles = theme => ( {
     root: {
         display: 'inline-block',
@@ -69,7 +74,7 @@ const styles = theme => ( {
         margin: 'auto',
         width: 400,
         padding: '13% 0',
-    }
+    },
 
 })
 
@@ -132,6 +137,11 @@ export class CarouselItem extends Component {
         this.state = { shadow: 1, detailsOpen: false}
     }
 
+    componentWillMount() {
+        const { song, songId } = this.props
+        this.props.getSongDetails(song, songId)
+      }
+
     onMouseOver = () => {
         this.setState({ shadow: 5 })
     };
@@ -146,7 +156,12 @@ export class CarouselItem extends Component {
     }
 
     render() {
-        const {classes, theme, title, artist, coverArt, media } = this.props
+        const {songId, song, classes, theme, auth} = this.props
+        const title = song['title']
+        const artist = song['artistName']
+        const coverArt = song['imageUrl']
+        const media = song['songUrl']
+        const ownerId = song['ownerId']
         return (
         <div style={{display: 'inline'}}>
             <Card 
@@ -171,7 +186,7 @@ export class CarouselItem extends Component {
 
             <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
                 <DialogContent>
-                    <SongDetails title={title} artist={artist} coverArt={coverArt}/>
+                    <SongDetails song={song} songId={songId} />
                 </DialogContent>
             </Modal>  
          </div>
@@ -179,4 +194,12 @@ export class CarouselItem extends Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(CarouselItem)
+const mapDispatchToProps = (dispatch, ownProps) => {
+
+    return {
+      getSongDetails: (song, songId) => dispatch(dbGetSongDetails(song, songId)),
+    }
+  }
+
+
+export default connect(null, mapDispatchToProps)(withStyles(styles, { withTheme: true })(CarouselItem))

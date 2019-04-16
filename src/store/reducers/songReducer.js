@@ -50,16 +50,16 @@ export let songReducer = (state = initState, action) => {
       return {...state, 'stream': {...state.stream, 'lastSongId': payload.lastSongId}}
 
     case 'HAS_MORE_DATA_PROFILE':
-      return {...state, 'stream': {...state.profile, [payload.userId]: {...state.profile.userId, 'hasMoreData': true}}}
+      return {...state, 'stream': {...state.profile, [payload.userId]: {...state.profile[payload.userId], 'hasMoreData': true}}}
 
     case 'NOT_MORE_DATA_PROFILE':
-      return {...state, 'stream': {...state.profile, [payload.userId]: {...state.profile.userId, 'hasMoreData': false}}}
+      return {...state, 'stream': {...state.profile, [payload.userId]: {...state.profile[payload.userId], 'hasMoreData': false}}}
 
     case 'REQUEST_PAGE_PROFILE':
-      return {...state, 'stream': {...state.profile, [payload.userId]: {...state.profile.userId, 'lastPageRequest': payload.page}}}
+      return {...state, 'stream': {...state.profile, [payload.userId]: {...state.profile[payload.userId], 'lastPageRequest': payload.page}}}
 
     case 'LAST_SONG_PROFILE':
-      return {...state, 'stream': {...state.profile, [payload.userId]: {...state.profile.userId, 'lastSongId': payload.lastSongId}}}
+      return {...state, 'stream': {...state.profile, [payload.userId]: {...state.profile[payload.userId], 'lastSongId': payload.lastSongId}}}
 
     default:
       return state

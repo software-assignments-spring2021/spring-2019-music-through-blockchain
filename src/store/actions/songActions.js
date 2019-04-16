@@ -12,7 +12,7 @@ export let dbUploadSong = (songInfo, image, imageName, song, songName, callBack)
       console.log('dbUploadSong called')
       const state = getState()
       const uid = state.firebase.auth.uid
-      songInfo['ownerId'] = uid
+      songInfo['ownerId'] = [uid]
 
       return songService.uploadSong(uid, songInfo, image, imageName, song, songName).then((songData) => {
         dispatch(addSong(song.ownerId, songData))
@@ -96,15 +96,15 @@ export const getSongsByUserId = (userId, page = 0, limit = 10, type = '', sortBy
     return (dispatch, getState, {getFirebase}) => {
       const state = getState()
       const uid = state.firebase.auth.uid
-      const stream = state.song.stream
-      const lastPageRequest = stream[userId].lastPageRequest
-      const lastSongId = stream[userId].lastSongId
+      const profile = state.song.profile
+      const lastPageRequest = profile[userId].lastPageRequest
+      const lastSongId = profile[userId].lastSongId
   
       if (uid && lastPageRequest !== page) {
   
         return songService.getSongs(userId, lastSongId, page, limit, type, sortBy).then((result) => {
   
-          if (!result.songs || !(result.songs.length > 0)) {
+          if (!result.songs || result.newLastSongId === lastSongId) {
               return dispatch(notMoreDataProfile(userId))
           }
   
@@ -127,6 +127,23 @@ export const getSongsByUserId = (userId, page = 0, limit = 10, type = '', sortBy
     }
   }
 
+export const dbGetSongDetails = (song, songId) => {
+  return (dispatch, getState, {getFirebase}) => {
+    const state = getState()
+    const uid = state.firebase.auth.uid
+    const songOwners = (song.ownerId)
+    if (uid) {
+      return songService.getSongDetails(songOwners, songId).then((result) => {
+        song['ownerDetails'] = result
+        dispatch(updateSong(song))
+      })
+      .catch((error) => {
+        dispatch(showMessage(error.message))
+      })
+    }
+  }
+}
+
 
 /* _____________ CRUD State Functions _____________ */
 
@@ -138,6 +155,7 @@ export const clearAllData = () => {
       type: 'CLEAR_ALL_DATA_SONGS'
     }
 }
+
 
 /**
  * Add a song
@@ -222,9 +240,10 @@ export const lastSongStream = (lastSongId) => {
 /**
  * Profile posts has more data to show
  */
-export const hasMoreDataProfile = () => {
+export const hasMoreDataProfile = (userId) => {
     return {
       type: 'HAS_MORE_DATA_PROFILE',
+      payload: { userId }
     }
 }
 

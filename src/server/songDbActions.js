@@ -31,11 +31,14 @@ export const songService = {
                   imageFullPath: imageResult.metadata.fullPath,
                   songUrl: songDownloadURL, 
                   songFullPath: songResult.metadata.fullPath}
-                
+                delete songData['price']
                 //firestore --> save song info
                 songRef.set(songData).then(() => {
                   //add song id to songs owned by user
-                  userRef.update({songsOwned: firebase.firestore.FieldValue.arrayUnion(songRef.id)})
+                  var usersUpdate = {};
+                  usersUpdate[`songsOwned.${songRef.id}.percentOwned`] = 100;
+                  usersUpdate[`songsOwned.${songRef.id}.price`] = songInfo.price;
+                  userRef.update(usersUpdate)
                   
                   //add songId to songInfo and resolve
                   .then(() => {
@@ -96,7 +99,7 @@ getSongs: (userId, lastSongId, page, limit, type, sortBy) => {
       console.log('dbGetSongs') 
         let parsedData = []
         let query = db.collection('songs')
-        if (userId !== '') {
+        if (userId && userId !== '') {
             query = query.where('ownerId', '==', userId)
         }
         if (lastSongId && lastSongId !== '') {
@@ -121,6 +124,23 @@ getSongs: (userId, lastSongId, page, limit, type, sortBy) => {
             resolve({ songs: parsedData, newLastSongId })
         })
         })
-    }
-}
+    },
 
+/**
+ * Get details of song ownership, price
+ * 
+ */
+getSongDetails: (ownerIds, songId) => {
+  return new Promise((resolve, reject) => {
+    console.log('dbGetSongDetails') 
+      let parsedData = {}
+      ownerIds.forEach((ownerId) => {
+        let userRef = db.doc(`users/${ownerId}`)
+        userRef.get().then((doc) => {
+          parsedData[ownerId] = doc.data()['songsOwned'][songId]
+        })
+      })
+      resolve(parsedData)
+    })
+  }
+}
