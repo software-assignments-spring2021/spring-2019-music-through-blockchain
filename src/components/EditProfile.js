@@ -126,10 +126,11 @@ export class EditProfileComponent extends Component {
                 this.props.history.push('/')
                 return <Redirect to='/'/>
             }
+
             editProfile(
                 profileInfo,
                 this.state.file,
-                this.state.file.name,
+                (this.state.file) ? this.state.file.name : null,
                 callBack
             )
         }
