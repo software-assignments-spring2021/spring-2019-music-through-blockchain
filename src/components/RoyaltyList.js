@@ -89,16 +89,16 @@ export class RoyaltyList extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {royalties.map(r => (
-              <TableRow hover className={classes.row} key={r.id} component="td">
+            {Object.keys(royalties).map(r => (
+              <TableRow hover className={classes.row} key={r} component="td">
                 <TableCell align="right" className={classes.cell}>
-                  {r.seller}
+                  {r}
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
-                  {r.amount}
+                  {royalties[r].percent}
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
-                  {r.pricePerRoyalty}
+                  {royalties[r].price}
                 </TableCell>
                 <TableCell
                   align="right"

@@ -9,6 +9,7 @@ import Homepage from './containers/Homepage'
 import Profile from './containers/Profile'
 import Navbar from './components/Navbar'
 import NotFound from './components/NotFound'
+import { withRouter } from "react-router";
 
 import Master from './containers/Master'
 import SongUploadComponent from './containers/SongUpload'
@@ -40,6 +41,8 @@ class App extends Component {
 
   render() {
     //This should display once drizzle is ready and/or has loaded
+    console.log('app props: ', this.props)
+    const SongPageWrapped = withRouter(props => <SongPage {...props}/>);
     return (
       <BrowserRouter>
         <div className="App">
@@ -48,7 +51,7 @@ class App extends Component {
 
           <Switch>
             <Route exact path='/' component={Homepage} />
-            <Route path='/song/:uid' render={() => <SongPage drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/> }/>
+            <Route path='/song/:songId' render={() => <SongPageWrapped drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/> }/>
             <Route path='/signin' component={SigninComponent} />
             <Route path='/signup' component={SignupComponent} />
             <Route path='/profile/:uid' component={Profile} />

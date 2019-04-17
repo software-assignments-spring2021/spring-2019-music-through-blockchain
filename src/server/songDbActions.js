@@ -9,7 +9,7 @@ export const songService = {
   uploadSong: (uid, songInfo, image, imageName, song, songName) => {
     return new Promise((resolve, reject) => {
         let songData = {}
-        let songRef = db.collection(`songs`).doc()
+        let songRef = db.collection(`songs`)
         let userRef = db.collection(`users`).doc(uid)
         const imageKey = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9);
         const songKey = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9);
@@ -34,15 +34,15 @@ export const songService = {
                   songFullPath: songResult.metadata.fullPath}
                 delete songData['price']
                 //firestore --> save song info
-                songRef.set(songData).then(() => {
+                songRef.add(songData).then((docRef) => {
                   //add song id to songs owned by user
                   var usersUpdate = {};
-                  usersUpdate[`songsOwned.${songRef.id}.percentOwned`] = 100;
+                  usersUpdate[`songsOwned.${docRef.id}.percentOwned`] = 100;
                   userRef.update(usersUpdate)
                   
                   //add songId to songInfo and resolve
                   .then(() => {
-                    songData['id'] = songRef.id
+                    songData['id'] = docRef.id
                     resolve(songData)
                   })
                 })
@@ -124,6 +124,16 @@ getSongs: (userId, lastSongId, page, limit, type, sortBy) => {
         })
         })
     },
+  
+  getSongById:(songId) => {
+    return new Promise((resolve, reject) => {
+      console.log('dbGetSong songId: ', songId) 
+      let songRef = db.doc(`songs/${songId}`)
+      songRef.get().then((doc) => {
+        resolve({[songId]: doc.data()})
+      })
+    })
+  },
 
 /**
  * Get details of song ownership
@@ -188,20 +198,27 @@ getSongOwners: (ownerIds, songId) => {
           
           //add song ownership to buyer
           let buyerRef = db.doc(`users/${buyerId}`)
-          var buyerUpdate = {};
-          buyerUpdate[`songsOwned.${songId}.percentOwned`] = saleInfo.percent;
-          
-          buyerRef.update(buyerUpdate)
-  
-          //delete song ownership of seller
-          db.collection('songs').doc(songId).update({
-            ['market.' + sellerId]: firebase.firestore.FieldValue.delete()
-          }).then (() => {
+          buyerRef.get().then((doc) => {
+            const data = doc.data()
+            let amtOwned = 0
+            if(data['songsOwned'] && data['songsOwned'][songId]) {
+              amtOwned = data['songsOwned'][songId]
+            }
+            var buyerUpdate = {};
+            buyerUpdate[`songsOwned.${songId}.percentOwned`] = amtOwned + saleInfo.percent;
+            buyerRef.update(buyerUpdate)
+          })
+          .then(() => {
+            //delete song ownership of seller
+            db.collection('songs').doc(songId).update({
+              ['market.' + sellerId]: firebase.firestore.FieldValue.delete()
+            })
+          })                 
+          .then (() => {
             if (sellAllShares) {
               db.collection('users').doc(sellerId).update({
                 ['songsOwned.' + songId]: firebase.firestore.FieldValue.delete()
               })
-
             } 
             else {
               //update song ownership of seller
@@ -210,10 +227,8 @@ getSongOwners: (ownerIds, songId) => {
                 const ownStats = doc.data()['songsOwned'][songId]
                 var sellerUpdate = {};
                 sellerUpdate[`songsOwned.${songId}.percentOwned`] = ownStats.percentOwned - saleInfo.percent;
-                sellerRef.update(buyerUpdate)
-              })
-              
-
+                sellerRef.update(sellerUpdate)
+              })           
             }     
           })
         })

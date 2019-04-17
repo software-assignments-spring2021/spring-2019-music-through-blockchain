@@ -209,11 +209,9 @@ class SongDetails extends Component {
                   />
                   <Button style={{position: 'relative', top: 25, left: 100}} variant='contained' color='primary' onClick={this.handlePutForSale}>Sell Song</Button>
                 </div>
-              </div>
-              
-              :
-
-              <div className={classes.offerList}>
+              </div> : ''}
+            
+              <div className={classes.offerListTwo}>
                 <h3> Current Offers: </h3>
                 {(market && Object.keys(market).length > 0) ? Object.keys(market).map((key) => {
                   const price = market[key]['price']
@@ -225,7 +223,7 @@ class SongDetails extends Component {
                   </div>
                   )
                 })
-                : ''}
+                : 'No offers at the moment.'}
 
                 <div>
                 </div>

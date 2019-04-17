@@ -9,6 +9,8 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
 
+import { dbDeleteSong, dbPurchaseSong, dbPutSongForSale, dbRemoveSongForSale, dbGetSongOwners, dbGetSongById } from '../store/actions/songActions'
+
 let id = 0;
 function createData(seller, pricePerRoyalty, amount, totalPrice) {
   id += 1;
@@ -92,9 +94,11 @@ export class SongPage extends Component {
   };
 
   componentDidMount() {
-    const { drizzle, drizzleState } = this.props;
-    console.log(drizzle);
-    console.log(drizzleState);
+    const { drizzle, drizzleState, match } = this.props;
+    const songId = match.params.songId
+    console.log('drizzle: ', drizzle);
+    console.log('drizzleState', drizzleState);
+    this.props.loadSong(songId)
   }
 
   componentDidUpdate() {
@@ -103,12 +107,16 @@ export class SongPage extends Component {
 
   buySong(){
     
-  }  
+  }
 
   render() {
     const { classes, auth, match } = this.props;
-    console.log("SongPage props: ", this.props);
-    console.log(auth.uid)
+    const songId = match.params.songId
+    if (this.props.song && Object.keys(this.props.song['info']).length > 0){
+      console.log("SongPage props: ", this.props);
+      const song = this.props.song['info'][songId]
+      const market = song['market']
+        
     if (auth.uid) {
         return (
             <div className={classes.root}>
@@ -118,7 +126,7 @@ export class SongPage extends Component {
                     <img
                       className={classes.cover}
                       data-image="black"
-                      src={coverArt}
+                      src={song['imageUrl']}
                       alt=""
                     />
                   </div>
@@ -127,10 +135,10 @@ export class SongPage extends Component {
                   <div>
                     <div>
                       <Typography className={classes.artist} variant="subtitle2">
-                        Ariana Grande
+                        {song.artistName}
                       </Typography>
                       <Typography className={classes.songName} variant="h4">
-                        Thank u, next
+                        {song.title}
                       </Typography>
                       <p className={classes.description}>
                         Lorem ipsum dolor sit amet et delectus accommodare his consul
@@ -158,7 +166,9 @@ export class SongPage extends Component {
                     >
                       Buy royalty packages from current song owners
                     </Typography>
-                    <RoyaltyList royalties={royalties} />
+                    {(market && Object.keys(market).length > 0) ?
+                    <RoyaltyList royalties={market} />
+                    : 'No Current Offers'}
                   </div>
                 </Grid>
               </Grid>
@@ -166,15 +176,30 @@ export class SongPage extends Component {
     } else {
       return <Redirect to='/' />
     }
+  } else {
+    return null
+  }
     
   }
 }
 
 const mapStateToProps = (state) => {
     return {
+        ...state,
         auth: state.firebase.auth,
-        profile: state.firebase.profile
+        profile: state.firebase.profile,
     }
-  }
+}
 
-  export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(SongPage))
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+      deleteSong: (songId) => dispatch(dbDeleteSong(songId)),
+      purchaseSong: (song, songId, sellerId) => dispatch(dbPurchaseSong(song, songId, sellerId)),
+      sellSong: (song, songId, percent, price, sellAllShares, callBack) => dispatch(dbPutSongForSale(song, songId, percent, price, sellAllShares, callBack)),
+      removeForSale: (song, songId, callBack) => dispatch(dbRemoveSongForSale(song, songId, callBack)),
+      getSongOwners: (song, songId) => dispatch(dbGetSongOwners(song, songId)),
+      loadSong: (songId) => dispatch(dbGetSongById(songId)),
+    }
+}
+
+  export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(SongPage))

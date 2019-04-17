@@ -15,7 +15,7 @@ export let dbUploadSong = (songInfo, image, imageName, song, songName, callBack)
       songInfo['ownerId'] = [uid]
 
       return songService.uploadSong(uid, songInfo, image, imageName, song, songName).then((songData) => {
-        dispatch(addSong(song.ownerId, songData))
+        dispatch(addSongs({[songData.id]: songData}))
         callBack()
       })
       .catch((error) => dispatch(showMessage(error.message)))
@@ -89,6 +89,23 @@ export const dbGetSongs = (page = 0, limit = 10, sortBy = '') => {
     }
   }
 
+export const dbGetSongOwners = (song, songId) => {
+  return (dispatch, getState, {getFirebase}) => {
+      const state = getState()
+      const uid = state.firebase.auth.uid
+      const songOwners = (song.ownerId)
+      if (uid) {
+        return songService.getSongOwners(songOwners, songId).then((result) => {
+          song['ownerDetails'] = result
+          dispatch(updateSong(song))
+        })
+        .catch((error) => {
+          dispatch(showMessage(error.message))
+        })
+      }
+    }
+  }
+
 /**
  * Get songs for particular user
  */
@@ -127,20 +144,16 @@ export const getSongsByUserId = (userId, page = 0, limit = 10, type = '', sortBy
     }
   }
 
-export const dbGetSongOwners = (song, songId) => {
+// get specific song
+export const dbGetSongById = (songId) => { 
   return (dispatch, getState, {getFirebase}) => {
-    const state = getState()
-    const uid = state.firebase.auth.uid
-    const songOwners = (song.ownerId)
-    if (uid) {
-      return songService.getSongOwners(songOwners, songId).then((result) => {
-        song['ownerDetails'] = result
-        dispatch(updateSong(song))
-      })
-      .catch((error) => {
-        dispatch(showMessage(error.message))
-      })
-    }
+    return songService.getSongById(songId).then((result) => {
+      dispatch(addSongs(result))
+      dbGetSongOwners(result[songId], songId)
+    })
+    .catch((error) => {
+      dispatch(showMessage(error.message))
+    })
   }
 }
 
@@ -189,8 +202,11 @@ export const dbPurchaseSong = (song, songId, sellerId) => {
       return songService.purchaseSong(songId, sellerId, uid, sellAllShares).then((result) => {
         delete song['market'][sellerId]
         song['ownerId'].push(uid)
+        if (sellAllShares) {
+          delete song['ownerId'][sellerId]
+        }
         //todo: update buyer and seller details here
-
+        
         dispatch(updateSong(song))
       }).catch((error) => {
         dispatch(showMessage(error.message))
@@ -208,17 +224,6 @@ export const dbPurchaseSong = (song, songId, sellerId) => {
 export const clearAllData = () => {
     return {
       type: 'CLEAR_ALL_DATA_SONGS'
-    }
-}
-
-
-/**
- * Add a song
- */
-export const addSong = (ownerId, song) => {
-    return {
-      type: 'ADD_SONG',
-      payload: { ownerId, song}
     }
 }
 

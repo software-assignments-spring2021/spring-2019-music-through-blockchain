@@ -18,7 +18,7 @@ export class SongBoxGrid extends Component {
     return (
       <div className={classes.root}>
         {(songs && Object.keys(songs).length > 0) ? Object.keys(songs).map((songId) => (
-            <SongBox key={songId} song ={songs[songId]} songId={songId}/>
+            <SongBox key={songId} song ={songs[songId]} songId={songId} />
         )) : ''}
       </div>
     )

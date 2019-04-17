@@ -12,11 +12,8 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import Modal from '@material-ui/core/Modal'
 import DialogContent from '@material-ui/core/DialogContent';
-import { connect } from 'react-redux'
 
 import SongDetails from './SongDetails'
-
-import { dbGetSongOwners } from '../store/actions/songActions'
 
 const styles = theme => ( {
     root: {
@@ -57,7 +54,8 @@ const styles = theme => ( {
         display: 'flex',
         position: 'absolute',
         bottom: 5,
-        width: '100%',
+        width: '98%',
+        left: '1%',
         height: 50,
         contentAlign: 'center',
         alignItems: 'center',
@@ -141,7 +139,6 @@ export class CarouselItem extends Component {
 
     componentWillMount() {
         const { song, songId } = this.props
-        this.props.getSongOwners(song, songId)
       }
 
     onMouseOver = () => {
@@ -171,7 +168,7 @@ export class CarouselItem extends Component {
                 onMouseOver={this.onMouseOver}
                 onMouseOut={this.onMouseOut}
                 elevation={this.state.shadow}
-                style={{width: 300, height: 300}}
+                style={{width: 310, height: 310}}
             >
                 <Background>
                     <img className={classes.cover} src={coverArt}></img>
@@ -196,10 +193,4 @@ export class CarouselItem extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        getSongOwners: (song, songId) => dispatch(dbGetSongOwners(song, songId)),
-    }
-  }
-
-export default connect(null, mapDispatchToProps)(withStyles(styles, { withTheme: true })(CarouselItem))
+export default withStyles(styles, { withTheme: true })(CarouselItem)

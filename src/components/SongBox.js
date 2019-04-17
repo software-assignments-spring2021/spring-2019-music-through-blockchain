@@ -13,6 +13,8 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import DialogContent from '@material-ui/core/DialogContent';
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import { withRouter } from "react-router";
 
 import SongDetails from './SongDetails'
 
@@ -79,7 +81,6 @@ const styles = theme => ( {
 
 //e-motion components
 const Title = styled.h4({
-
     fontFamily: "Helvetica",
     transform: "translate3d(0,50px,0)",
     transition: "transform 350ms ease",
@@ -136,13 +137,12 @@ export class SongBox extends Component {
             shadow: 1, 
             detailsOpen: false 
         }
-        this.handleCloseModal = this.handleCloseModal.bind(this)
     }
 
     componentWillMount() {
         const { song, songId } = this.props
         this.props.getSongOwners(song, songId)
-      }
+    }
 
     onMouseOver = () => {
         this.setState({ shadow: 5 })
@@ -150,11 +150,10 @@ export class SongBox extends Component {
     onMouseOut = () => {
         this.setState({ shadow: 1 })
     }
-    handleOpenModal = () => {
-        this.setState({ detailsOpen: true })
-    }
-    handleCloseModal = () => {
-        this.setState({ detailsOpen: false })
+    goToSongPage = () => {
+        const { history, songId } = this.props
+            history.push(`/song/${songId}`)
+            return <Redirect to={`/song/${songId}`} />
     }
 
     render() {
@@ -184,28 +183,22 @@ export class SongBox extends Component {
                     <img className={classes.cover} src={coverArt}></img>
                     <DisplayOver>
                         <Hover>
-                            <Title style={{fontSize: titleSize}} className={classes.title} onClick={this.handleOpenModal}>{title}</Title>
+                            <Title style={{fontSize: titleSize}} className={classes.title} onClick={this.goToSongPage}>{title}</Title>
                             <SubTitle style={{fontSize: subtitleSize}} className={classes.subtitle} onClick={this.handleOpenModal}>{artist}</SubTitle>
                             <audio src={media} controls className={classes.audio}/>
                         </Hover>
                     </DisplayOver>
                 </Background>    
             </Card>
-            <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
-                <DialogContent>
-                    <SongDetails song={song} closeModal={this.handleCloseModal} songId={songId}/>
-                </DialogContent>
-            </Modal>
          </div>
         )
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-
     return {
         getSongOwners: (song, songId) => dispatch(dbGetSongOwners(song, songId)),
     }
-  }
+}
 
-export default connect(null, mapDispatchToProps)(withStyles(styles, { withTheme: true })(SongBox))
+export default withRouter(connect(null, mapDispatchToProps)(withStyles(styles, { withTheme: true })(SongBox)))
