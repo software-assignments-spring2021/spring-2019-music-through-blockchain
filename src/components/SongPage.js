@@ -17,14 +17,6 @@ function createData(seller, pricePerRoyalty, amount, totalPrice) {
   return { id, seller, pricePerRoyalty, amount, totalPrice };
 }
 
-const royalties = [
-  createData("Seller 1", 20, 5, 100),
-  createData("Seller 2", 20, 5, 100),
-  createData("Seller 3", 20, 5, 100),
-  createData("Seller 4", 20, 5, 100),
-  createData("Seller 5", 20, 5, 100)
-];
-
 const styles = theme => ({
   html: {
     height: "100%"
@@ -167,7 +159,7 @@ export class SongPage extends Component {
                       Buy royalty packages from current song owners
                     </Typography>
                     {(market && Object.keys(market).length > 0) ?
-                    <RoyaltyList royalties={market} />
+                    <RoyaltyList royalties={market} song={song} songId={songId}/>
                     : 'No Current Offers'}
                   </div>
                 </Grid>

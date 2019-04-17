@@ -202,7 +202,8 @@ getSongOwners: (ownerIds, songId) => {
             const data = doc.data()
             let amtOwned = 0
             if(data['songsOwned'] && data['songsOwned'][songId]) {
-              amtOwned = data['songsOwned'][songId]
+              amtOwned = data['songsOwned'][songId].percentOwned
+              console.log('percent already owned: ', amtOwned)
             }
             var buyerUpdate = {};
             buyerUpdate[`songsOwned.${songId}.percentOwned`] = amtOwned + saleInfo.percent;

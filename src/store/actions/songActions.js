@@ -132,7 +132,7 @@ export const getSongsByUserId = (userId, page = 0, limit = 10, type = '', sortBy
           result.songs.forEach((song) => {
             const songId = Object.keys(song)[0]
             const songData = song[songId]
-            songData.ownerId.songId = songData
+            songData[userId][songId] = songData
           })
           dispatch(addSongs(parsedData))
         })
@@ -148,6 +148,7 @@ export const getSongsByUserId = (userId, page = 0, limit = 10, type = '', sortBy
 export const dbGetSongById = (songId) => { 
   return (dispatch, getState, {getFirebase}) => {
     return songService.getSongById(songId).then((result) => {
+      result[songId].id = songId
       dispatch(addSongs(result))
       dbGetSongOwners(result[songId], songId)
     })
@@ -164,6 +165,7 @@ export const dbPutSongForSale = (song, songId, percent, price, sellAllShares, ca
     if (uid) {
       return songService.putSongForSale(songId, uid, percent, price, sellAllShares).then((result) => {
         song['market'][uid] = {'price': price, 'percent': percent, 'sellAllShares': sellAllShares}
+        song.id = songId
         dispatch(updateSong(song))
         callBack()
       })
@@ -181,6 +183,7 @@ export const dbRemoveSongForSale = (song, songId, callBack) => {
     if (uid) {
       return songService.removeSongForSale(songId, uid).then(() => {
         delete song['market'][uid]
+        song.id = songId
         dispatch(updateSong(song))
         callBack()
       })
@@ -202,11 +205,12 @@ export const dbPurchaseSong = (song, songId, sellerId) => {
       return songService.purchaseSong(songId, sellerId, uid, sellAllShares).then((result) => {
         delete song['market'][sellerId]
         song['ownerId'].push(uid)
+
         if (sellAllShares) {
           delete song['ownerId'][sellerId]
         }
         //todo: update buyer and seller details here
-        
+        song.id = songId
         dispatch(updateSong(song))
       }).catch((error) => {
         dispatch(showMessage(error.message))

@@ -134,12 +134,7 @@ export class CarouselItem extends Component {
         super(props);
         this.state = { shadow: 1, detailsOpen: false}
         this.handleCloseModal = this.handleCloseModal.bind(this)
-
     }
-
-    componentWillMount() {
-        const { song, songId } = this.props
-      }
 
     onMouseOver = () => {
         this.setState({ shadow: 5 })

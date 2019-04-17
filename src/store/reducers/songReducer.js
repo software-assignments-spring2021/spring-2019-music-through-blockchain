@@ -10,7 +10,6 @@ const initState = {
 
 const updateSong = (state, payload) => {
   const song = payload.song
-  const updatedOwnerId = song.ownerId
   const updatedId = song.id
   return {...state, 'info': {...state.info, [updatedId]: song}}
 }
