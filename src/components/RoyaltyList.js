@@ -6,6 +6,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
+import { connect } from 'react-redux'
+
+import { dbPurchaseSong } from '../store/actions/songActions'
 
 const styles = theme => ({
   root: {
@@ -67,7 +70,7 @@ export class RoyaltyList extends Component {
     this.setState({ color: event.target.checked ? "blue" : "default" });
   };
   render() {
-    const { classes, royalties } = this.props;
+    const { classes, royalties, song, songId } = this.props;
 
     return (
       <div>
@@ -89,26 +92,26 @@ export class RoyaltyList extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {royalties.map(r => (
-              <TableRow hover className={classes.row} key={r.id} component="td">
+            {Object.keys(royalties).map(r => (
+              <TableRow hover className={classes.row} key={r} component="td">
                 <TableCell align="right" className={classes.cell}>
-                  {r.seller}
+                  {r}
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
-                  {r.amount}
+                  {royalties[r].percent}
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
-                  {r.pricePerRoyalty}
+                  {royalties[r].price}
                 </TableCell>
                 <TableCell
                   align="right"
                   style={{ marginLeft: 20, paddingLeft: 50 }}
                   className={classes.cell}
                 >
-                  {r.totalPrice}
+                  {royalties[r].price * royalties[r].percent}
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
-                  <Button className={classes.button}>Buy</Button>
+                  <Button className={classes.button} onClick={() => this.props.purchaseSong(song, songId, r)}>Buy</Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -119,4 +122,10 @@ export class RoyaltyList extends Component {
   }
 }
 
-export default withStyles(styles)(RoyaltyList);
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    purchaseSong: (song, songId, sellerId) => dispatch(dbPurchaseSong(song, songId, sellerId)),
+  }
+}
+
+export default connect(null, mapDispatchToProps)(withStyles(styles)(RoyaltyList));
