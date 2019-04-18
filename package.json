@@ -9,6 +9,8 @@
     "@material-ui/icons": "^3.0.2",
     "connected-react-router": "^6.3.1",
     "drizzle": "^1.3.3",
+    "drizzle-react": "^1.2.0",
+    "drizzle-react-components": "^1.4.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.10.0",
     "firebase": "^5.8.4",
