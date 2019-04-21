@@ -36,7 +36,7 @@ export const dbEditProfile = (updatedProfile, image, imageName, callBack) => {
         const uid = state.firebase.auth.uid
 
         if (image) {
-            return userService.updateProfileWithImage(uid, updatedProfile, image, imageName).then((profileData) => {
+            return userService.updatedprofileWithImage(uid, updatedProfile, image, imageName).then((profileData) => {
                 console.log("updated profile in database")
                 dispatch(setEditedUserProfile(profileData))
                 callBack(uid)
