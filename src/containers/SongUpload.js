@@ -26,6 +26,16 @@ const styles = (theme) => ({
         textAlign: 'center',
         display: 'block',
         margin: 'auto',
+    },
+    button: {
+        background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
+        width: 300,
+        color: 'white !important',
+        marginTop: 20,
+        fontSize: 16
+    },
+    input: {
+        marginBottom: 20
     }
 })
 
@@ -173,6 +183,7 @@ export class SongUploadComponent extends Component {
                                     <div>
                                         <div>Choose mp3 file to upload</div>
                                         <input
+                                               className={classes.input}
                                                onChange={this.onSongChange}
                                                error={this.state.songFileInputError.trim() !== ''}
                                                accept='.mp3'
@@ -192,7 +203,7 @@ export class SongUploadComponent extends Component {
                                         />
                                     </div>
                                     <div>
-                                        <Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>
+                                        <Button className ={classes.button} variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>
                                     </div>
                                 </div>
                             </div>

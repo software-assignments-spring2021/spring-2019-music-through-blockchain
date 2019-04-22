@@ -26,6 +26,16 @@ const styles = (theme) => ({
         textAlign: 'center',
         display: 'block',
         margin: 'auto',
+    },
+    button: {
+        background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
+        width: 300,
+        color: 'white !important',
+        marginTop: 20,
+        fontSize: 16
+    },
+    input: {
+        marginBottom: 20
     }
 })
 
@@ -208,8 +218,7 @@ export class EditProfileComponent extends Component {
                                     </div>
 
                                     <div>
-                                        {/*<Button variant='contained' color='primary'>Save Changes</Button>*/}
-                                        <Button variant='contained' color='primary' onClick={this.handleForm}>Save Changes</Button>
+                                        <Button className ={classes.button} variant='contained' color='primary' onClick={this.handleForm}>Save Changes</Button>
                                     </div>
                                 </div>
                             </div>
