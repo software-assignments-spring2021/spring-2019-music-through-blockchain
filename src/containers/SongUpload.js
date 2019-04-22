@@ -8,6 +8,7 @@ import {signUp} from '../store/actions/authActions'
 import { Grid } from '@material-ui/core'
 import { Redirect } from 'react-router-dom'
 import {SignupComponent} from "./SignupComponent";
+
 import {dbUploadSong} from '../store/actions/songActions'
 
 const styles = (theme) => ({
@@ -38,8 +39,6 @@ export class SongUploadComponent extends Component {
             songNameInputError: '',
             artistNameInput: '',
             artistNameInputError: '',
-            priceInput: '',
-            priceInputError: '',
             songFileInput: '',
             songFileInputError: '',
             songFile: null
@@ -64,11 +63,6 @@ export class SongUploadComponent extends Component {
             case 'artistNameInput':
                 this.setState({
                     artistNameInputError: ''
-                })
-                break
-            case 'priceInput':
-                this.setState({
-                    priceInputError: ''
                 })
                 break
             case 'songFileInput':
@@ -106,24 +100,11 @@ export class SongUploadComponent extends Component {
             error = true
         }
 
-       /* Check artist name*/
-        let intPrice = parseInt(priceInput)
-
-
-        if (isNaN(intPrice)) {
-            if (!intPrice || intPrice <= 0) {
-                this.setState({
-                    priceInputError: 'Please enter a valid price'
-                })
-                error = true
-            }
-        }
-
         if (!error) {
             const songInfo = {
                 title: songNameInput,
                 artistName: artistNameInput,
-                price: priceInput}
+                }
             const callBack = () => {
                 this.props.history.push('/')
                 return <Redirect to='/' />
@@ -151,7 +132,7 @@ export class SongUploadComponent extends Component {
     }
 
     render() {
-
+        console.log("song upload props", this.props);
         const { classes, auth } = this.props
         if (!auth.uid){
             this.props.history.push('/')
@@ -185,15 +166,6 @@ export class SongUploadComponent extends Component {
                                     error={this.state.artistNameInputError.trim() !== ''}
                                     name='artistNameInput'
                                     label='Artist Name'
-                                    type='text'
-                                /><br />
-                                <TextField
-                                    className={classes.textField}
-                                    onChange={this.handleInputChange}
-                                    helperText={this.state.priceInputError}
-                                    error={this.state.priceInputError.trim() !== ''}
-                                    name='priceInput'
-                                    label='Price'
                                     type='text'
                                 /><br />
                                 <br />

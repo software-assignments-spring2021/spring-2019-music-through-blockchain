@@ -20,7 +20,7 @@ export let userReducer = (state = initState, action) => {
                     photoUrl: payload.user.photoUrl,  
                     songsOwned: payload.user.songsOwned,
                     songs: payload.user.songs,
-                    bio: payload.user.bio
+                    bio: payload.user.biography
             }
         }
         case 'SET_EDIT_USER':
