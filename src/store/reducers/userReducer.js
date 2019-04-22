@@ -24,8 +24,16 @@ export let userReducer = (state = initState, action) => {
             }
         }
         case 'SET_EDIT_USER':
-            console.log(payload.accountOwner)
-            console.log(state)
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    accountOwner: payload.accountOwner,
+                    artistName: payload.artistName,
+                    bio: payload.biography
+                }
+            }
+        case 'SET_EDIT_USER_IMAGE':
             return {
                 ...state,
                 user: {

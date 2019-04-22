@@ -29,44 +29,53 @@ export  const setUserProfile = (user) => {
         payload: user
 }}
 
+/**
+ * Edits the users profile
+ * @param updatedProfile
+ * @param image
+ * @param imageName
+ * @param callBack
+ * @returns {Function}
+ */
 export const dbEditProfile = (updatedProfile, image, imageName, callBack) => {
     return (dispatch, getState, {getFirebase}) => {
         console.log("dbEditProfile called")
         const state = getState()
         const uid = state.firebase.auth.uid
 
+        //if the user changes this their profile image
         if (image) {
             return userService.updatedprofileWithImage(uid, updatedProfile, image, imageName).then((profileData) => {
-                console.log("updated profile in database")
-                dispatch(setEditedUserProfile(profileData))
+                dispatch(setEditedUserProfileImage(profileData))
                 callBack(uid)
             })
                 .catch((error) => {
-                    console.log("there was an error in saving the profile")
-                    console.log(error)
                     dispatch(showMessage(error.message))
                 })
         }
-        return userService.updateProfile(uid, updatedProfile).then((profileData) => {
-            console.log(profileData)
-            console.log(image)
-            console.log(imageName)
 
-            console.log("updated profile in database")
+        //if the user changes their name or biography
+        return userService.updateProfile(uid, updatedProfile).then((profileData) => {
             dispatch(setEditedUserProfile(profileData))
             callBack(uid)
         })
             .catch((error) => {
-                console.log("there was an error in saving the profile")
-                console.log(error)
                 dispatch(showMessage(error.message))
             })
     }
 }
 
-//call on the for the edited profile reducer
+
 export const setEditedUserProfile = (user) => {
     return {
         type: 'SET_EDIT_USER',
         payload: user
-}}
+    }
+}
+
+export const setEditedUserProfileImage = (user) => {
+    return {
+        type: 'SET_EDIT_USER_IMAGE',
+        payload: user
+    }
+}
