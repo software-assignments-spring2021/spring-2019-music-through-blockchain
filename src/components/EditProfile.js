@@ -35,11 +35,11 @@ export class EditProfileComponent extends Component {
         super(props)
 
         this.state = {
-            editNameInput: '',
+            editNameInput: props.accountOwner || '',
             editNameInputError: '',
-            editArtistNameInput: '',
+            editArtistNameInput: props.artistName || '',
             editArtistNameInputError: '',
-            userInfoInput: '',
+            userInfoInput: props.biography || '',
             userInfoInputError: '',
             profilePictureFileInput: null,
             profilePictureFileInputError: '',
@@ -169,6 +169,7 @@ export class EditProfileComponent extends Component {
                                     error={this.state.editNameInputError.trim() !== ''}
                                     name='editNameInput'
                                     label='Name'
+                                    value={this.state.editNameInput}
                                     type='text'
                                 /><br />
                                 <TextField
@@ -179,6 +180,7 @@ export class EditProfileComponent extends Component {
                                     error={this.state.editArtistNameInputError.trim() !== ''}
                                     name='editArtistNameInput'
                                     label='Artist Name'
+                                    value={this.state.editArtistNameInput}
                                     type='text'
                                 /><br />
                                 <TextField
@@ -188,6 +190,7 @@ export class EditProfileComponent extends Component {
                                     error={this.state.userInfoInputError.trim() !== ''}
                                     name='userInfoInput'
                                     label='Biography'
+                                    value={this.state.userInfoInput}
                                     type='textarea'
                                 /><br />
                                 <br />

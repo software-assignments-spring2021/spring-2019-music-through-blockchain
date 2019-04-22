@@ -144,7 +144,7 @@ export class Profile extends Component {
   } 
 
   render() {
-    const {classes, auth, match,user} = this.props
+    const {classes, auth, match, user, profile} = this.props
     const songs = user.user.songs;
     if(!auth.uid){
       return <Redirect to='/' />
@@ -178,7 +178,11 @@ export class Profile extends Component {
         </Modal>
         <Modal className={classes.modal} open={this.state.editProfileOpen} onClose={this.handleCloseEditProfile}>
             <DialogContent>
-                <EditProfile />
+                <EditProfile
+                accountOwner = {profile.accountOwner}
+                artistName = {profile.artistName}
+                biography = {profile.biography}
+                />
             </DialogContent>
         </Modal>
       </div>
