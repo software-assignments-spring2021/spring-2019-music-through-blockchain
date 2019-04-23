@@ -5,7 +5,10 @@ const initState = {
         'lastPageRequest': null,
         'lastSongId': null
     },
-    profile: {}
+    profile: {},
+    user: {
+      'saveSuccess': null
+    }
 }
 
 const updateSong = (state, payload) => {
@@ -34,7 +37,7 @@ export let songReducer = (state = initState, action) => {
       return state
 
     case 'ADD_SONGS':
-      return {...state, 'info': {...state.info, ...payload.songs}}
+      return {...state, 'info': {...state.info, ...payload.songs}, user: {saveSuccess: true}}
       
     case 'HAS_MORE_DATA_STREAM':
       return {...state, 'stream': {...state.stream, 'hasMoreData': true}}
