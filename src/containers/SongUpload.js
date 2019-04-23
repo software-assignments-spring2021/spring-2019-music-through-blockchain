@@ -149,45 +149,36 @@ export class SongUploadComponent extends Component {
             })
         }
 
-       /* Check artist name*/
-        let intPrice = parseInt(priceInput)
-
-
-        if (isNaN(intPrice)) {
-            if (!intPrice || intPrice <= 0) {
-                this.setState({
-                    priceInputError: 'Please enter a valid price'
-                })
-                error = true
-            }
-        }
-
-        const newSongAddress = this.uploadTransaction();
-
         if (!error) {
+            this.uploadTransaction().then((newSongAddress) => {
 
-            const songInfo = {
-                songPublicAddress: newSongAddress,
-                title: songNameInput,
-                artistName: artistNameInput,
-                price: priceInput}
-            
-            const artistPublicAddress = drizzleState.accounts[0];
-            
-            const callBack = () => {
-                this.props.history.push('/')
-                return <Redirect to='/' />
-            }
-            
-            upload(
-                songInfo,
-                this.state.file,
-                this.state.file.name,
-                this.state.songFile,
-                this.state.songFile.name,
-                artistPublicAddress,
-                callBack
-            )
+                const songInfo = {
+                    songPublicAddress: newSongAddress,
+                    title: songNameInput,
+                    artistName: artistNameInput,
+                    price: priceInput}
+
+                const artistPublicAddress = drizzleState.accounts[0];
+
+                const callBack = () => {
+                    this.props.history.push('/')
+                    return <Redirect to='/' />
+                }
+
+                upload(
+                    songInfo,
+                    this.state.file,
+                    this.state.file.name,
+                    this.state.songFile,
+                    this.state.songFile.name,
+                    artistPublicAddress,
+                    newSongAddress,
+                    callBack
+                )
+
+            }).catch((error) => {
+                console.log(error)
+            })
         }
         else {
             console.log('form input error')
@@ -200,23 +191,21 @@ export class SongUploadComponent extends Component {
             const contract = drizzle.contracts.SongsContract;
     
             let newSongAddress = drizzle.web3.eth.accounts.create();
-    
+
             if(drizzleState.drizzleStatus.initialized){
-                
-                contract.methods.registerSong(newSongAddress.address).send({from: drizzleState.accounts[0], gas: 4712388,}, 
+                contract.methods.registerSong(newSongAddress.address).send({from: drizzleState.accounts[0], gas: 4712388,},
                     function(error, result){
                         if(error){
                             console.log(error);
-                            return undefined;
+                            reject(error)
                         } else{
                             console.log("TX hash is " + result);
                             console.log("The new Song's address is: " + newSongAddress.address);
-                            return newSongAddress.address;
+                            resolve(newSongAddress.address)
                         }
                     }                
                 );
             }
-            return undefined;
         });
     }
 
