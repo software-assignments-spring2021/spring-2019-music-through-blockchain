@@ -4,7 +4,8 @@ const initState = {
         'artistName': null,
         'photoUrl': null, 
         'songsOwned': [], 
-        'bio':null
+        'bio':null,
+        'saveSuccess': null
     }
 }
 
@@ -30,7 +31,8 @@ export let userReducer = (state = initState, action) => {
                     ...state.user,
                     accountOwner: payload.accountOwner,
                     artistName: payload.artistName,
-                    bio: payload.biography
+                    bio: payload.biography,
+                    saveSuccess: true
                 }
             }
         case 'SET_EDIT_USER_IMAGE':
@@ -41,7 +43,16 @@ export let userReducer = (state = initState, action) => {
                     accountOwner: payload.accountOwner,
                     artistName: payload.artistName,
                     bio: payload.biography,
-                    photoUrl: payload.photoUrl
+                    photoUrl: payload.photoUrl,
+                    saveSuccess: true
+                }
+            }
+        case 'SET_EDIT_FAIL':
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    saveSuccess: false
                 }
             }
         default:

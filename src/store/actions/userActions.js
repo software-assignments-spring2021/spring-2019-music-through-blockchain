@@ -50,6 +50,7 @@ export const dbEditProfile = (updatedProfile, image, imageName, callBack) => {
                 callBack(uid)
             })
                 .catch((error) => {
+                    dispatch(setFail(updatedProfile))
                     dispatch(showMessage(error.message))
                 })
         }
@@ -69,6 +70,12 @@ export const dbEditProfile = (updatedProfile, image, imageName, callBack) => {
 export const setEditedUserProfile = (user) => {
     return {
         type: 'SET_EDIT_USER',
+        payload: user
+    }
+}
+export const setFail = (user) => {
+    return {
+        type: 'SET_EDIT_FAIL',
         payload: user
     }
 }

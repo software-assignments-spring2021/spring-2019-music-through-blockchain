@@ -112,13 +112,8 @@ const styles = theme => ({
   description: {
     position: 'absolute',
     top: 50, 
-    left: 5,
-      textAlign: "center",
-      fontSize: 16,
-      color: "#86939E",
-      letterSpacing: "-1px",
-      fontWeight: 300,
-      lineHeight: "24px"
+    left: 5
+
   }
 })
 

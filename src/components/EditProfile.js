@@ -32,10 +32,14 @@ const styles = (theme) => ({
         width: 300,
         color: 'white !important',
         marginTop: 20,
-        fontSize: 16
+        fontSize: 16,
+        marginBottom: 10
     },
     input: {
         marginBottom: 20
+    },
+    success: {
+        color: '#33cc33'
     }
 })
 
@@ -54,7 +58,6 @@ export class EditProfileComponent extends Component {
             profilePictureFileInput: null,
             profilePictureFileInputError: '',
             file: null
-
         }
         this.handleForm = this.handleForm.bind(this)
     }
@@ -233,6 +236,13 @@ export class EditProfileComponent extends Component {
                                     <div>
                                         <Button className ={classes.button} variant='contained' color='primary' onClick={this.handleForm}>Save Changes</Button>
                                     </div>
+                                    {this.props.user.user.saveSuccess ?
+                                        <div className={classes.success}>
+                                            Changes Successfully Saved ✔
+                                        </div> :
+                                        <div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </Paper>
@@ -240,15 +250,14 @@ export class EditProfileComponent extends Component {
                 </Grid>
             </Grid>
         )
-
     }
-
 }
 
 const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
-        profile: state.firebase.profile
+        profile: state.firebase.profile,
+        user: state.user
     }
 }
 

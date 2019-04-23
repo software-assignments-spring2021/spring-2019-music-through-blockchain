@@ -32,10 +32,14 @@ const styles = (theme) => ({
         width: 300,
         color: 'white !important',
         marginTop: 20,
-        fontSize: 16
+        fontSize: 16,
+        marginBottom: 10
     },
     input: {
         marginBottom: 20
+    },
+    success: {
+        color: '#33cc33'
     }
 })
 
@@ -206,6 +210,13 @@ export class SongUploadComponent extends Component {
                                     <div>
                                         <Button className ={classes.button} variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>
                                     </div>
+                                    {this.props.song.user.saveSuccess ?
+                                        <div className={classes.success}>
+                                            Uploaded Song Successfully ✔
+                                        </div> :
+                                        <div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </Paper>
@@ -220,7 +231,8 @@ export class SongUploadComponent extends Component {
 const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
-        profile: state.firebase.profile
+        profile: state.firebase.profile,
+        song: state.song
     }
 }
 
