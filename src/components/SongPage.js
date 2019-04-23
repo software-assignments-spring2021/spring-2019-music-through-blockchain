@@ -85,49 +85,59 @@ const styles = theme => ({
 export class SongPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {showSongPrice: false};
+    this.state = {
+      showSongPrice: false,
+      songPrice: 0,
+      isLoaded: false,
+    };
   }
   
   scrollToBottom = () => {
     window.scrollTo(0, 1000);
   };
 
+  //
   componentDidMount() {
-    const { drizzle, drizzleState } = this.props;
-    console.log(drizzle);
-    console.log(drizzleState);
+    //TODO: fetch this api
+    fetch("https://api.coinmarketcap.com/v1/ticker/ethereum")
+      .then(res => 
+        {
+          res.json();
+          console.log(res.json());
+        })
+      .then(
+        (result) => {
+
+          const price_song = 1.0 / 175.0; // result.items.price_usd;
+          this.setState({
+            isLoaded: true,
+            songPrice: price_song
+          });
+        },
+        (error) => {
+          const price_song = 1.0 / 175.0 //remove when API is fixed
+          this.setState({
+            isLoaded: true,
+            songPrice: price_song
+          });
+          
+          console.log(error);
+        }
+      )
   }
 
   componentDidUpdate() {
     this.scrollToBottom();
   }
 
-  displaySongPrice = () =>{
-
-    const { drizzle, drizzleState } = this.props;
-    const contract = drizzle.contracts.SongsContract;
-    if(drizzleState.drizzleStatus.initialized){
-      contract.methods.viewSongPrice().call({from: drizzleState.accounts[0]}, 
-          function(error, result){
-            if(error){
-              console.log(error);
-            } else{
-              console.log(result);
-              this.setState({showSongPrice: true});
-            }
-          }                
-      );
-    }
-  }
-
   render() {
-    const { classes, auth, match, drizzleState, drizzle } = this.props;
-    const showSongPrice = this.state.showSongPrice;
+    const { classes, auth, match, drizzleState, drizzle, isLoaded } = this.props;
+    const songPrice = this.state.songPrice;
     console.log("SongPage props: ", this.props);
     console.log(auth.uid)
     if (auth.uid) {
 
-      if(!drizzleState.drizzleStatus.initialized){
+      if(!drizzleState.drizzleStatus.initialized && isLoaded){
         return (<p>Loading ...</p>);
       }
 
@@ -163,7 +173,7 @@ export class SongPage extends Component {
                     </div>
                   </div>
                   <div>
-                    {showSongPrice ? <p>some price</p> : (<p>no price</p>) }
+                    <p>All songs are only $1 ({songPrice.toFixed(6)} ETH)</p>
                     <Button className ={classes.button} onClick={()=>{this.displaySongPrice()}}>See Song Price</Button>
                     <Button className ={classes.button} onClick={this.scrollToBottom}>Purchase Song</Button>
                   </div>
