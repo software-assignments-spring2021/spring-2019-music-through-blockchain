@@ -13,7 +13,6 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import withStyles from "@material-ui/core/styles/withStyles";
 import metaIcon from '../img/metamask.jpg'
 import popup from '../img/popup.png'
-import purchase from '../img/purchase.svg'
 function MusicIcon(props) {
     return (
       <SvgIcon {...props}>
@@ -179,7 +178,7 @@ class HowTo extends Component {
             </ListItem>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-              <MusicIcon component={this.styled} />
+              <DollarIcon component={this.styled} />
               </ListItemIcon>
               <ListItemText inset primary="Purchase Song" />
             </ListItem>
@@ -196,13 +195,13 @@ class HowTo extends Component {
           <List component="div" disablePadding>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-              <RoyaltiesIcon component={this.styled} />
+              <DollarIcon component={this.styled} />
               </ListItemIcon>
               <ListItemText inset primary="Purchase Royalties" />
             </ListItem>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-              <RoyaltiesIcon component={this.styled} />
+              <DollarIcon component={this.styled} />
               </ListItemIcon>
               <ListItemText inset primary="Sell Royalties" />
             </ListItem>
