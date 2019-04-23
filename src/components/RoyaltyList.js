@@ -66,6 +66,33 @@ export class RoyaltyList extends Component {
   handleChange = event => {
     this.setState({ color: event.target.checked ? "blue" : "default" });
   };
+
+  buyRoyalties(songAddress, sellerAddress, totalPrice){
+    const { drizzle, drizzleState } = this.props;
+    const contract = drizzle.contracts.SongsContract;
+
+    songAddress = drizzleState.accounts[2];
+    sellerAddress = drizzleState.accounts[1];
+    totalPrice = 5;
+
+    if(drizzleState.drizzleStatus.initialized){
+        
+        contract.methods.buyRoyalties(songAddress, sellerAddress).send({ value: totalPrice * 1000000000000000000, from: drizzleState.accounts[0], gas: 4712388,}, 
+            function(error, result){
+                if(error){
+                    console.log(error);
+                    return undefined;
+                } else{
+                    console.log("TX hash is " + result);
+                    return songAddress;
+                }
+            }                
+        );
+    }
+    return undefined;
+
+  }
+
   render() {
     const { classes, royalties } = this.props;
 
@@ -108,7 +135,7 @@ export class RoyaltyList extends Component {
                   {r.totalPrice}
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
-                  <Button className={classes.button}>Buy</Button>
+                  <Button className={classes.button} onClick={()=>{this.buyRoyalties(r.id, r.seller, r.totalPrice)}} >Buy</Button>
                 </TableCell>
               </TableRow>
             ))}

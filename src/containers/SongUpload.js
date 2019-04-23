@@ -130,7 +130,6 @@ export class SongUploadComponent extends Component {
         const newSongAddress = this.uploadTransaction();
 
         if (!error) {
-            const newSongAddress = this.uploadTransaction();
 
             const songInfo = {
                 songPublicAddress: newSongAddress,
@@ -165,10 +164,7 @@ export class SongUploadComponent extends Component {
         const { drizzle, drizzleState } = this.props;
         const contract = drizzle.contracts.SongsContract;
 
-        console.log(drizzle);
-
-        let newSongAddress;
-        console.log(newSongAddress);
+        let newSongAddress = drizzle.web3.eth.accounts.create();
 
         if(drizzleState.drizzleStatus.initialized){
             
@@ -179,9 +175,8 @@ export class SongUploadComponent extends Component {
                         return undefined;
                     } else{
                         console.log("TX hash is " + result);
-                        newSongAddress = drizzle.web3.eth.accounts.create();
-                        console.log("The new Song's address is: " + newSongAddress);
-                        return newSongAddress;
+                        console.log("The new Song's address is: " + newSongAddress.address);
+                        return newSongAddress.address;
                     }
                 }                
             );
@@ -206,7 +201,7 @@ export class SongUploadComponent extends Component {
         }
 
         if(!drizzleState.drizzleStatus.initialized){
-            
+            return (<p>Loading ...</p>);
         }
 
         return (

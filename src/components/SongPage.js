@@ -85,6 +85,7 @@ const styles = theme => ({
 export class SongPage extends Component {
   constructor(props) {
     super(props);
+    this.state = {showSongPrice: false};
   }
   
   scrollToBottom = () => {
@@ -101,15 +102,35 @@ export class SongPage extends Component {
     this.scrollToBottom();
   }
 
-  buySong(){
-    
-  }  
+  displaySongPrice = () =>{
+
+    const { drizzle, drizzleState } = this.props;
+    const contract = drizzle.contracts.SongsContract;
+    if(drizzleState.drizzleStatus.initialized){
+      contract.methods.viewSongPrice().call({from: drizzleState.accounts[0]}, 
+          function(error, result){
+            if(error){
+              console.log(error);
+            } else{
+              console.log(result);
+              this.setState({showSongPrice: true});
+            }
+          }                
+      );
+    }
+  }
 
   render() {
-    const { classes, auth, match } = this.props;
+    const { classes, auth, match, drizzleState, drizzle } = this.props;
+    const showSongPrice = this.state.showSongPrice;
     console.log("SongPage props: ", this.props);
     console.log(auth.uid)
     if (auth.uid) {
+
+      if(!drizzleState.drizzleStatus.initialized){
+        return (<p>Loading ...</p>);
+      }
+
         return (
             <div className={classes.root}>
               <Grid container spacing={24} className={classes.grid}>
@@ -142,7 +163,8 @@ export class SongPage extends Component {
                     </div>
                   </div>
                   <div>
-                    <Button className ={classes.button} onClick={this.scrollToBottom}>See Song Price</Button>
+                    {showSongPrice ? <p>some price</p> : (<p>no price</p>) }
+                    <Button className ={classes.button} onClick={()=>{this.displaySongPrice()}}>See Song Price</Button>
                     <Button className ={classes.button} onClick={this.scrollToBottom}>Purchase Song</Button>
                   </div>
                 </Grid>
@@ -158,7 +180,7 @@ export class SongPage extends Component {
                     >
                       Buy royalty packages from current song owners
                     </Typography>
-                    <RoyaltyList royalties={royalties} />
+                    <RoyaltyList royalties={royalties} drizzle={drizzle} drizzleState={drizzleState} />
                   </div>
                 </Grid>
               </Grid>
