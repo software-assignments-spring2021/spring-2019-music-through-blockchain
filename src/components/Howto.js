@@ -9,19 +9,26 @@ import Collapse from '@material-ui/core/Collapse';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import withStyles from "@material-ui/core/styles/withStyles";
 import metaIcon from '../img/metamask.jpg'
 import popup from '../img/popup.png'
+import purchase from '../img/purchase.svg'
 function MusicIcon(props) {
     return (
       <SvgIcon {...props}>
         <path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zm-7.5-1c1.38 0 2.5-1.12 2.5-2.5V7h3V5h-4v5.51c-.42-.32-.93-.51-1.5-.51-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6z"/>   
-  </SvgIcon>
+    </SvgIcon>
     );
   }
 
+  function DollarIcon(props) {
+    return (
+      <SvgIcon {...props}>
+        <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>   
+    </SvgIcon>
+    );
+  }
   function RoyaltiesIcon(props) {
     return (
       <SvgIcon {...props}>
@@ -166,13 +173,13 @@ class HowTo extends Component {
           <List component="div" disablePadding>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-                <StarBorder />
+                <MusicIcon component={this.styled} />
               </ListItemIcon>
               <ListItemText inset primary="Upload Song" />
             </ListItem>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-                <StarBorder />
+              <MusicIcon component={this.styled} />
               </ListItemIcon>
               <ListItemText inset primary="Purchase Song" />
             </ListItem>
@@ -189,19 +196,19 @@ class HowTo extends Component {
           <List component="div" disablePadding>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-                <StarBorder />
+              <RoyaltiesIcon component={this.styled} />
               </ListItemIcon>
               <ListItemText inset primary="Purchase Royalties" />
             </ListItem>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-                <StarBorder />
+              <RoyaltiesIcon component={this.styled} />
               </ListItemIcon>
               <ListItemText inset primary="Sell Royalties" />
             </ListItem>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-                <StarBorder />
+              <RoyaltiesIcon component={this.styled} />
               </ListItemIcon>
               <ListItemText inset primary="Withdraw Royalties" />
             </ListItem>
