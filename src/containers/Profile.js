@@ -37,9 +37,20 @@ const styles = theme => ({
   rowTwo : {
       position: 'absolute',
       top: 310,
-      height: 500,
+      height: 100,
       width: '100%',
       maxWidth: 960,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems : 'center',
+      alignContent: 'center'
+  },
+  rowThree: {
+    position: 'absolute',
+    top: 380,
+    height: 500,
+    width: '100%',
+    maxWidth: 960,
   },
 
   songList: {
@@ -109,7 +120,19 @@ const styles = theme => ({
     position: 'absolute',
     top: 50, 
     left: 5
-    
+  }, 
+  button: {
+    background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
+    "&:hover": {
+      border: "solid 3px white",
+      color: "white !important"
+    },
+    border: "solid 1px rgba(120,0,96,0.2)",
+    height: 48,
+    width: 300,
+    marginLeft: 20,
+    color: 'white !important',
+    fontSize: 16
   }
 })
 
@@ -144,8 +167,13 @@ export class Profile extends Component {
     this.setState({ editProfileOpen: false })
   } 
 
+  withdrawFunds(){
+    //TODO: select songs from which to withdraw funds.
+  }
+
   render() {
-    const {classes, auth, match,user} = this.props
+    const {classes, auth, match,user, drizzle, drizzleState} = this.props
+    console.log(this.props);
     const songs = user.user.songs;
     if(!auth.uid){
       return <Redirect to='/' />
@@ -171,14 +199,17 @@ export class Profile extends Component {
           </div>
 
         </div>
-        <div className={classes.rowTwo}>
+        <div className ={classes.rowTwo}>
+          <Button className={classes.button} onClick={()=>{this.withdrawFunds()}} >Withdraw Earnings</Button>
+        </div>        
+        <div className={classes.rowThree}>
           <div className={classes.songList}> 
               {/* <SongList songs= {songs} songsOwned={user.user.songsOwned} /> */}
           </div>
         </div> 
         <Modal className={classes.modal} open={this.state.uploadModalOpen} onClose={this.handleCloseUpload}>
             <DialogContent>
-                <SongUpload />
+                <SongUpload drizzle={drizzle} drizzleState={drizzleState}/>
             </DialogContent>
         </Modal>
         <Modal className={classes.modal} open={this.state.editProfileOpen} onClose={this.handleCloseEditProfile}>

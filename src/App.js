@@ -41,6 +41,7 @@ class App extends Component {
 
   render() {
     //This should display once drizzle is ready and/or has loaded
+    //TODO add this to profile:  render={() => <Profile drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/>}
     console.log('app props: ', this.props)
     const SongPageWrapped = withRouter(props => <SongPage {...props}/>);
     const CreatePageWrapped = withRouter(props => <SongUploadComponent {...props}/>);
