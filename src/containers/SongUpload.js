@@ -127,6 +127,8 @@ export class SongUploadComponent extends Component {
             }
         }
 
+        const newSongAddress = this.uploadTransaction();
+
         if (!error) {
             const newSongAddress = this.uploadTransaction();
 
@@ -165,24 +167,26 @@ export class SongUploadComponent extends Component {
 
         console.log(drizzle);
 
-        const newSongAddress = drizzle.web3.eth.accounts.create();
+        let newSongAddress;
         console.log(newSongAddress);
 
         if(drizzleState.drizzleStatus.initialized){
             
-            console.log("The new Song's address is: " + newSongAddress);
-
             contract.methods.registerSong(newSongAddress.address).send({from: drizzleState.accounts[0], gas: 4712388,}, 
                 function(error, result){
                     if(error){
                         console.log(error);
+                        return undefined;
                     } else{
                         console.log("TX hash is " + result);
+                        newSongAddress = drizzle.web3.eth.accounts.create();
+                        console.log("The new Song's address is: " + newSongAddress);
+                        return newSongAddress;
                     }
                 }                
-                );
+            );
         }
-       return newSongAddress;
+        return undefined;
     }
 
     onImageChange = (e) => {
