@@ -46,6 +46,7 @@ class App extends Component {
     console.log('app props: ', this.props)
     const SongPageWrapped = withRouter(props => <SongPage {...props}/>);
     const CreatePageWrapped = withRouter(props => <SongUploadComponent {...props}/>);
+    const ProfilePageWrapped = withRouter(props => <Profile {...props}/>);
     return (
       <BrowserRouter>
         <div className="App">
@@ -57,7 +58,7 @@ class App extends Component {
             <Route path='/song/:songId' render={() => <SongPageWrapped drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/> }/>
             <Route path='/signin' component={SigninComponent} />
             <Route path='/signup' component={SignupComponent} />
-            <Route path='/profile/:uid' component={Profile} />
+            <Route path='/profile/:uid' render={() => <ProfilePageWrapped drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/> } />
             <Route path='/create' render={() => <CreatePageWrapped drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/> } />
             <Route component={NotFound} />
             <Route path='/edit-profile' component={EditProfileComponent} />
