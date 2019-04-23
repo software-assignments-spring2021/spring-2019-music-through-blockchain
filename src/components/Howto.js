@@ -13,7 +13,7 @@ import StarBorder from '@material-ui/icons/StarBorder';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import withStyles from "@material-ui/core/styles/withStyles";
 import metaIcon from '../img/metamask.jpg'
-import 
+import popup from '../img/popup.png'
 function MusicIcon(props) {
     return (
       <SvgIcon {...props}>
@@ -46,6 +46,10 @@ const styles = theme => ({
     nested: {
         paddingLeft: 20
     }, 
+    popup: {
+        width: "70%",
+        position: "relative"
+    },
      pic: {
         width: "40%",
         position: "relative"
@@ -112,8 +116,8 @@ class HowTo extends Component {
         let steps = [
             'Download Metamask. You must be logged in MetaMask to navigate through bMusic offerings and purchase songs and royalties',
             'Explore bMusic Offers.', 
-            "When one of the previous actions are triggered,a MetaMask pop up should appear asking for the user's confirmation of the transaction. Once accepted, the song is yours to enjoy. Congratulations!", 
-            "It is important for the user to know that only one account will be associated as owner to whatever the user chooses to buy. That is, a user must always use the same account in order to be validated for the song and validate his/her ownership over royalties. We highly recomment the users to only use one ethereum account per profile with bMusic."
+            "When one of the previous actions are triggered, a MetaMask pop up should appear asking for the user's confirmation of the transaction. Once accepted, the song is yours.", 
+            "We highly recommend our users to only use one ethereum account per profile with bMusic."
         ]
         const metamask = 'src/'
         return(
@@ -143,6 +147,7 @@ class HowTo extends Component {
                     />
                   </div>
             </Grid>
+            <Grid item xs={12}>
             <Typography variant='h4' align='left'>Step 2</Typography>
             <Typography className = {this.props.classes.desc} variant ='h5' align='left'>
                 {steps[1]}
@@ -203,27 +208,34 @@ class HowTo extends Component {
           </List>
         </Collapse>
     </List>
-    <Grid item xs={6}>
+            </Grid>
+            <Grid item xs={12}>
             <Typography variant='h4' align='left' marginTop='20px' >Step 3</Typography>
             <Typography className = {this.props.classes.desc} variant ='h5' align='left' style={{marginBottom: 20}}>
                 Confirm Purchase.
             </Typography>
-            <Typography className = {this.props.classes.desc} variant ='body1' align='left' style={{marginBottom: 20}}>
+            <Typography className = {this.props.classes.desc} variant ='subheading' align='left' style={{marginBottom: 20}}>
                 {steps[2]}
             </Typography>
-            </Grid>
-            <Grid item xs={6}>
             <div className={classes.leftColumn}>
                     <img
-                      className={classes. pic}
+                      className={classes.popup}
                       data-image="black"
-                      src={metaIcon}
+                      src={popup}
                       alt=""
                     />
-                  </div>
+            </div>
             </Grid>
-                <Typography variant='body2'  className={classes.desc}>  </Typography>
-                </Grid>
+        <Grid item xs={12}>
+            <Typography className = {this.props.classes.desc} variant ='subheading' align='center' style={{marginBottom: 20}}>
+                {steps[3]}
+            </Typography>
+            <Typography className = {this.props.classes.desc} variant ='h5' align='center' style={{marginBottom: 20}}>
+            Enjoy!
+            </Typography>
+            </Grid>
+        </Grid>
+            
             </div>
             );
     }
