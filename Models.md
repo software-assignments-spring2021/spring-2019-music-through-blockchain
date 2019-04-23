@@ -6,16 +6,15 @@ user:
             {
               // this userId links to firebase's user
               // anyone in charge of account
-              name : "Johnny" <string> 
+              first_name : "Johnny" <string> 
+              last_name: "Palmer" <string>
               artistName: "Some Band or Artist Name" <string> 
               photoUrl: "https://bMusic.com/img/tom.jpg", <string>
               // songsWithRoaylties is an array with song ids that user has listed for sale
               songsWithRoyalties: ["songOne", "songTwo"] Array<string>
               // songsCanListenTo is an array with song ids that user can listen to
               songsCanListenTo:  ["songOne", "songTwo"] Array<string>
-
               biography: "biography" <string>
-
               walletAddress: " " <string>
               biography: <string>,
               /*other fields that will be inherited from the firebase's

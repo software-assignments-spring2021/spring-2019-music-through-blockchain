@@ -16,13 +16,11 @@ export let dbUploadSong = (songInfo, image, imageName, song, songName, artistPub
       console.log('dbUploadSong called')
       const state = getState()
       const uid = state.firebase.auth.uid
-      songInfo['ownerId'] = uid 
-
-      console.log(state);
+      songInfo['ownerId'] = [uid]
 
 // ------------------------ TODO: Add the artistPublicAddress as passed from SongUpload.js to database ---------------------------------------
       return songService.uploadSong(uid, songInfo, image, imageName, song, songName).then((songData) => {
-        dispatch(addSong(song.ownerId, songData))
+        dispatch(addSongs({[songData.id]: songData}))
         callBack()
       })
       .catch((error) => dispatch(showMessage(error.message)))
@@ -96,6 +94,23 @@ export const dbGetSongs = (page = 0, limit = 10, sortBy = '') => {
     }
   }
 
+export const dbGetSongOwners = (song, songId) => {
+  return (dispatch, getState, {getFirebase}) => {
+      const state = getState()
+      const uid = state.firebase.auth.uid
+      const songOwners = (song.ownerId)
+      if (uid) {
+        return songService.getSongOwners(songOwners, songId).then((result) => {
+          song['ownerDetails'] = result
+          dispatch(updateSong(song))
+        })
+        .catch((error) => {
+          dispatch(showMessage(error.message))
+        })
+      }
+    }
+  }
+
 /**
  * Get songs for particular user
  */
@@ -103,15 +118,15 @@ export const getSongsByUserId = (userId, page = 0, limit = 10, type = '', sortBy
     return (dispatch, getState, {getFirebase}) => {
       const state = getState()
       const uid = state.firebase.auth.uid
-      const stream = state.song.stream
-      const lastPageRequest = stream[userId].lastPageRequest
-      const lastSongId = stream[userId].lastSongId
+      const profile = state.song.profile
+      const lastPageRequest = profile[userId].lastPageRequest
+      const lastSongId = profile[userId].lastSongId
   
       if (uid && lastPageRequest !== page) {
   
         return songService.getSongs(userId, lastSongId, page, limit, type, sortBy).then((result) => {
   
-          if (!result.songs || !(result.songs.length > 0)) {
+          if (!result.songs || result.newLastSongId === lastSongId) {
               return dispatch(notMoreDataProfile(userId))
           }
   
@@ -122,7 +137,7 @@ export const getSongsByUserId = (userId, page = 0, limit = 10, type = '', sortBy
           result.songs.forEach((song) => {
             const songId = Object.keys(song)[0]
             const songData = song[songId]
-            songData.ownerId.songId = songData
+            songData[userId][songId] = songData
           })
           dispatch(addSongs(parsedData))
         })
@@ -134,6 +149,81 @@ export const getSongsByUserId = (userId, page = 0, limit = 10, type = '', sortBy
     }
   }
 
+// get specific song
+export const dbGetSongById = (songId) => { 
+  return (dispatch, getState, {getFirebase}) => {
+    return songService.getSongById(songId).then((result) => {
+      result[songId].id = songId
+      dispatch(addSongs(result))
+      dbGetSongOwners(result[songId], songId)
+    })
+    .catch((error) => {
+      dispatch(showMessage(error.message))
+    })
+  }
+}
+
+export const dbPutSongForSale = (song, songId, percent, price, sellAllShares, callBack) => {
+  return (dispatch, getState, {getFirebase}) => {
+    const state = getState()
+    const uid = state.firebase.auth.uid
+    if (uid) {
+      return songService.putSongForSale(songId, uid, percent, price, sellAllShares).then((result) => {
+        song['market'][uid] = {'price': price, 'percent': percent, 'sellAllShares': sellAllShares}
+        song.id = songId
+        dispatch(updateSong(song))
+        callBack()
+      })
+      .catch((error) => {
+        dispatch(showMessage(error.message))
+      })
+    }
+  }
+}
+
+export const dbRemoveSongForSale = (song, songId, callBack) => {
+  return (dispatch, getState, {getFirebase}) => {
+    const state = getState()
+    const uid = state.firebase.auth.uid
+    if (uid) {
+      return songService.removeSongForSale(songId, uid).then(() => {
+        delete song['market'][uid]
+        song.id = songId
+        dispatch(updateSong(song))
+        callBack()
+      })
+    }
+  }
+}
+
+export const dbPurchaseSong = (song, songId, sellerId) => {
+  const sellAllShares = song['market'][sellerId].sellAllShares
+
+  console.log('purchasing song')
+  console.log('purchase song args:: ', 'song: ', song, 'songId: ', songId, 'sellerId: ', sellerId, 'sellAllShares: ', sellAllShares)
+
+  
+  return (dispatch, getState, {getFirebase}) => {
+    const state = getState()
+    const uid = state.firebase.auth.uid
+    if (uid) {
+      return songService.purchaseSong(songId, sellerId, uid, sellAllShares).then((result) => {
+        delete song['market'][sellerId]
+        song['ownerId'].push(uid)
+
+        if (sellAllShares) {
+          delete song['ownerId'][sellerId]
+        }
+        //todo: update buyer and seller details here
+        song.id = songId
+        dispatch(updateSong(song))
+      }).catch((error) => {
+        dispatch(showMessage(error.message))
+      })
+    }
+  }
+}
+
 
 /* _____________ CRUD State Functions _____________ */
 
@@ -143,16 +233,6 @@ export const getSongsByUserId = (userId, page = 0, limit = 10, type = '', sortBy
 export const clearAllData = () => {
     return {
       type: 'CLEAR_ALL_DATA_SONGS'
-    }
-}
-
-/**
- * Add a song
- */
-export const addSong = (ownerId, song) => {
-    return {
-      type: 'ADD_SONG',
-      payload: { ownerId, song}
     }
 }
 
@@ -229,9 +309,10 @@ export const lastSongStream = (lastSongId) => {
 /**
  * Profile posts has more data to show
  */
-export const hasMoreDataProfile = () => {
+export const hasMoreDataProfile = (userId) => {
     return {
       type: 'HAS_MORE_DATA_PROFILE',
+      payload: { userId }
     }
 }
 

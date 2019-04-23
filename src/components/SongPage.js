@@ -9,19 +9,13 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
 
+import { dbDeleteSong, dbPurchaseSong, dbPutSongForSale, dbRemoveSongForSale, dbGetSongOwners, dbGetSongById } from '../store/actions/songActions'
+
 let id = 0;
 function createData(seller, pricePerRoyalty, amount, totalPrice) {
   id += 1;
   return { id, seller, pricePerRoyalty, amount, totalPrice };
 }
-
-const royalties = [
-  createData("Seller 1", 20, 5, 100),
-  createData("Seller 2", 20, 5, 100),
-  createData("Seller 3", 20, 5, 100),
-  createData("Seller 4", 20, 5, 100),
-  createData("Seller 5", 20, 5, 100)
-];
 
 const styles = theme => ({
   html: {
@@ -97,6 +91,11 @@ export class SongPage extends Component {
 
   //
   componentDidMount() {
+    const { drizzle, drizzleState, match } = this.props;
+    const songId = match.params.songId
+    console.log('drizzle: ', drizzle);
+    console.log('drizzleState', drizzleState);
+    this.props.loadSong(songId)
     //TODO: fetch this api
     fetch("https://api.coinmarketcap.com/v1/ticker/ethereum")
       .then(res => 
@@ -129,11 +128,19 @@ export class SongPage extends Component {
     this.scrollToBottom();
   }
 
+
+  buySong(){
+    
+  }
+
   render() {
     const { classes, auth, match, drizzleState, drizzle, isLoaded } = this.props;
+    const songId = match.params.songId;
     const songPrice = this.state.songPrice;
-    console.log("SongPage props: ", this.props);
-    console.log(auth.uid)
+    if (this.props.song && Object.keys(this.props.song['info']).length > 0){
+      console.log("SongPage props: ", this.props);
+      const song = this.props.song['info'][songId]
+      const market = song['market']
     if (auth.uid) {
 
       if(!drizzleState.drizzleStatus.initialized && isLoaded){
@@ -148,7 +155,7 @@ export class SongPage extends Component {
                     <img
                       className={classes.cover}
                       data-image="black"
-                      src={coverArt}
+                      src={song['imageUrl']}
                       alt=""
                     />
                   </div>
@@ -157,10 +164,10 @@ export class SongPage extends Component {
                   <div>
                     <div>
                       <Typography className={classes.artist} variant="subtitle2">
-                        Ariana Grande
+                        {song.artistName}
                       </Typography>
                       <Typography className={classes.songName} variant="h4">
-                        Thank u, next
+                        {song.title}
                       </Typography>
                       <p className={classes.description}>
                         Lorem ipsum dolor sit amet et delectus accommodare his consul
@@ -189,7 +196,9 @@ export class SongPage extends Component {
                     >
                       Buy royalty packages from current song owners
                     </Typography>
-                    <RoyaltyList royalties={royalties} drizzle={drizzle} drizzleState={drizzleState} />
+                    {(market && Object.keys(market).length > 0) ?
+                    <RoyaltyList royalties={market} song={song} songId={songId} drizzle={drizzle} drizzleState={drizzleState}/>
+                    : 'No Current Offers'}
                   </div>
                 </Grid>
               </Grid>
@@ -197,15 +206,30 @@ export class SongPage extends Component {
     } else {
       return <Redirect to='/' />
     }
+  } else {
+    return null
+  }
     
   }
 }
 
 const mapStateToProps = (state) => {
     return {
+        ...state,
         auth: state.firebase.auth,
-        profile: state.firebase.profile
+        profile: state.firebase.profile,
     }
-  }
+}
 
-  export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(SongPage))
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+      deleteSong: (songId) => dispatch(dbDeleteSong(songId)),
+      purchaseSong: (song, songId, sellerId) => dispatch(dbPurchaseSong(song, songId, sellerId)),
+      sellSong: (song, songId, percent, price, sellAllShares, callBack) => dispatch(dbPutSongForSale(song, songId, percent, price, sellAllShares, callBack)),
+      removeForSale: (song, songId, callBack) => dispatch(dbRemoveSongForSale(song, songId, callBack)),
+      getSongOwners: (song, songId) => dispatch(dbGetSongOwners(song, songId)),
+      loadSong: (songId) => dispatch(dbGetSongById(songId)),
+    }
+}
+
+  export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(SongPage))

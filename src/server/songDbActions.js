@@ -9,7 +9,7 @@ export const songService = {
   uploadSong: (uid, songInfo, image, imageName, song, songName) => {
     return new Promise((resolve, reject) => {
         let songData = {}
-        let songRef = db.collection(`songs`).doc()
+        let songRef = db.collection(`songs`)
         let userRef = db.collection(`users`).doc(uid)
         const imageKey = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9);
         const songKey = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9);
@@ -27,19 +27,22 @@ export const songService = {
               songResult.ref.getDownloadURL()
               .then((songDownloadURL) => {
                 songData = {...songInfo, 
+                  market: {},
                   imageUrl: imageDownloadURL,
                   imageFullPath: imageResult.metadata.fullPath,
                   songUrl: songDownloadURL, 
                   songFullPath: songResult.metadata.fullPath}
-                
+                delete songData['price']
                 //firestore --> save song info
-                songRef.set(songData).then(() => {
+                songRef.add(songData).then((docRef) => {
                   //add song id to songs owned by user
-                  userRef.update({songsOwned: firebase.firestore.FieldValue.arrayUnion(songRef.id)})
+                  var usersUpdate = {};
+                  usersUpdate[`songsOwned.${docRef.id}.percentOwned`] = 100;
+                  userRef.update(usersUpdate)
                   
                   //add songId to songInfo and resolve
                   .then(() => {
-                    songData['id'] = songRef.id
+                    songData['id'] = docRef.id
                     resolve(songData)
                   })
                 })
@@ -89,14 +92,13 @@ export const songService = {
 
 /**
  * Get list of songs for homepage
- * 
  */
 getSongs: (userId, lastSongId, page, limit, type, sortBy) => {
     return new Promise((resolve, reject) => {
       console.log('dbGetSongs') 
         let parsedData = []
         let query = db.collection('songs')
-        if (userId !== '') {
+        if (userId && userId !== '') {
             query = query.where('ownerId', '==', userId)
         }
         if (lastSongId && lastSongId !== '') {
@@ -121,6 +123,119 @@ getSongs: (userId, lastSongId, page, limit, type, sortBy) => {
             resolve({ songs: parsedData, newLastSongId })
         })
         })
-    }
-}
+    },
+  
+  getSongById:(songId) => {
+    return new Promise((resolve, reject) => {
+      console.log('dbGetSong songId: ', songId) 
+      let songRef = db.doc(`songs/${songId}`)
+      songRef.get().then((doc) => {
+        resolve({[songId]: doc.data()})
+      })
+    })
+  },
 
+/**
+ * Get details of song ownership
+ */
+getSongOwners: (ownerIds, songId) => {
+  return new Promise((resolve, reject) => {
+    console.log('dbGetSongDetails') 
+      let parsedData = {}
+      ownerIds.forEach((ownerId) => {
+        let userRef = db.doc(`users/${ownerId}`)
+        userRef.get().then((doc) => {
+          parsedData[ownerId] = doc.data()['songsOwned'][songId]
+        })
+      })
+      resolve(parsedData)
+    })
+  },
+
+  /**
+  * Put percent of song up for sale
+  */
+  putSongForSale: (songId, userId, percent, price, sellAllShares) => {
+    return new Promise((resolve, reject) => {
+      let songRef = db.doc(`songs/${songId}`)
+      var songUpdate = {};
+      songUpdate[`market.${userId}.percent`] = percent;
+      songUpdate[`market.${userId}.price`] = price;
+      songUpdate[`market.${userId}.sellAllShares`] = sellAllShares;
+      songRef.update(songUpdate)
+      resolve()
+    })
+  },
+
+  /**
+  * Remove your song up for sale
+  */
+ removeSongForSale: (songId, userId) => {
+  return new Promise((resolve, reject) => {
+      db.collection('songs').doc(songId).update({
+        ['market.' + userId]: firebase.firestore.FieldValue.delete()
+      })
+      resolve()
+    })
+  },
+
+  purchaseSong: (songId, sellerId, buyerId, sellAllShares) => {
+    return new Promise((resolve, reject) => {
+      let songRef = db.doc(`songs/${songId}`)
+      if (sellAllShares) {
+        songRef.update({
+          ownerId: firebase.firestore.FieldValue.arrayRemove(sellerId)
+        })
+      }
+      songRef.update({
+        ownerId: firebase.firestore.FieldValue.arrayUnion(buyerId)
+      })
+      .then(() => {
+        songRef.get().then((doc) => {
+
+          //get sale details
+          const saleInfo = doc.data()['market'][sellerId]
+          
+          //add song ownership to buyer
+          let buyerRef = db.doc(`users/${buyerId}`)
+          buyerRef.get().then((doc) => {
+            const data = doc.data()
+            let amtOwned = 0
+            if(data['songsOwned'] && data['songsOwned'][songId]) {
+              amtOwned = data['songsOwned'][songId].percentOwned
+              console.log('percent already owned: ', amtOwned)
+            }
+            var buyerUpdate = {};
+            buyerUpdate[`songsOwned.${songId}.percentOwned`] = amtOwned + saleInfo.percent;
+            buyerRef.update(buyerUpdate)
+          })
+          .then(() => {
+            //delete song ownership of seller
+            db.collection('songs').doc(songId).update({
+              ['market.' + sellerId]: firebase.firestore.FieldValue.delete()
+            })
+          })                 
+          .then (() => {
+            if (sellAllShares) {
+              db.collection('users').doc(sellerId).update({
+                ['songsOwned.' + songId]: firebase.firestore.FieldValue.delete()
+              })
+            } 
+            else {
+              //update song ownership of seller
+              const sellerRef = db.doc(`users/${sellerId}`)
+              sellerRef.get().then((doc) => {
+                const ownStats = doc.data()['songsOwned'][songId]
+                var sellerUpdate = {};
+                sellerUpdate[`songsOwned.${songId}.percentOwned`] = ownStats.percentOwned - saleInfo.percent;
+                sellerRef.update(sellerUpdate)
+              })           
+            }     
+          })
+        })
+      })
+      
+      resolve()
+    })
+  }
+}
