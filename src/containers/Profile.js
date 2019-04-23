@@ -102,14 +102,23 @@ const styles = theme => ({
 
   artistName: {
     position: 'absolute',
-    top: 15, 
-    left: 5
+    top: 15,
+    left: 5,
+      fontWeight: 300,
+      fontSize: 52,
+      color: "#43484D",
+      letterSpacing: "-2px"
   },
   description: {
     position: 'absolute',
     top: 50, 
-    left: 5
-    
+    left: 5,
+      textAlign: "center",
+      fontSize: 16,
+      color: "#86939E",
+      letterSpacing: "-1px",
+      fontWeight: 300,
+      lineHeight: "24px"
   }
 })
 

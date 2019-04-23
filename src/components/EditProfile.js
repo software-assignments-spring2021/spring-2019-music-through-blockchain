@@ -53,6 +53,7 @@ export class EditProfileComponent extends Component {
             userInfoInputError: '',
             profilePictureFileInput: null,
             profilePictureFileInputError: '',
+            file: null
 
         }
         this.handleForm = this.handleForm.bind(this)
@@ -69,7 +70,7 @@ export class EditProfileComponent extends Component {
         switch (name) {
             case 'editNameInput':
                 this.setState({
-                    songNameInputError: ''
+                    editNameInputError: ''
                 })
                 break
             case 'editArtistNameInput':
@@ -94,7 +95,7 @@ export class EditProfileComponent extends Component {
 
     handleForm = () => {
 
-        const { editNameInput, userInfoInput, editArtistNameInput, profilePictureFileInput}= this.state
+        const { editNameInput, userInfoInput, editArtistNameInput, profilePictureFileInput, file}= this.state
         const { editProfile } = this.props
 
         let error = false
@@ -104,7 +105,7 @@ export class EditProfileComponent extends Component {
         /*check name input*/
         if (editNameInput.length < 1) {
             this.setState({
-                songNameInputError: 'Please enter a valid name'
+                editNameInputError: 'Please enter a valid name'
             })
             error = true
         }
@@ -112,7 +113,7 @@ export class EditProfileComponent extends Component {
         /*check artist name input*/
         if (editArtistNameInput.length < 1) {
             this.setState({
-                songNameInputError: 'Please enter a valid artist name'
+                editArtistNameInputError: 'Please enter a valid artist name'
             })
             error = true
         }
@@ -120,11 +121,22 @@ export class EditProfileComponent extends Component {
         /* Check userbio */
         if (userInfoInput.trim().length > 2000) {
             this.setState({
-                artistNameInputError: 'Please enter no more than 2000 characters'
+                userInfoInputError: 'Please enter no more than 2000 characters'
             })
             error = true
         }
 
+        if (file) {
+            const typeArr = ['png', 'jpg', 'jpeg', 'gif']
+            const fileType = file.type.split('/').pop()
+            console.log(fileType)
+            if (!typeArr.includes(fileType)) {
+                this.setState({
+                    profilePictureFileInputError: 'Please enter a \'png\', \'jpg\', \'jpeg\' or \'gif\' file'
+                })
+                error = true
+            }
+        }
 
         if (!error) {
             const profileInfo = {
@@ -209,8 +221,9 @@ export class EditProfileComponent extends Component {
                                         <div>Choose profile picture file to upload</div>
                                         <input
                                             onChange={this.onImageChange}
+                                            helperText={this.state.profilePictureFileInputError}
                                             error={this.state.profilePictureFileInputError.trim() !== ''}
-                                            accept=''
+                                            accept='image/png, image/jpeg, image/gif'
                                             label='Choose a profile picture to upload'
                                             name='profilePictureFileInput'
                                             type="file"

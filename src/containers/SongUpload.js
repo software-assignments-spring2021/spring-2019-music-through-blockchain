@@ -156,7 +156,7 @@ export class SongUploadComponent extends Component {
                         <Paper className={classes.paper} elevation={1} >
                             <div style={{ padding: '48px 40px 36px' }}>
                                 <div style={{ paddingLeft: '40px', paddingRight: '40px'}}>
-                                    <h2>bMusic Song Upload</h2>
+                                    <h2>Upload a Song</h2>
                                 </div>
                                 <TextField
                                     className={classes.textField}
@@ -197,6 +197,7 @@ export class SongUploadComponent extends Component {
                                         <input
                                             onChange={this.onImageChange}
                                             error={this.state.songFileInputError.trim() !== ''}
+                                            accept='image/png, image/jpeg, image/gif'
                                             label='Choose cover art to upload'
                                             name='coverArtInput'
                                             type="file"
