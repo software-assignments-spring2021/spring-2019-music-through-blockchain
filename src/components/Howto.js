@@ -1,24 +1,55 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom';
-
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import StarBorder from '@material-ui/icons/StarBorder';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import withStyles from "@material-ui/core/styles/withStyles";
+import metaIcon from '../img/metamask.jpg'
+import 
+function MusicIcon(props) {
+    return (
+      <SvgIcon {...props}>
+        <path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zm-7.5-1c1.38 0 2.5-1.12 2.5-2.5V7h3V5h-4v5.51c-.42-.32-.93-.51-1.5-.51-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6z"/>   
+  </SvgIcon>
+    );
+  }
+
+  function RoyaltiesIcon(props) {
+    return (
+      <SvgIcon {...props}>
+        <path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/>   
+  </SvgIcon>
+    );
+  }
 
 const styles = theme => ({
     desc: {
       width:'100%', 
       marginTop: '20px',
       align: 'left', 
-      overflowX: 'auto'
+      overflowX: 'auto', 
     }, 
+    head: {
+        marginBottom: 50,
+        width:'100%', 
+        align: 'left', 
+        overflowX: 'auto'
+    }, 
+    nested: {
+        paddingLeft: 20
+    }, 
+     pic: {
+        width: "40%",
+        position: "relative"
+      }, 
     root: {
         maxWidth: "1200px",
         margin: "0 auto",
@@ -28,41 +59,172 @@ const styles = theme => ({
       }, 
       grid: {
         marginTop: 40
+      }, 
+      item: {
+          fontSize: 15
+      }, 
+      list :{
+        width:'100%', 
+        marginTop: '20px',
+        align: 'left', 
+        overflowX: 'auto', 
+        marginBottom: 20,
       }
   });
   
 class HowTo extends Component {
     constructor(props) {
         super(props)
+        this.state = {
+            openSong: false, 
+            openRoyalties: false
+        }
     }
+    handleClickSong = () => {
+        this.setState(state => ({ openSong: !state.openSong }));
+      };
+      handleClickRoyalties = () => {
+        this.setState(state => ({ openRoyalties: !state.openRoyalties }));
+      };
+    
+    renderList = (p, step) => {
+        return(
+            <div>
+
+        </div>
+        );
+    }
+    styled = svgProps => (
+        <svg {...svgProps}>
+          <defs>
+            <linearGradient id="gradient1">
+              <stop offset="30%" stopColor='#647DEE' />
+              <stop offset="70%" stopColor='#7F53AC' />
+            </linearGradient>
+          </defs>
+          {React.cloneElement(svgProps.children[0], { fill: 'url(#gradient1)' })}
+        </svg>
+      )
+
     render() {
         console.log(this.props.classes)
         const { classes } = this.props;
-        let text = "The music industry has seen a big change in the last decade thanks to the massive embrace that streaming platforms have had. Although it took a while, such platforms are finally being profitable but artists have not been able to see their profits grow proportionally. The amount of intermediaries between the artist and the end-user platforms that serve as revenue streams for the industry don't allow enough transparency for the artists, and makes their earnings less liquid. In order to make the industry more transparent to artist and cut some of the intermediaries, we are enabling the artists to directly market their assets through our platform and directly receive their revenues using smart contracts, taking into account the percentage of royalties of each owner of the songs. By constructing a new marketplace to sell music, we can potentially increase the margin of profits for the artists." ;
+        let steps = [
+            'Download Metamask. You must be logged in MetaMask to navigate through bMusic offerings and purchase songs and royalties',
+            'Explore bMusic Offers.', 
+            "When one of the previous actions are triggered,a MetaMask pop up should appear asking for the user's confirmation of the transaction. Once accepted, the song is yours to enjoy. Congratulations!", 
+            "It is important for the user to know that only one account will be associated as owner to whatever the user chooses to buy. That is, a user must always use the same account in order to be validated for the song and validate his/her ownership over royalties. We highly recomment the users to only use one ethereum account per profile with bMusic."
+        ]
+        const metamask = 'src/'
         return(
             <div className={classes.root}>
 
             <Grid container spacing={24} className={classes.grid}>
-            <Typography variant='h3' align='center' className={classes.desc}>
+            <Typography variant='h3' align='center' className={classes.head}>
                     How To Get Started with bMusic
-                </Typography>
-                <Typography variant='h4' align='left'>
-                    Part 1 Download Metamask
-                </Typography>
-                <Typography variant='body2'  className={classes.desc} align='left'>{text} </Typography>
-                <Typography variant='h4' align='left'>
-                    Part 2
             </Typography>
-            <Typography variant='body2' className={classes.desc}>{text} </Typography>
+            <Grid item xs={6}>
+            <Typography variant='h4' align='left' marginTop='20px' >Step 1</Typography>
 
-            <Typography variant='h4' align='left'>
-                    Part 3
-                </Typography>
-                <Typography variant='body2'  className={classes.desc}>{text} </Typography>
+            <Typography className = {this.props.classes.desc} variant ='h5' align='left' style={{marginBottom: 20}}>
+                Download Metamask. 
+            </Typography>
+            <Typography className = {this.props.classes.desc} variant ='h5' align='left' style={{marginBottom: 20}}>
+                You must be logged in MetaMask to navigate through bMusic offerings and purchase songs and royalties
+            </Typography>
+            </Grid>
+            <Grid item xs={6}>
+            <div className={classes.leftColumn}>
+                    <img
+                      className={classes. pic}
+                      data-image="black"
+                      src={metaIcon}
+                      alt=""
+                    />
+                  </div>
+            </Grid>
+            <Typography variant='h4' align='left'>Step 2</Typography>
+            <Typography className = {this.props.classes.desc} variant ='h5' align='left'>
+                {steps[1]}
+            </Typography>
+<List className={classes.list}>
+    <ListItem button onClick={this.handleClickSong}>
+          <ListItemIcon>
+          <MusicIcon
+            component={this.styled}
+      />          
+      </ListItemIcon>
+          <ListItemText inset primary="Songs" />
+          {this.state.openSong ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={this.state.openSong} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText inset primary="Upload Song" />
+            </ListItem>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText inset primary="Purchase Song" />
+            </ListItem>
+          </List>
+        </Collapse>
+        <ListItem button onClick={this.handleClickRoyalties}>
+          <ListItemIcon>
+            <RoyaltiesIcon component={this.styled} />
+          </ListItemIcon>
+          <ListItemText inset primary="Royalties" />
+          {this.state.openRoyalties ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={this.state.openRoyalties} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText inset primary="Purchase Royalties" />
+            </ListItem>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText inset primary="Sell Royalties" />
+            </ListItem>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText inset primary="Withdraw Royalties" />
+            </ListItem>
+          </List>
+        </Collapse>
+    </List>
+    <Grid item xs={6}>
+            <Typography variant='h4' align='left' marginTop='20px' >Step 3</Typography>
+            <Typography className = {this.props.classes.desc} variant ='h5' align='left' style={{marginBottom: 20}}>
+                Confirm Purchase.
+            </Typography>
+            <Typography className = {this.props.classes.desc} variant ='body1' align='left' style={{marginBottom: 20}}>
+                {steps[2]}
+            </Typography>
+            </Grid>
+            <Grid item xs={6}>
+            <div className={classes.leftColumn}>
+                    <img
+                      className={classes. pic}
+                      data-image="black"
+                      src={metaIcon}
+                      alt=""
+                    />
+                  </div>
+            </Grid>
+                <Typography variant='body2'  className={classes.desc}>  </Typography>
                 </Grid>
             </div>
-
-
             );
     }
 }
