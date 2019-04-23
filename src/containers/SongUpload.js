@@ -40,6 +40,9 @@ const styles = (theme) => ({
     },
     success: {
         color: '#33cc33'
+    },
+    error: {
+        color: '#ff0000'
     }
 })
 
@@ -55,7 +58,8 @@ export class SongUploadComponent extends Component {
             artistNameInputError: '',
             songFileInput: '',
             songFileInputError: '',
-            songFile: null
+            songFile: null,
+            coverArtFileInputError: ''
         }
         this.handleForm = this.handleForm.bind(this)
     }
@@ -91,7 +95,7 @@ export class SongUploadComponent extends Component {
 
     handleForm = () => {
 
-        const { songNameInput, artistNameInput, priceInput, songFileInput}= this.state
+        const { songNameInput, artistNameInput, priceInput, songFileInput, file, songFile}= this.state
         const { upload } = this.props
 
         let error = false
@@ -112,6 +116,30 @@ export class SongUploadComponent extends Component {
                 artistNameInputError: 'Please enter a valid artist name'
             })
             error = true
+        }
+
+        if (!file) {
+            this.setState({
+                coverArtFileInputError: 'Please choose a song photo*'
+            })
+            error = true
+        }
+        else {
+            this.setState({
+                coverArtFileInputError: ''
+            })
+        }
+
+        if (!songFile) {
+            this.setState({
+                songFileInputError: 'Please choose an mp3 file to upload*'
+            })
+            error = true
+        }
+        else {
+            this.setState({
+                songFileInputError: ''
+            })
         }
 
         if (!error) {
@@ -185,6 +213,13 @@ export class SongUploadComponent extends Component {
                                 <br />
                                 <div>
                                     <div>
+                                        {this.state.songFileInputError ?
+                                            <div className={classes.error}>
+                                                {this.state.songFileInputError}
+                                            </div> :
+                                            <div>
+                                            </div>
+                                        }
                                         <div>Choose mp3 file to upload</div>
                                         <input
                                                className={classes.input}
@@ -197,10 +232,17 @@ export class SongUploadComponent extends Component {
                                         />
                                     </div>
                                     <div>
+                                        {this.state.coverArtFileInputError ?
+                                            <div className={classes.error}>
+                                                {this.state.coverArtFileInputError}
+                                            </div> :
+                                            <div>
+                                            </div>
+                                        }
                                         <div>Choose cover art to upload</div>
                                         <input
                                             onChange={this.onImageChange}
-                                            error={this.state.songFileInputError.trim() !== ''}
+                                            error={this.state.coverArtFileInputError.trim() !== ''}
                                             accept='image/png, image/jpeg, image/gif'
                                             label='Choose cover art to upload'
                                             name='coverArtInput'
