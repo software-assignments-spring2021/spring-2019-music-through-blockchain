@@ -14,6 +14,7 @@ import { withRouter } from "react-router";
 import Master from './containers/Master'
 import SongUploadComponent from './containers/SongUpload'
 import LandingPage from './containers/LandingPage'
+import HowTo from './components/Howto'
 
 class App extends Component {
 
@@ -56,6 +57,7 @@ class App extends Component {
             <Route path='/signin' component={SigninComponent} />
             <Route path='/signup' component={SignupComponent} />
             <Route path='/profile/:uid' component={Profile} />
+            <Route path='/howto' component={HowTo} />
             <Route path='/create' render={() => <CreatePageWrapped drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/> } />
             <Route component={NotFound} />
 
