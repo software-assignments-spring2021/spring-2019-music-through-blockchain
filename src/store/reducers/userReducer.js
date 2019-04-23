@@ -40,7 +40,8 @@ export let userReducer = (state = initState, action) => {
                     ...state.user,
                     accountOwner: payload.accountOwner,
                     artistName: payload.artistName,
-                    bio: payload.biography
+                    bio: payload.biography,
+                    photoUrl: payload.photoUrl
                 }
             }
         default:

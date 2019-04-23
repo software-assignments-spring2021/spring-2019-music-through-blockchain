@@ -49,39 +49,33 @@ dbGetUserInfo: (userId) => {
 
             //find the existing profile picture saved in storage
             profileRef.get().then((profileDoc) => {
-                console.log("getting profile")
                 const existingImagePath = profileDoc.data().imageFullPath
                 //if there is an existing image saved store is as a reference
                 const existingImageRef = (existingImagePath) ? storageRef.child(existingImagePath): null
 
                 //save the new chosen profile picture into storage
-                console.log("saving image in storage")
 
                 const imageKey = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9)
                 const imageStorageFile = storageRef.child(`images/${imageKey}_${imageName}`)
 
                 imageStorageFile.put(image).then((imageResult) => {
                     imageResult.ref.getDownloadURL().then((imageDownloadURL) => {
-                        console.log("successfully called saved the new image in storag")
                         profileData = {
                             ...profile,
                             photoUrl: imageDownloadURL,
                             imageFullPath: imageResult.metadata.fullPath
                         }
 
-                        console.log("updating the profile with new information")
                         profileRef.update(profileData).then((savedProfile) => {
                             //resolve with the savedProfile Image
 
                             //delete the old profile image if there is onw
                             existingImageRef.delete().then((message) => {
-                                console.log(message)
-                                resolve(savedProfile)
+                                resolve(profileData)
                             }).catch((message) => {
-                                console.log(message)
-                                resolve(savedProfile)
+                                resolve(profileData)
                             })
-                            resolve(savedProfile)
+                            resolve(profileData)
                         })
                     })
 
