@@ -158,23 +158,6 @@ export class SongUploadComponent extends Component {
         }
     }
 
-    getTxStatus = (stackId) => {
-        // get the transaction states from the drizzle state
-        const { transactions, transactionStack } = this.props.drizzleState;
-        console.log(transactions);
-        console.log(transactionStack);
-
-        // get the transaction hash using our saved `stackId`
-        const txHash = transactionStack[stackId];
-        console.log(txHash)
-
-        // if transaction hash does not exist, don't display anything
-        if (!txHash) return undefined;
-
-        // otherwise, return the transaction status
-        return `Transaction status: ${transactions[txHash] && transactions[txHash].status}`;
-    };
-
     uploadTransaction = () =>{
 
         const { drizzle, drizzleState } = this.props;
