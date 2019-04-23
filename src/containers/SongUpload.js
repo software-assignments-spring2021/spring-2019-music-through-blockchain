@@ -42,7 +42,9 @@ export class SongUploadComponent extends Component {
             priceInputError: '',
             songFileInput: '',
             songFileInputError: '',
+            contractError: '',
             songFile: null
+
         }
         this.handleForm = this.handleForm.bind(this)
     }
@@ -76,6 +78,11 @@ export class SongUploadComponent extends Component {
                     songFileInputError: ''
                 })
                 break
+            case 'contractError':
+                this.setState({
+                    contractError: ''
+                })
+                break
             default:
 
         }
@@ -85,6 +92,7 @@ export class SongUploadComponent extends Component {
 
         const { songNameInput, artistNameInput, priceInput, songFileInput}= this.state
         const { upload } = this.props
+        const { drizzleState } = this.props;
 
         let error = false
 
@@ -120,26 +128,78 @@ export class SongUploadComponent extends Component {
         }
 
         if (!error) {
+            const newSongAddress = this.uploadTransaction();
+
             const songInfo = {
+                songPublicAddress: newSongAddress,
                 title: songNameInput,
                 artistName: artistNameInput,
                 price: priceInput}
+            
+            const artistPublicAddress = drizzleState.accounts[0];
+
             const callBack = () => {
                 this.props.history.push('/')
                 return <Redirect to='/' />
             }
+            
             upload(
                 songInfo,
                 this.state.file,
                 this.state.file.name,
                 this.state.songFile,
                 this.state.songFile.name,
+                artistPublicAddress,
                 callBack
             )
         }
         else {
             console.log('form input error')
         }
+    }
+
+    getTxStatus = (stackId) => {
+        // get the transaction states from the drizzle state
+        const { transactions, transactionStack } = this.props.drizzleState;
+        console.log(transactions);
+        console.log(transactionStack);
+
+        // get the transaction hash using our saved `stackId`
+        const txHash = transactionStack[stackId];
+        console.log(txHash)
+
+        // if transaction hash does not exist, don't display anything
+        if (!txHash) return undefined;
+
+        // otherwise, return the transaction status
+        return `Transaction status: ${transactions[txHash] && transactions[txHash].status}`;
+    };
+
+    uploadTransaction = () =>{
+
+        const { drizzle, drizzleState } = this.props;
+        const contract = drizzle.contracts.SongsContract;
+
+        console.log(drizzle);
+
+        const newSongAddress = drizzle.web3.eth.accounts.create();
+        console.log(newSongAddress);
+
+        if(drizzleState.drizzleStatus.initialized){
+            
+            console.log("The new Song's address is: " + newSongAddress);
+
+            contract.methods.registerSong(newSongAddress.address).send({from: drizzleState.accounts[0], gas: 4712388,}, 
+                function(error, result){
+                    if(error){
+                        console.log(error);
+                    } else{
+                        console.log("TX hash is " + result);
+                    }
+                }                
+                );
+        }
+       return newSongAddress;
     }
 
     onImageChange = (e) => {
@@ -152,10 +212,14 @@ export class SongUploadComponent extends Component {
 
     render() {
         console.log("song upload props", this.props);
-        const { classes, auth } = this.props
+        const { classes, auth, drizzleState } = this.props
         if (!auth.uid){
             this.props.history.push('/')
             return <Redirect to='/' />
+        }
+
+        if(!drizzleState.drizzleStatus.initialized){
+            
         }
 
         return (
@@ -242,7 +306,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        upload: (songInfo, image, imageName, song, songName, callBack) => { dispatch(dbUploadSong(songInfo, image, imageName, song, songName, callBack)) },
+        upload: (songInfo, image, imageName, song, songName, artistPublicAddress, callBack) => { dispatch(dbUploadSong(songInfo, image, imageName, song, songName, artistPublicAddress, callBack)) },
     }
 }
 

@@ -8,21 +8,10 @@ import { songService } from '../../server/songDbActions'
  * Upload song
  */
 
-let getTxStatus = () => {
-  // get the transaction states from the drizzle state
-  const { transactions, transactionStack } = this.props.drizzleState;
 
-  // get the transaction hash using our saved `stackId`
-  const txHash = transactionStack[this.state.stackId];
 
-  // if transaction hash does not exist, don't display anything
-  if (!txHash) return null;
 
-  // otherwise, return the transaction status
-  return `Transaction status: ${transactions[txHash] && transactions[txHash].status}`;
-};
-
-export let dbUploadSong = (songInfo, image, imageName, song, songName, callBack) => {
+export let dbUploadSong = (songInfo, image, imageName, song, songName, artistPublicAddress, callBack) => {
     return (dispatch, getState, {getFirebase}) => {
       console.log('dbUploadSong called')
       const state = getState()
@@ -31,21 +20,7 @@ export let dbUploadSong = (songInfo, image, imageName, song, songName, callBack)
 
       console.log(state);
 
-      const { drizzle, drizzleState } = this.props;
-      const contract = drizzle.contracts.MyStringStore;
-
-      const newSongAddress = drizzle.web3.eth.accounts.create();
-
-      // let drizzle know we want to call the `set` method with `value`
-      const stackId = contract.methods["registerSong"].cacheSend(newSongAddress, {
-        from: drizzleState.accounts[0]
-      });
-
-      // save the `stackId` for later reference
-      this.setState({ stackId });
-
-      const txStatus = getTxStatus();
-
+// ------------------------ TODO: Add the artistPublicAddress as passed from SongUpload.js to database ---------------------------------------
       return songService.uploadSong(uid, songInfo, image, imageName, song, songName).then((songData) => {
         dispatch(addSong(song.ownerId, songData))
         callBack()
