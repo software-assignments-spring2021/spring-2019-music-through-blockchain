@@ -78,4 +78,4 @@ We will also test the software with potential end-users consisting of artists, m
  - [CONTRIBUTING.md](https://github.com/nyu-software-engineering/music-through-blockchain/blob/master/CONTRIBUTING.md)
  - [REQUIREMENTS.MD](https://github.com/nyu-software-engineering/music-through-blockchain/blob/master/REQUIREMENTS.md)
  - [Ethereum Tutorial Notes](https://github.com/nyu-software-engineering/music-through-blockchain/blob/smartContracts/EthereumTutorialNotes.md)
- - [MetaMask.md](https://github.com/nyu-software-engineering/music-through-blockchain/blob/smartContracts/metamask.md)
+ - [MetaMask.md](https://github.com/nyu-software-engineering/music-through-blockchain/blob/master/metamask.md)
