@@ -52,7 +52,7 @@ class App extends Component {
             <Route path='/song/:uid' render={() => <SongPage drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/> }/>
             <Route path='/signin' component={SigninComponent} />
             <Route path='/signup' component={SignupComponent} />
-    <Route path='/profile/:uid' render={() => <Profile drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/>} /> 
+    <Route path='/profile/:uid' component={Profile} /> 
             <Route path='/create' render={() => <SongUploadComponent drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/> } />
             <Route component={NotFound} />
 

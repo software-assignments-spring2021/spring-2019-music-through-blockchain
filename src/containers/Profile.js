@@ -37,9 +37,20 @@ const styles = theme => ({
   rowTwo : {
       position: 'absolute',
       top: 310,
-      height: 500,
+      height: 100,
       width: '100%',
       maxWidth: 960,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems : 'center',
+      alignContent: 'center'
+  },
+  rowThree: {
+    position: 'absolute',
+    top: 380,
+    height: 500,
+    width: '100%',
+    maxWidth: 960,
   },
 
   songList: {
@@ -171,7 +182,9 @@ export class Profile extends Component {
       <div className={classes.root}>
         <div className={classes.rowOne}>
           <div className={classes.topLeft}>
-            <div className={classes.avatar}><img className={classes.avatarPhoto} src='https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png' alt='no photo'></img></div>
+            <div className={classes.avatar}>
+              <img className={classes.avatarPhoto} src='https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png' alt='no photo'></img>
+            </div>
           </div>
           <div className={classes.topCenter}>
             <h3 className={classes.artistName}>Artist Name: {user.user.artistName}</h3>
@@ -184,10 +197,10 @@ export class Profile extends Component {
           <Card className={classes.topRight}>
           </Card>
         </div>
-        <div>
-        <Button className={classes.button} onClick={()=>{this.withdrawFunds()}} >Withdraw Earnings</Button>
+        <div className ={classes.rowTwo}>
+          <Button className={classes.button} onClick={()=>{this.withdrawFunds()}} >Withdraw Earnings</Button>
         </div>        
-        <div className={classes.rowTwo}>
+        <div className={classes.rowThree}>
           <div className={classes.songList}> 
               {/* <SongList songs= {songs} songsOwned={user.user.songsOwned} /> */}
           </div>
