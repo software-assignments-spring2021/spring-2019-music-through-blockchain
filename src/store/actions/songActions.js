@@ -7,13 +7,18 @@ import { songService } from '../../server/songDbActions'
 /**
  * Upload song
  */
-export let dbUploadSong = (songInfo, image, imageName, song, songName, callBack) => {
+
+
+
+
+export let dbUploadSong = (songInfo, image, imageName, song, songName, artistPublicAddress, callBack) => {
     return (dispatch, getState, {getFirebase}) => {
       console.log('dbUploadSong called')
       const state = getState()
       const uid = state.firebase.auth.uid
       songInfo['ownerId'] = [uid]
 
+// ------------------------ TODO: Add the artistPublicAddress as passed from SongUpload.js to database ---------------------------------------
       return songService.uploadSong(uid, songInfo, image, imageName, song, songName).then((songData) => {
         dispatch(addSongs({[songData.id]: songData}))
         callBack()
