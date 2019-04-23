@@ -195,10 +195,6 @@ export class SongUploadComponent extends Component {
             return <Redirect to='/' />
         }
 
-        if(!drizzleState.drizzleStatus.initialized){
-            return (<p>Loading ...</p>);
-        }
-
         return (
             <Grid container spacing={24} style={{display: 'inline', backgroundColor: 'grey'}}>
                 <Grid item xs={12} className={classes.contain}>
