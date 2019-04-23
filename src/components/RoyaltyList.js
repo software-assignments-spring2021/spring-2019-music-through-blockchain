@@ -55,7 +55,7 @@ const styles = theme => ({
     border: "solid 1px rgba(120,0,96,0.2)",
     height: 48,
     width: "100%",
-    marginLeft: 20
+    marginLeft: 20,
   }
 });
 export class RoyaltyList extends Component {

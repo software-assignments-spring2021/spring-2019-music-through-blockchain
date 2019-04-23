@@ -61,7 +61,6 @@ const styles = theme => ({
     color: 'white !important',
     marginTop: 20,
     fontSize: 16
-
   },
   description: {
     textAlign: "center",
