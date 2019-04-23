@@ -113,13 +113,18 @@ const styles = theme => ({
 
   artistName: {
     position: 'absolute',
-    top: 15, 
-    left: 5
+    top: 15,
+    left: 5,
+      fontWeight: 300,
+      fontSize: 52,
+      color: "#43484D",
+      letterSpacing: "-2px"
   },
   description: {
     position: 'absolute',
     top: 50, 
     left: 5
+
   }, 
   button: {
     background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
@@ -172,8 +177,8 @@ export class Profile extends Component {
   }
 
   render() {
-    const {classes, auth, match,user, drizzle, drizzleState} = this.props
-    console.log(this.props);
+    const {classes, auth, match,user, profile, drizzle, drizzleState} = this.props
+
     const songs = user.user.songs;
     if(!auth.uid){
       return <Redirect to='/' />
@@ -214,7 +219,11 @@ export class Profile extends Component {
         </Modal>
         <Modal className={classes.modal} open={this.state.editProfileOpen} onClose={this.handleCloseEditProfile}>
             <DialogContent>
-                <EditProfile />
+                <EditProfile
+                accountOwner = {profile.accountOwner}
+                artistName = {profile.artistName}
+                biography = {profile.biography}
+                />
             </DialogContent>
         </Modal>
       </div>
