@@ -55,7 +55,6 @@ const styles = theme => ({
     color: 'white !important',
     marginTop: 20,
     fontSize: 16
-
   },
   description: {
     textAlign: "center",
@@ -79,37 +78,75 @@ const styles = theme => ({
 export class SongPage extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showSongPrice: false,
+      songPrice: 0,
+      isLoaded: false,
+    };
   }
   
   scrollToBottom = () => {
     window.scrollTo(0, 1000);
   };
 
+  //
   componentDidMount() {
     const { drizzle, drizzleState, match } = this.props;
     const songId = match.params.songId
     console.log('drizzle: ', drizzle);
     console.log('drizzleState', drizzleState);
     this.props.loadSong(songId)
+    //TODO: fetch this api
+    fetch("https://api.coinmarketcap.com/v1/ticker/ethereum")
+      .then(res => 
+        {
+          res.json();
+          console.log(res.json());
+        })
+      .then(
+        (result) => {
+
+          const price_song = 1.0 / 175.0; // result.items.price_usd;
+          this.setState({
+            isLoaded: true,
+            songPrice: price_song
+          });
+        },
+        (error) => {
+          const price_song = 1.0 / 175.0 //remove when API is fixed
+          this.setState({
+            isLoaded: true,
+            songPrice: price_song
+          });
+          
+          console.log(error);
+        }
+      )
   }
 
   componentDidUpdate() {
     this.scrollToBottom();
   }
 
+
   buySong(){
     
   }
 
   render() {
-    const { classes, auth, match } = this.props;
-    const songId = match.params.songId
+    const { classes, auth, match, drizzleState, drizzle, isLoaded } = this.props;
+    const songId = match.params.songId;
+    const songPrice = this.state.songPrice;
     if (this.props.song && Object.keys(this.props.song['info']).length > 0){
       console.log("SongPage props: ", this.props);
       const song = this.props.song['info'][songId]
       const market = song['market']
-        
     if (auth.uid) {
+
+      if(!drizzleState.drizzleStatus.initialized && isLoaded){
+        return (<p>Loading ...</p>);
+      }
+
         return (
             <div className={classes.root}>
               <Grid container spacing={24} className={classes.grid}>
@@ -142,7 +179,8 @@ export class SongPage extends Component {
                     </div>
                   </div>
                   <div>
-                    <Button className ={classes.button} onClick={this.scrollToBottom}>See Song Price</Button>
+                    <p>All songs are only $1 ({songPrice.toFixed(6)} ETH)</p>
+                    <Button className ={classes.button} onClick={()=>{this.displaySongPrice()}}>See Song Price</Button>
                     <Button className ={classes.button} onClick={this.scrollToBottom}>Purchase Song</Button>
                   </div>
                 </Grid>
@@ -159,7 +197,7 @@ export class SongPage extends Component {
                       Buy royalty packages from current song owners
                     </Typography>
                     {(market && Object.keys(market).length > 0) ?
-                    <RoyaltyList royalties={market} song={song} songId={songId}/>
+                    <RoyaltyList royalties={market} song={song} songId={songId} drizzle={drizzle} drizzleState={drizzleState}/>
                     : 'No Current Offers'}
                   </div>
                 </Grid>
