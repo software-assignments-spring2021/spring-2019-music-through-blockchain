@@ -5,15 +5,8 @@ function dataFetcher () {
     this.getCollectionById = (collectionName, id)  => {
         return new Promise((resolve, reject) => {
             let ref = db.collection(collectionName).doc(id)
-            ref.get().then((user) => {
-                let userInfo = user.data()
-                console.log(userInfo)
-                songService.getSongs('',null,  0, 10,'').then((result) => {
-                    userInfo.songs = result.songs //need to set songs and adjust song list
-                    resolve({ user: userInfo }) }
-                ).catch((error) => {
-                    reject(error)
-                })
+            ref.get().then((res) => {
+                resolve(res.data())
             }).catch((error)=> {
                 reject(error)
             })
@@ -31,14 +24,19 @@ export const userService = {
 dbGetUserInfo: (userId) => {
     return new Promise((resolve, reject) => {
         let ref = db.collection('users').doc(userId)
+        let fetcher = new dataFetcher()
+        let songs = []
+        
         ref.get().then((user) => {
             let userInfo = user.data()
-            songService.getSongs('',null,  0, 10,'').then((result) => {
-                userInfo.songs = result.songs //need to set songs and adjust song list
-                resolve({ user: userInfo }) }
-            ).catch((error) => {
-                reject(error)
+            Object.keys(userInfo.songsOwned).forEach((id)=>{
+               fetcher.getCollectionById('songs', id).then((song) => {
+                    songs.push(song)
+               })
             })
+            userInfo.songs = songs
+            resolve({user: userInfo})
+
         }).catch((error)=> {
             reject(error)
         })
