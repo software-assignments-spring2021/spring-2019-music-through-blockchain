@@ -6,7 +6,9 @@ function dataFetcher () {
         return new Promise((resolve, reject) => {
             let ref = db.collection(collectionName).doc(id)
             ref.get().then((res) => {
-                resolve(res.data())
+                res= res.data()
+                res.id = id
+                resolve(res)
             }).catch((error)=> {
                 reject(error)
             })
@@ -27,15 +29,19 @@ dbGetUserInfo: (userId) => {
         let fetcher = new dataFetcher()
         let songs = []
         
+        
         ref.get().then((user) => {
             let userInfo = user.data()
-            Object.keys(userInfo.songsOwned).forEach((id)=>{
-               fetcher.getCollectionById('songs', id).then((song) => {
-                    songs.push(song)
-               })
+            userInfo.songs =[]
+            let promises = Object.keys(userInfo.songsOwned).map((id) =>fetcher.getCollectionById('songs', id))
+            console.log(promises)
+
+            Promise.all(promises).then((values) => {
+                userInfo.songs= values
+                resolve({user: userInfo})
+                console.log(userInfo.songs[0])
+
             })
-            userInfo.songs = songs
-            resolve({user: userInfo})
 
         }).catch((error)=> {
             reject(error)

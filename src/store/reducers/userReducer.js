@@ -5,6 +5,8 @@ const initState = {
         'photoUrl': null, 
         'songsOwned': [], 
         'bio':null,
+        'songs': [], 
+
         'saveSuccess': null
     }
 }

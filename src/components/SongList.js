@@ -79,24 +79,24 @@ export class SongList extends Component {
               </TableRow>
               </TableHead>
               <TableBody>
-                  { songs && songsOwned.map(id => (
+                  { songs.map((song) => (
                    
-                  <TableRow key={id} className={classes.tablecell} onClick = {() => this.props.viewDetails(id)}>
+                  <TableRow key={song.id} className={classes.tablecell} onClick = {() => this.props.viewDetails(song.uid)}>
                   <TableCell>
                     <Grid container wrap="nowrap" spacing={16}>
                         <Grid item>
                           <div style={{width: 75, height:75, backgroundColor: 'lightgrey'}}>
-                            <img className={classes.image} src ={songs[id].imageUrl} />
+                            <img className={classes.image} src ={songs.imageUrl} />
                           </div>
                         </Grid>
                       <Grid item xs zeroMinWidth alignContent="center">
-                        <Typography className={classes.tablecell}>{songs[id].title}</Typography>
+                        <Typography className={classes.tablecell}>{song.name}</Typography>
                       </Grid>
                     </Grid>
                   </TableCell>
-                    <TableCell align="right" className={classes.tablecell} >{songs[id].artistName || 'anonymous'}</TableCell>
-                    <TableCell align="right" className={classes.tablecell} style={{paddingRight: '120px'}}> {songs[id].price || 0 }$ </TableCell>
-                    <TableCell align="right" className={classes.tablecell}>{songs[id].percentOwned || 0 }% </TableCell>
+                    <TableCell align="right" className={classes.tablecell} >{song.artistName || 'anonymous'}</TableCell>
+                    <TableCell align="right" className={classes.tablecell} style={{paddingRight: '120px'}}> {song.price || 0 }$ </TableCell>
+                    <TableCell align="right" className={classes.tablecell}>{songsOwned[song.id].percentOwned || 0 }% </TableCell>
                   </TableRow>          
                   ))}
             </TableBody>
