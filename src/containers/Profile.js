@@ -180,6 +180,11 @@ export class Profile extends Component {
     const {classes, auth, match,user, profile, drizzle, drizzleState} = this.props
 
     const songs = user.user.songs;
+    if (songs) {
+      console.log(songs[0])
+
+      
+    }
     if(!auth.uid){
       return <Redirect to='/' />
     }
@@ -209,7 +214,7 @@ export class Profile extends Component {
         </div>        
         <div className={classes.rowThree}>
           <div className={classes.songList}> 
-              {/* <SongList songs= {songs} songsOwned={user.user.songsOwned} /> */}
+              <SongList songs= {songs} songsOwned={user.user.songsOwned} />
           </div>
         </div> 
         <Modal className={classes.modal} open={this.state.uploadModalOpen} onClose={this.handleCloseUpload}>
