@@ -2,7 +2,7 @@ import coverArt from '../img/albumArt.png'
 import coverArtTwo from '../img/tameImpala.jpg'
 export const songs =[
     {
-        id: 'fl30BfSLL3WLpJIu5T0I',
+        ownerDetails: 'fl30BfSLL3WLpJIu5T0I',
         title: 'song1',
         coverArt: coverArt ,
         artist: ' artist name',
@@ -19,3 +19,21 @@ export const songs =[
 ] 
 
 export default songs ;
+
+export const market = {
+    "dsHMkuhGJwgo16bYRjffIym6WJD3": {
+      price: 50,
+      percent: 50
+    },
+    "dsHMkuhGJwgo16bYRjffIym6WJD3": {
+      price: 50,
+      percent: 50
+    }
+  };
+
+export const ownerDetails = {
+    'dsHMkuhGJwgo16bYRjffIym6WJD3': {
+        percentOwned :50
+    }
+}
+
