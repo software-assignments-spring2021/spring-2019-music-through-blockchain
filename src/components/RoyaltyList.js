@@ -82,6 +82,7 @@ export class RoyaltyList extends Component {
                     return undefined;
                 } else{
                     console.log("TX hash is " + result);
+                    //display txHash as a transaction receipt
                     this.props.purchaseSong(song, songId, sellerAddress);
                     return songAddress;
                 }

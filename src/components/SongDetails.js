@@ -139,7 +139,8 @@ class SongDetails extends Component {
     }
 
     if (!error) {
-      this.sellRoyalties(songId, percentValue, price).then(()=>{
+      this.sellRoyalties(songId, percentValue, price).then((txHash)=>{
+        //display txHash as receipt of the transaction
         console.log('Putting ', percentValue, 'percent up for sale at $', intPrice, ' per percentage point')
         const callBack = () => {
           this.props.closeModal()
@@ -179,9 +180,54 @@ class SongDetails extends Component {
               }                
           );
       }
-  });
-    
+    });  
   }
+
+  submitWithdraw(){
+    return new Promise((resolve, reject) => {
+    const {songId, song, drizzle, drizzleState, auth} = this.props;
+    const market = song['market'];
+    const contract = drizzle.contracts.SongsContract;
+
+    //Remove this when songAddress is added to the database
+    const songAddress = '0xAE20d508d2F30666FfdE8c3e5D30e9b09Eb5Bb25';
+    const royalties = market[auth.uid].percent * 100;
+
+    console.log("remove offer is doing something");
+    if(drizzleState.drizzleStatus.initialized){
+
+      console.log("remove offer is not initialized");
+        contract.methods.withdrawOffer(songAddress, royalties).send({from: drizzleState.accounts[0], gas: 4712388,},
+            function(error, result){
+                if(error){
+                    console.log(error);
+                    reject(error);
+                } else{
+                    console.log("TX hash is " + result);
+                    resolve(result);
+                }
+            }                
+        );
+    }
+
+  });
+}
+
+handleRemoveFromSale = () =>{
+    const callBack = () => {
+      this.props.closeModal()
+    }
+    const {songId, song} = this.props;
+
+    this.submitWithdraw().then((txHash)=>{
+      //display tx hash as receipt of the transaction
+      this.props.removeForSale(song, songId, callBack);
+    }).catch((error)=>{
+      console.log(error);
+    });
+
+  }
+
 
   render() {
     const {deleteSong, songId, song, classes, theme, auth} = this.props
@@ -220,7 +266,7 @@ class SongDetails extends Component {
               <div style={{position: 'relative', right: 40, bottom: 60 }}>
                 <Typography> You own {ownerDetails[auth.uid].percentOwned}% </Typography>
                 <div style={{position: 'relative', width: 350, left: 46, top: 15}}>You are selling {market[auth.uid].percent}% at ${market[auth.uid].price} per percentage point.</div> 
-                <Button style={{position: 'relative', top: 25}} variant='contained' color='primary' onClick={() => this.props.removeForSale(song, songId, callBack)}>Remove</Button>
+                <Button style={{position: 'relative', top: 25}} variant='contained' color='primary' onClick={this.handleRemoveFromSale}>Remove</Button>
               </div>
               :
               <div>

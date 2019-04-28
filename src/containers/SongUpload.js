@@ -150,10 +150,12 @@ export class SongUploadComponent extends Component {
         }
 
         if (!error) {
-            this.uploadTransaction().then((newSongAddress) => {
+            this.uploadTransaction().then((resultItems) => {
+
+                //display the txHash, stored as txHash in resultItems, as a transaction receipt
 
                 const songInfo = {
-                    songPublicAddress: newSongAddress,
+                    songPublicAddress: resultItems.newSongAddress,
                     title: songNameInput,
                     artistName: artistNameInput,
                     price: priceInput}
@@ -201,7 +203,7 @@ export class SongUploadComponent extends Component {
                         } else{
                             console.log("TX hash is " + result);
                             console.log("The new Song's address is: " + newSongAddress.address);
-                            resolve(newSongAddress.address)
+                            resolve({newSongAddres: newSongAddress.address, txHash: result});
                         }
                     }                
                 );
