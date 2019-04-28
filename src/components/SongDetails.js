@@ -139,12 +139,48 @@ class SongDetails extends Component {
     }
 
     if (!error) {
-      console.log('Putting ', percentValue, 'percent up for sale at $', intPrice, ' per percentage point')
-      const callBack = () => {
-        this.props.closeModal()
-      }
-      sellSong(song, songId, percentValue, intPrice, sellAllShares, callBack)
+      this.sellRoyalties(songId, percentValue, price).then(()=>{
+        console.log('Putting ', percentValue, 'percent up for sale at $', intPrice, ' per percentage point')
+        const callBack = () => {
+          this.props.closeModal()
+        }
+        sellSong(song, songId, percentValue, intPrice, sellAllShares, callBack)
+      }).catch(error=>{
+        console.log(error);
+      });
     }
+  }
+
+  sellRoyalties(songId, percentValue, price){
+
+    //Is songId the songAddress?
+    const royalties = percentValue * 100;
+    const pricePerPoint = price / royalties;
+
+    return new Promise((resolve, reject) => {
+      const { drizzle, drizzleState } = this.props;
+      const contract = drizzle.contracts.SongsContract;
+
+      
+
+      //Remove this when songAddress is added to the database
+      songId = '0xAE20d508d2F30666FfdE8c3e5D30e9b09Eb5Bb25';
+
+      if(drizzleState.drizzleStatus.initialized){
+          contract.methods.sellRoyalties(songId, royalties, pricePerPoint).send({from: drizzleState.accounts[0], gas: 4712388,},
+              function(error, result){
+                  if(error){
+                      console.log(error);
+                      reject(error);
+                  } else{
+                      console.log("TX hash is " + result);
+                      resolve(result);
+                  }
+              }                
+          );
+      }
+  });
+    
   }
 
   render() {

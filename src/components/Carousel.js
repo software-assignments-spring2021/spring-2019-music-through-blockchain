@@ -30,7 +30,7 @@ export class Carousel extends Component {
     }
 
     render() {
-    const { classes, theme, songs } = this.props
+    const { classes, theme, songs, drizzle, drizzleState } = this.props
     var settings = {
         dots: true,
         arrows: true,
@@ -47,7 +47,7 @@ export class Carousel extends Component {
                 <h1 style={{position: 'relative', right: '40%', top: 10}}>Featured</h1>
                 <Slider {...settings} className={classes.slider}>
                     {(songs && Object.keys(songs).length > 0) ? Object.keys(songs).map((songId) => (
-                        <CarouselItem key={songId} song={songs[songId]} songId={songId} />
+                        <CarouselItem key={songId} song={songs[songId]} songId={songId} drizzle={drizzle} drizzleState = {drizzleState} />
                     )) : ''}
                 </Slider>
             </div>

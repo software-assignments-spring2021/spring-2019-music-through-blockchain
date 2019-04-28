@@ -143,14 +143,16 @@ export class CarouselItem extends Component {
         this.setState({ shadow: 1 })
     }
     handleOpenModal = () => {
-        this.setState({ detailsOpen: true })
+        this.setState({ 
+            detailsOpen: true
+        })
     }
     handleCloseModal = () => {
         this.setState({ detailsOpen: false })
     }
 
     render() {
-        const {songId, song, classes, theme, auth} = this.props
+        const {songId, song, classes, theme, auth, drizzle, drizzleState} = this.props
         const title = song['title']
         const artist = song['artistName']
         const coverArt = song['imageUrl']
@@ -180,7 +182,7 @@ export class CarouselItem extends Component {
 
             <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
                 <DialogContent>
-                    <SongDetails song={song} closeModal={this.handleCloseModal} songId={songId} />
+                    <SongDetails song={song} closeModal={this.handleCloseModal} songId={songId} drizzle={drizzle} drizzleState = {drizzleState} />
                 </DialogContent>
             </Modal>  
          </div>
