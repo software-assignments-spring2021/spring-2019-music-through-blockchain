@@ -16,7 +16,7 @@ import { dbDeleteSong, dbPurchaseSong, dbPutSongForSale, dbRemoveSongForSale } f
 import Modal from '@material-ui/core/Modal'
 import DialogContent from '@material-ui/core/DialogContent';
 
-import SongDetails from './SongDetails'
+import SongRow from './SongRow'
 
 //USAGE:
 // <SongList songs={songs} userId={1}/>
@@ -141,52 +141,7 @@ handleCloseModal = () => {
               </TableHead>
               <TableBody>
                 {  songs.map((song) => 
-          
-                    <TableRow
-                      key={'1'}
-                      className={classes.row}
-                    >
-                      <TableCell>
-                        <div
-                          style={{
-                            width: 75,
-                            height: 75,
-                            backgroundColor: "lightgrey"
-                          }}
-                        >
-                          <img className={classes.image} src={song.imageUrl} />
-                        </div>
-                        <Typography className={classes.tablecell} 
-                                            onClick={() => this.props.viewDetails(song.id)}
-                        >
-                          {song.name}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right" className={classes.tablecell}>
-                        {song.artistName || "anonymous"}
-                      </TableCell>
-                      <TableCell align="right" className={classes.tablecell}>
-                        {songsOwned[song.id].percentOwned || 0}%
-                      </TableCell>
-                      <TableCell align="right" className={classes.cell}>
-                        <Button
-                          className={classes.button}
-                          onClick={this.handleOpenModal}
-                        >
-                          Sell
-                        </Button>
-  
-                  {(auth && songsOwned[song.id].percentOwned === 100) ? 
-                  <Button className={classes.deleteButton} onClick={() => deleteSong(song.id)}>Delete</Button> : 
-                  ''}
-  
-                      </TableCell>
-                      <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
-                        <DialogContent>
-                            <SongDetails song={song} closeModal={this.handleCloseModal} songId={song.id} />
-                        </DialogContent>
-                      </Modal>
-                    </TableRow>
+                <SongRow song={song} songsOwned={songsOwned} auth={auth} />
                     
                   )
                 })
@@ -210,7 +165,6 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    deleteSong: (songId) => dispatch(dbDeleteSong(songId)),
     viewDetails: id => {
       console.log("hello");
       ownProps.history.push(`/song/${id}`);

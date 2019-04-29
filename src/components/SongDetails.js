@@ -71,13 +71,18 @@ const styles = (theme) => ({
   title: {
 
   },
-  artist: {
+  button: {
+    background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
+    "&:hover": {
+      border: "solid 3px white",
+      color: "white !important"
+    }, 
+    top: 100
 
   },
-  offerList: {
-    position: 'relative',
-    bottom: 85,
-    right: 135
+  sellArea: {
+    margin: 'auto'
+
   },
   paper: {
     height: 420,
@@ -93,7 +98,8 @@ const styles = (theme) => ({
       },
     position: 'relative',
     left: 90,
-    bottom: 27,
+    top: 27,
+    
 }
 })
 
@@ -191,14 +197,14 @@ class SongDetails extends Component {
               :
               <div>
 
-                <div className={classes.offerList}>
-                  <h3> Sell Your Shares: </h3>
-                  <div style={{position:'relative', left: 200, top: 10}}>
+                <div className={classes.sellArea}>
+                  <Typography variant='h5'> Sell Your Shares: </Typography>
+                  <div style={{position:'relative', left: 125, top: 40}}>
                     <Slider step={1} style={{width: 200}} aria-labelledby="label" onChange={this.handleSlider} value={this.state.percentValue} max={ownerDetails[auth.uid].percentOwned} min={1}></Slider>
                     <div style={{position: 'relative', bottom: 10}}>{this.state.percentValue}%</div>
                   </div>
                   <TextField
-                      style={{position: 'relative', left: 80, width: 100, top: 10}}
+                      style={{position: 'relative', left: 5, width: 100, top: 20}}
                       onChange={this.handlePriceChange}
                       helperText={this.state.priceInputError}
                       error={this.state.priceInputError.trim() !== ''}
@@ -206,7 +212,7 @@ class SongDetails extends Component {
                       label='Price ($)'
                       type='number'
                   />
-                  <Button style={{position: 'relative', top: 25, left: 100}} variant='contained' color='primary' onClick={this.handlePutForSale}>Sell Song</Button>
+                  <Button style={{position: 'relative', top: 40, left: 30}} variant='contained' color='primary' onClick={this.handlePutForSale}>Sell Song</Button>
                 </div>
               </div> : ''}
               <Button className = {classes.button} onClick={() => this.props.viewDetails(song.id)}>
