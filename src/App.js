@@ -8,6 +8,7 @@ import SignupComponent from './containers/SignupComponent'
 import Homepage from './containers/Homepage'
 import Profile from './containers/Profile'
 import Navbar from './components/Navbar'
+import AboutComponent from './containers/About'
 import NotFound from './components/NotFound'
 import { withRouter } from "react-router";
 
@@ -63,7 +64,7 @@ class App extends Component {
             <Route path='/profile/:uid' render={() => <ProfilePageWrapped drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/> } />
             <Route path='/create' render={() => <CreatePageWrapped drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/> } />
             <Route component={NotFound} />
-            <Route path='/edit-profile' component={EditProfileComponent} />
+            <Route path='/about' component={AboutComponent} />
           </Switch>
         </div>
       </BrowserRouter>
