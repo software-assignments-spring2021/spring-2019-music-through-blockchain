@@ -101,6 +101,7 @@ export const dbGetSongOwners = (song, songId) => {
       const songOwners = (song.ownerId)
       if (uid) {
         return songService.getSongOwners(songOwners, songId).then((result) => {
+          console.log(result)
           song['ownerDetails'] = result
           dispatch(updateSong(song))
         })

@@ -2,7 +2,7 @@ import { db, storageRef } from "../fbconfig";
 import { songService } from "./songDbActions";
 
 function dataFetcher() {
-  this.getCollectionById = (collectionName, id) => {
+  this.getCollectionById = (collectionName, id, userPercent) => {
     return new Promise((resolve, reject) => {
       let ref = db.collection(collectionName).doc(id);
       ref
@@ -10,6 +10,7 @@ function dataFetcher() {
         .then(res => {
           res = res.data();
           res.id = id;
+          res['ownerDetails'] = userPercent
           resolve(res);
         })
         .catch(error => {
@@ -35,11 +36,18 @@ export const userService = {
         .then(user => {
           let userInfo = user.data();
           userInfo.songs = [];
-          let promises = Object.keys(userInfo.songsOwned).map(id =>
-            fetcher.getCollectionById("songs", id)
-          );
+          let promises = Object.keys(userInfo.songsOwned).map((id) =>{
+            
+            const percent = userInfo.songsOwned[id].percentOwned
+            console.log("PERCENT", percent)
+            let d = {}
+            d[userId] = percent
+            return fetcher.getCollectionById("songs", id, d)
+          });
+          console.log(promises)
           Promise.all(promises).then(values => {
             userInfo.songs = values;
+            console.log('userINFO', userInfo)
             resolve({ user: userInfo });
           });
         })
