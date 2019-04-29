@@ -11,17 +11,12 @@ import Paper from "@material-ui/core/Paper";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import {
-  dbDeleteSong,
-  dbPurchaseSong,
-  dbPutSongForSale,
-  dbRemoveSongForSale
-} from "../store/actions/songActions";
+import { dbDeleteSong, dbPurchaseSong, dbPutSongForSale, dbRemoveSongForSale } from '../store/actions/songActions'
 
-import Modal from "@material-ui/core/Modal";
-import DialogContent from "@material-ui/core/DialogContent";
+import Modal from '@material-ui/core/Modal'
+import DialogContent from '@material-ui/core/DialogContent';
 
-import SongRow from "./SongRow";
+import SongDetails from './SongDetails'
 
 //USAGE:
 // <SongList songs={songs} userId={1}/>
@@ -95,52 +90,76 @@ const CustomTableCell = withStyles(theme => ({
   }
 }))(TableCell);
 
-export class SongList extends Component {
+export class SongRow extends Component {
   constructor(props) {
     super(props);
-    this.state = { shadow: 1, detailsOpen: false };
-    this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.state = { shadow: 1, detailsOpen: false}
+    this.handleCloseModal = this.handleCloseModal.bind(this)
   }
+  
+  handleOpenModal = () => {
+    console.log('hello')
+    this.setState({ detailsOpen: true })
+}
+handleCloseModal = () => {
+    this.setState({ detailsOpen: false })
+} 
   componentWillMount() {
-    const { songs } = this.props;
+    const {songs} = this.props;
   }
 
   render() {
-    const { classes, songs, songsOwned, deleteSong, auth } = this.props;
-    if (songs && songs.length > 0 && songsOwned) {
-      return (
-        <Grid container justify="center">
-          <Paper className={classes.paper}>
-            <Table className={classes.table}>
-              <colgroup>
-                <col style={{ width: "5%" }} />
-                <col style={{ width: "19%" }} />
-                <col style={{ width: "19%" }} />
-                <col style={{ width: "19%" }} />
-                <col style={{ width: "19%" }} />
-              </colgroup>
-              <TableHead>
-                <TableRow>
-                  <TableCell className={classes.head} align="left">
-                    Song
-                  </TableCell>
-                  <TableCell className={classes.head} align="left">
-                    Artist
-                  </TableCell>
-                  <TableCell className={classes.head} align="left">
-                    % Royalty
-                  </TableCell>
-                  <TableCell className={classes.head} align="left" />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {songs.map(song => (
-                  <SongRow song={song} songsOwned={songsOwned} auth={auth} />
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        </Grid>
+    const { classes, song, songsOwned, deleteSong, auth} = this.props;
+    if (song) {
+      console.log('SONGS', )
+      return (    
+        <TableRow
+        key={'1'}
+        className={classes.row}
+      >
+        <TableCell>
+          <div
+            style={{
+              width: 75,
+              height: 75,
+              backgroundColor: "lightgrey"
+            }}
+          >
+            <img className={classes.image} src={song.imageUrl} />
+          </div>
+          <Typography className={classes.tablecell} 
+                              onClick={() => this.props.viewDetails(song.id)}
+          >
+            {song.name}
+          </Typography>
+        </TableCell>
+        <TableCell align="right" className={classes.tablecell}>
+          {song.artistName || "anonymous"}
+        </TableCell>
+        <TableCell align="right" className={classes.tablecell}>
+          {songsOwned[song.id].percentOwned || 0}%
+        </TableCell>
+        <TableCell align="right" className={classes.cell}>
+          <Button
+            className={classes.button}
+            onClick={this.handleOpenModal}
+          >
+            Sell
+          </Button>
+
+    {(auth && songsOwned[song.id].percentOwned === 100) ? 
+    <Button className={classes.deleteButton} onClick={() => deleteSong(song.id, song.ownerId)}>Delete</Button> 
+    : 
+    ''
+    }
+
+        </TableCell>
+        <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
+          <DialogContent>
+              <SongDetails song={song} closeModal={this.handleCloseModal} songId={song.id} />
+          </DialogContent>
+        </Modal>
+      </TableRow>
       );
     } else {
       return <div> </div>;
@@ -150,13 +169,18 @@ export class SongList extends Component {
 
 const mapStateToProps = state => {
   return {
-    auth: state.firebase.auth,
     profile: state.firebase.profile
   };
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    viewDetails: id => ownProps.history.push(`/song/${id}`)
+    viewDetails: id => {
+      ownProps.history.push(`/song/${id}`);
+    },
+    deleteSong: (songId, ownerId) => {
+      dispatch(dbDeleteSong(songId, ownerId[0]))
+    }
+
   };
 };
 
@@ -164,5 +188,5 @@ export default withRouter(
   connect(
     mapStateToProps,
     mapDispatchToProps
-  )(withStyles(styles)(SongList))
+  )(withStyles(styles)(SongRow))
 );
