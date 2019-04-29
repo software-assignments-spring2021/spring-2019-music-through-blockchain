@@ -143,7 +143,6 @@ export class CarouselItem extends Component {
         this.setState({ shadow: 1 })
     }
     handleOpenModal = () => {
-        console.log('hello')
         this.setState({ detailsOpen: true })
     }
     handleCloseModal = () => {

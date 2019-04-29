@@ -148,8 +148,10 @@ handleCloseModal = () => {
           </Button>
 
     {(auth && songsOwned[song.id].percentOwned === 100) ? 
-    <Button className={classes.deleteButton} onClick={() => deleteSong(song.id)}>Delete</Button> : 
-    ''}
+    <Button className={classes.deleteButton} onClick={() => deleteSong(song.id, song.ownerId)}>Delete</Button> 
+    : 
+    ''
+    }
 
         </TableCell>
         <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
@@ -175,7 +177,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     viewDetails: id => {
       ownProps.history.push(`/song/${id}`);
     },
-    deleteSong: (songId) => dispatch(dbDeleteSong(songId))
+    deleteSong: (songId, ownerId) => {
+      dispatch(dbDeleteSong(songId, ownerId[0]))
+    }
 
   };
 };

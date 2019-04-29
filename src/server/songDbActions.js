@@ -76,13 +76,28 @@ export const songService = {
   /**
    * Delete song
    */
-  deleteSong: (songId) => {
+  deleteSong: (songId, ownerId) => {
       return new Promise((resolve, reject) => {
         const batch = db.batch()
         let songRef = db.doc(`songs/${songId}`)
+        var userUpdate = {};
         batch.delete(songRef)
         batch.commit().then(() => {
-          resolve()
+          songRef.get().then( (song) =>
+          {
+            let userRef = db.doc(`users/${ownerId}`)
+            userRef.get()
+          .then(user => {
+            let songs = user.data().songsOwned
+            delete songs[songId]
+            userUpdate[`songsOwned`] = songs;
+            userRef.update(userUpdate)
+            .then(
+              resolve()
+            )})
+          }
+          )
+          
         })
           .catch((error) => {
             reject()

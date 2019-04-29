@@ -11,12 +11,17 @@ import Paper from "@material-ui/core/Paper";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import { dbDeleteSong, dbPurchaseSong, dbPutSongForSale, dbRemoveSongForSale } from '../store/actions/songActions'
+import {
+  dbDeleteSong,
+  dbPurchaseSong,
+  dbPutSongForSale,
+  dbRemoveSongForSale
+} from "../store/actions/songActions";
 
-import Modal from '@material-ui/core/Modal'
-import DialogContent from '@material-ui/core/DialogContent';
+import Modal from "@material-ui/core/Modal";
+import DialogContent from "@material-ui/core/DialogContent";
 
-import SongRow from './SongRow'
+import SongRow from "./SongRow";
 
 //USAGE:
 // <SongList songs={songs} userId={1}/>
@@ -93,27 +98,16 @@ const CustomTableCell = withStyles(theme => ({
 export class SongList extends Component {
   constructor(props) {
     super(props);
-    this.state = { shadow: 1, detailsOpen: false}
-    this.handleCloseModal = this.handleCloseModal.bind(this)
+    this.state = { shadow: 1, detailsOpen: false };
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
-  
-  handleOpenModal = () => {
-    console.log('hello')
-    this.setState({ detailsOpen: true })
-}
-handleCloseModal = () => {
-    this.setState({ detailsOpen: false })
-} 
   componentWillMount() {
-    const {songs} = this.props;
+    const { songs } = this.props;
   }
 
   render() {
-    const { classes, songs, songsOwned, deleteSong, auth} = this.props;
+    const { classes, songs, songsOwned, deleteSong, auth } = this.props;
     if (songs && songs.length > 0 && songsOwned) {
-      console.log('SONGS', songs)
-
-
       return (
         <Grid container justify="center">
           <Paper className={classes.paper}>
@@ -140,14 +134,11 @@ handleCloseModal = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {  songs.map((song) => 
-                <SongRow song={song} songsOwned={songsOwned} auth={auth} />
-                    
-                  )
-                })
+                {songs.map(song => (
+                  <SongRow song={song} songsOwned={songsOwned} auth={auth} />
+                ))}
               </TableBody>
             </Table>
-             
           </Paper>
         </Grid>
       );
@@ -165,10 +156,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    viewDetails: id => {
-      console.log("hello");
-      ownProps.history.push(`/song/${id}`);
-    }
+    viewDetails: id => ownProps.history.push(`/song/${id}`)
   };
 };
 
