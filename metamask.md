@@ -40,5 +40,8 @@
 
 ## Using MetaMask and bMusic
 
-1. You can login or signup regularly. The user should be allowed to use all the web app except when buying songs, trading royalties, or uploading a song.
-2. Drizzle needs to keep the store updated so the rest still has to be determined by the bMusic developing team.
+1. You can login or signup regularly.
+2. The user must not be logged in to MetaMask upon logging in to the webapp to be able to navigate through it.
+3. When the user chooses to upload a song, buy a song, buy royalties, sell royalties, or withdraw a royalty offer, the user will have to be logged into MetaMask.
+4. When a one of the previous actions are triggered, let 's say like the user chooses to buy a song, a MetaMask pop up should appear asking for the user's confirmation of the transaction. Upon acceptance of the transaction, the action should takes place. In this case, the user should now be the owner of the song (the audio).
+5. It is important for the user to know that only one account will be associated as owner to whatever the user chooses to buy. That is, a user must always use the same account in order to be validated for the song and validate his/her ownership over royalties. We highly recomment the users to only use one ethereum account per profile with bMusic.
