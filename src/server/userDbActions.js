@@ -101,14 +101,16 @@ export const userService = {
                 //resolve with the savedProfile Image
 
                 //delete the old profile image if there is onw
-                existingImageRef
-                  .delete()
-                  .then(message => {
-                    resolve(profileData);
-                  })
-                  .catch(message => {
-                    resolve(profileData);
-                  });
+                  if (existingImageRef) {
+                      existingImageRef
+                          .delete()
+                          .then(message => {
+                              resolve(profileData);
+                          })
+                          .catch(message => {
+                              resolve(profileData);
+                          });
+                  }
                 resolve(profileData);
               });
             });
@@ -121,72 +123,6 @@ export const userService = {
       });
     });
   },
-
-  //2nd iteration of function
-  // newupdatedprofileImage: (uid, profile, image, imageName) => {
-  //     return new Promise((resolve,reject) => {
-  //         console.log(this)
-  //         let profileData = {}
-  //         let profileRef = db.doc(`users/${uid}`)
-  //
-  //         //find the existing profile picture saved in storage
-  //         profileRef.get().then((profileDoc) => {
-  //             console.log("getting profile")
-  //             const existingImagePath = profileDoc.data().imageFullPath
-  //             //if there is an existing image saved store is as a reference
-  //             const existingImageRef = (existingImagePath) ? storageRef.child(existingImagePath): null
-  //
-  //             //save the new chosen profile picture into storage
-  //             console.log("saving image in storage")
-  //
-  //             const imageKey = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9)
-  //             const imageStorageFile = storageRef.child(`images/${imageKey}_${imageName}`)
-  //
-  //             this.saveImage(image, imageName).then((imageInfo) => {
-  //                 console.log("successfully called saved the new image in storag")
-  //                 //Store profile information and new image url in payload
-  //                 profileData = {
-  //                     ...profile,
-  //                     photoUrl: imageInfo.imageDownloadURL,
-  //                     imageFullPath: imageInfo.imageResult.metadata.fullPath
-  //                 }
-  //
-  //                 //update the user information in the database
-  //                 console.log("updating the profile with new information")
-  //                 profileRef.update(profileData).then((savedProfile) => {
-  //                     //resolve with the savedProfile Image
-  //
-  //                     //delete the old profile image if there is onw
-  //                     // this.deleteImage(existingImagePath).then((message) => {
-  //                     //     console.log(message)
-  //                     //     resolve(savedProfile)
-  //                     // }).catch((message) => {
-  //                     //     console.log(message)
-  //                     //     resolve(savedProfile)
-  //                     // })
-  //
-  //
-  //                     if (existingImageRef) {
-  //                         //delete the image
-  //                         existingImageRef.delete().then(() => {
-  //                             resolve(profileData)
-  //                         }).catch((error) => {
-  //                             resolve(profileData)
-  //                         })
-  //                     }
-  //                     else {
-  //                         reject("Image path no specified")
-  //                     }
-  //
-  //                     resolve(savedProfile)
-  //                 })
-  //
-  //             }).catch((error) => {
-  //                 reject(error)
-  //             })
-  //         })
-  //     })
-  // },
 
   /**
    * deletes image in firebase storage
