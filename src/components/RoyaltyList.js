@@ -11,11 +11,6 @@ import { connect } from 'react-redux'
 import { dbPurchaseSong } from '../store/actions/songActions'
 
 const styles = theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing.unit * 3,
-    overflowX: "auto"
-  },
   table: {
     cellPadding: "0",
     cellSpacing: "0",

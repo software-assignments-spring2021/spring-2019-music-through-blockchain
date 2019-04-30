@@ -57,7 +57,6 @@ const styles = theme => ({
       position: 'absolute',
       top: 30,
       bottom: 30,
-      backgroundColor: 'lightgrey',
       left: '10%',
       width: '80%',
   },
@@ -180,6 +179,11 @@ export class Profile extends Component {
     const {classes, auth, match,user, profile, drizzle, drizzleState} = this.props
 
     const songs = user.user.songs;
+    if (songs) {
+      console.log(songs[0])
+
+      
+    }
     if(!auth.uid){
       return <Redirect to='/' />
     }
@@ -209,7 +213,7 @@ export class Profile extends Component {
         </div>        
         <div className={classes.rowThree}>
           <div className={classes.songList}> 
-              {/* <SongList songs= {songs} songsOwned={user.user.songsOwned} /> */}
+              <SongList songs= {songs} songsOwned={user.user.songsOwned} drizzle={drizzle} drizzleState={drizzleState}/>
           </div>
         </div> 
         <Modal className={classes.modal} open={this.state.uploadModalOpen} onClose={this.handleCloseUpload}>

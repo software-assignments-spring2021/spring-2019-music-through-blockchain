@@ -5,11 +5,17 @@ import Grid from "@material-ui/core/Grid";
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import RoyaltyList from "./RoyaltyList";
-import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
-
-import { dbDeleteSong, dbPurchaseSong, dbPutSongForSale, dbRemoveSongForSale, dbGetSongOwners, dbGetSongById } from '../store/actions/songActions'
+import {
+  dbDeleteSong,
+  dbPurchaseSong,
+  dbPutSongForSale,
+  dbRemoveSongForSale,
+  dbGetSongOwners,
+  dbGetSongById
+} from "../store/actions/songActions";
 
 let id = 0;
 function createData(seller, pricePerRoyalty, amount, totalPrice) {
@@ -52,7 +58,7 @@ const styles = theme => ({
   button: {
     background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
     width: 300,
-    color: 'white !important',
+    color: "white !important",
     marginTop: 20,
     fontSize: 16
   },
@@ -81,10 +87,10 @@ export class SongPage extends Component {
     this.state = {
       showSongPrice: false,
       songPrice: 0,
-      isLoaded: false,
+      isLoaded: false
     };
   }
-  
+
   scrollToBottom = () => {
     window.scrollTo(0, 1000);
   };
@@ -92,144 +98,183 @@ export class SongPage extends Component {
   //
   componentDidMount() {
     const { drizzle, drizzleState, match } = this.props;
-    const songId = match.params.songId
-    console.log('drizzle: ', drizzle);
-    console.log('drizzleState', drizzleState);
-    this.props.loadSong(songId)
+    const songId = match.params.songId;
+    console.log("drizzle: ", drizzle);
+    console.log("drizzleState", drizzleState);
+    this.props.loadSong(songId);
     //TODO: fetch this api
     fetch("https://api.coinmarketcap.com/v1/ticker/ethereum")
-      .then(res => 
-        {
-          res.json();
-          console.log(res.json());
-        })
+      .then(res => {
+        res.json();
+        console.log(res.json());
+      })
       .then(
-        (result) => {
-
+        result => {
           const price_song = 1.0 / 175.0; // result.items.price_usd;
           this.setState({
             isLoaded: true,
             songPrice: price_song
           });
         },
-        (error) => {
-          const price_song = 1.0 / 175.0 //remove when API is fixed
+        error => {
+          const price_song = 1.0 / 175.0; //remove when API is fixed
           this.setState({
             isLoaded: true,
             songPrice: price_song
           });
-          
+
           console.log(error);
         }
-      )
+      );
   }
 
   componentDidUpdate() {
     this.scrollToBottom();
   }
 
-
-  buySong(){
-    
-  }
+  buySong() {}
 
   render() {
-    const { classes, auth, match, drizzleState, drizzle, isLoaded } = this.props;
+    const {
+      classes,
+      auth,
+      match,
+      drizzleState,
+      drizzle,
+      isLoaded
+    } = this.props;
     const songId = match.params.songId;
     const songPrice = this.state.songPrice;
-    if (this.props.song && Object.keys(this.props.song['info']).length > 0){
+    if (this.props.song && Object.keys(this.props.song["info"]).length > 0) {
       console.log("SongPage props: ", this.props);
-      const song = this.props.song['info'][songId]
-      const market = song['market']
-    if (auth.uid) {
-
-      if(!drizzleState.drizzleStatus.initialized && isLoaded){
-        return (<p>Loading ...</p>);
-      }
+      const song = this.props.song["info"][songId];
+      console.log(this.props.song);
+      //const market = song['market']
+      const market = {
+        "1": {
+          price: 50,
+          percent: 50
+        },
+        "2": {
+          price: 50,
+          percent: 50
+        }
+      };
+      console.log(Object.keys(market));
+      if (auth.uid) {
+        if (!drizzleState.drizzleStatus.initialized && isLoaded) {
+          return <p>Loading ...</p>;
+        }
 
         return (
-            <div className={classes.root}>
-              <Grid container spacing={24} className={classes.grid}>
-                <Grid item xs={6}>
-                  <div className={classes.leftColumn}>
-                    <img
-                      className={classes.cover}
-                      data-image="black"
-                      src={song['imageUrl']}
-                      alt=""
-                    />
-                  </div>
-                </Grid>
-                <Grid item xs={6}>
-                  <div>
-                    <div>
-                      <Typography className={classes.artist} variant="subtitle2">
-                        {song.artistName}
-                      </Typography>
-                      <Typography className={classes.songName} variant="h4">
-                        {song.title}
-                      </Typography>
-                      <p className={classes.description}>
-                        Lorem ipsum dolor sit amet et delectus accommodare his consul
-                        copiosae legendos at vix ad putent delectus delicata usu.
-                        Vidit dissentiet eos cu eum an brute copiosae hendrerit. Eos
-                        erant dolorum an. Per facer affert ut. Mei iisque mentitum
-                        moderatius cu. 
-                      </p>
-                    </div>
-                  </div>
-                  <div>
-                    <p>All songs are only $1 ({songPrice.toFixed(6)} ETH)</p>
-                    <Button className ={classes.button} onClick={()=>{this.displaySongPrice()}}>See Song Price</Button>
-                    <Button className ={classes.button} onClick={this.scrollToBottom}>Purchase Song</Button>
-                  </div>
-                </Grid>
-                <Grid item xs={12}>
-                  <div className={classes.royalties}>
-                    <Typography variant="h4" align="center" style={{ marginTop: 5 }}>
-                      Interested in investing in this song's royalties?
-                    </Typography>
-                    <Typography
-                      variant="subtitle2"
-                      align="center"
-                      style={{ marginTop: 25, marginBottom: 25 }}
-                    >
-                      Buy royalty packages from current song owners
-                    </Typography>
-                    {(market && Object.keys(market).length > 0) ?
-                    <RoyaltyList royalties={market} song={song} songId={songId} drizzle={drizzle} drizzleState={drizzleState}/>
-                    : 'No Current Offers'}
-                  </div>
-                </Grid>
+          <div className={classes.root}>
+            <Grid container spacing={24} className={classes.grid}>
+              <Grid item xs={6}>
+                <div className={classes.leftColumn}>
+                  <img
+                    className={classes.cover}
+                    data-image="black"
+                    src={song ? song["imageUrl"] : null}
+                    alt=""
+                  />
+                </div>
               </Grid>
-        </div> )
+              <Grid item xs={6}>
+                <div>
+                  <div>
+                    <Typography className={classes.artist} variant="subtitle2">
+                      {song ? song.artistName : ""}
+                    </Typography>
+                    <Typography className={classes.songName} variant="h4">
+                      {song ? song.title : ""}
+                    </Typography>
+                    <p className={classes.description}>Add Short Description</p>
+                  </div>
+                </div>
+                <div>
+                  <p>All songs are only $1 ({songPrice.toFixed(6)} ETH)</p>
+                  <Button
+                    className={classes.button}
+                    onClick={() => {
+                      this.displaySongPrice();
+                    }}
+                  >
+                    See Song Price
+                  </Button>
+                  <Button
+                    className={classes.button}
+                    onClick={this.scrollToBottom}
+                  >
+                    Purchase Song
+                  </Button>
+                </div>
+              </Grid>
+              <Grid item xs={12}>
+                <div className={classes.royalties}>
+                  <Typography
+                    variant="h4"
+                    align="center"
+                    style={{ marginTop: 5 }}
+                  >
+                    Interested in investing in this song's royalties?
+                  </Typography>
+                  <Typography
+                    variant="subtitle2"
+                    align="center"
+                    style={{ marginTop: 25, marginBottom: 25 }}
+                  >
+                    Buy royalty packages from current song owners
+                  </Typography>
+                  {market && Object.keys(market).length > 0 ? (
+                    <RoyaltyList
+                      royalties={market}
+                      song={song}
+                      songId={songId}
+                      drizzle={drizzle}
+                      drizzleState={drizzleState}
+                    />
+                  ) : (
+                    "No Current Offers"
+                  )}
+                </div>
+              </Grid>
+            </Grid>
+          </div>
+        );
+      } else {
+        return <Redirect to="/" />;
+      }
     } else {
-      return <Redirect to='/' />
+      return null;
     }
-  } else {
-    return null
-  }
-    
   }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        ...state,
-        auth: state.firebase.auth,
-        profile: state.firebase.profile,
-    }
-}
+const mapStateToProps = state => {
+  return {
+    ...state,
+    auth: state.firebase.auth,
+    profile: state.firebase.profile
+  };
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-      deleteSong: (songId) => dispatch(dbDeleteSong(songId)),
-      purchaseSong: (song, songId, sellerId) => dispatch(dbPurchaseSong(song, songId, sellerId)),
-      sellSong: (song, songId, percent, price, sellAllShares, callBack) => dispatch(dbPutSongForSale(song, songId, percent, price, sellAllShares, callBack)),
-      removeForSale: (song, songId, callBack) => dispatch(dbRemoveSongForSale(song, songId, callBack)),
-      getSongOwners: (song, songId) => dispatch(dbGetSongOwners(song, songId)),
-      loadSong: (songId) => dispatch(dbGetSongById(songId)),
-    }
-}
+  return {
+    deleteSong: songId => dispatch(dbDeleteSong(songId)),
+    purchaseSong: (song, songId, sellerId) =>
+      dispatch(dbPurchaseSong(song, songId, sellerId)),
+    sellSong: (song, songId, percent, price, sellAllShares, callBack) =>
+      dispatch(
+        dbPutSongForSale(song, songId, percent, price, sellAllShares, callBack)
+      ),
+    removeForSale: (song, songId, callBack) =>
+      dispatch(dbRemoveSongForSale(song, songId, callBack)),
+    getSongOwners: (song, songId) => dispatch(dbGetSongOwners(song, songId)),
+    loadSong: songId => dispatch(dbGetSongById(songId))
+  };
+};
 
-  export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(SongPage))
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(SongPage));

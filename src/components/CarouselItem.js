@@ -10,10 +10,11 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import Button from '@material-ui/core/Button';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
+import SongPreview from './SongPreview';
 import Modal from '@material-ui/core/Modal'
 import DialogContent from '@material-ui/core/DialogContent';
 
-import SongDetails from './SongDetails'
+
 
 const styles = theme => ( {
     root: {
@@ -132,8 +133,7 @@ const Hover = styled.div({
 export class CarouselItem extends Component {
     constructor(props) {
         super(props);
-        this.state = { shadow: 1, detailsOpen: false}
-        this.handleCloseModal = this.handleCloseModal.bind(this)
+        this.state = { shadow: 1}
     }
 
     onMouseOver = () => {
@@ -143,14 +143,17 @@ export class CarouselItem extends Component {
         this.setState({ shadow: 1 })
     }
     handleOpenModal = () => {
-        this.setState({ detailsOpen: true })
+        this.setState({ 
+            detailsOpen: true
+        })
     }
     handleCloseModal = () => {
         this.setState({ detailsOpen: false })
-    }
+    } 
 
     render() {
         const {songId, song, classes, theme, auth} = this.props
+        console.log(song, 'song in carousel');
         const title = song['title']
         const artist = song['artistName']
         const coverArt = song['imageUrl']
@@ -169,20 +172,19 @@ export class CarouselItem extends Component {
                     <img className={classes.cover} src={coverArt}></img>
                     <DisplayOver>
                         <Hover>
-                            <Title style={{}} className={classes.title} onClick={this.handleOpenModal}>{title}</Title>
+                            <Title style={{}} className={classes.title} >{title}</Title>
                             <SubTitle className={classes.subtitle} onClick={this.handleOpenModal}>{artist}</SubTitle>
                             <audio src={media} controls className={classes.audio}/>
                         </Hover>
                     </DisplayOver>
-                </Background>   
+                </Background>
+                <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
+                  <DialogContent>
+                      <SongPreview song={song} closeModal={this.handleCloseModal} songId={song.id} />
+                  </DialogContent>
+              </Modal>   
                     
             </Card>
-
-            <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
-                <DialogContent>
-                    <SongDetails song={song} closeModal={this.handleCloseModal} songId={songId} />
-                </DialogContent>
-            </Modal>  
          </div>
         )
     }
