@@ -137,7 +137,7 @@ handleCloseModal = () => {
           {song.artistName || "anonymous"}
         </TableCell>
         <TableCell align="right" className={classes.tablecell}>
-          {songsOwned[song.id].percentOwned || 0}%
+          {(song.market[auth.uid]? songsOwned[song.id].percentOwned - song.market[auth.uid].percent : songsOwned[song.id].percentOwned) || 0}%
         </TableCell>
         <TableCell align="right" className={classes.cell}>
           <Button

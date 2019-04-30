@@ -261,8 +261,7 @@ handleRemoveFromSale = () =>{
                 market && market[auth.uid] ? (
                   <div style={{ position: "relative", right: 40, bottom: 60 }}>
                     <Typography>
-                      {" "}
-                      You own {ownerDetails[auth.uid].percentOwned}%{" "}
+                      You own {ownerDetails[auth.uid].percentOwned}%
                     </Typography>
                     <div
                       style={{
