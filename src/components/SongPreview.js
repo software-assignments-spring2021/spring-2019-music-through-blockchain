@@ -99,6 +99,11 @@ const styles = theme => ({
     top: 100,
     background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
     color: "white"
+  }, 
+  buyButton: {
+    background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
+    color: "white"
+
   }
 });
 
@@ -159,13 +164,12 @@ class SongDetails extends Component {
                             Price: ${price * percent} for {percent}%
                           </div>
                           <Button
+                          className ={classes.buyButton}
                             style={{
                               position: "relative",
-                              bottom: 25,
-                              left: 160
+                              top: 20,
                             }}
                             variant="contained"
-                            color="primary"
                             onClick={() =>
                               this.props.purchaseSong(song, songId, key)
                             }
