@@ -32,9 +32,10 @@ export let songReducer = (state = initState, action) => {
     case 'UPDATE_SONG': 
       return updateSong(state, payload)
 
-    case 'DELETE_SONG':
-      delete state['info'][payload.id]
-      return state
+      case 'DELETE_SONG':
+          delete state['info'][payload.id]
+          console.log('song reducer')
+          return {...state}
 
     case 'ADD_SONGS':
       return {...state, 'info': {...state.info, ...payload.songs}, user: {saveSuccess: true}}

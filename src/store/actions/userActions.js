@@ -86,3 +86,14 @@ export const setEditedUserProfileImage = (user) => {
         payload: user
     }
 }
+
+/**
+ * Delete a post
+ */
+export const deleteSongProfile = (ownerId, id) => {
+
+    return {
+        type: 'DELETE_SONG_PROFILE',
+        payload: { ownerId, id}
+    }
+}

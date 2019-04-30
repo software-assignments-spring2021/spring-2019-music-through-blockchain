@@ -11,6 +11,7 @@ const initState = {
 }
 
 export let userReducer = (state = initState, action) => {
+    console.log("state in userReducer" , state)
     const {payload} = action
     switch (action.type) {
         case 'SET_USER':
@@ -25,6 +26,16 @@ export let userReducer = (state = initState, action) => {
                     bio: payload.user.biography
             }
         }
+
+        case 'DELETE_SONG_PROFILE':
+            console.log("BEFORE:" , state.user.user.songsOwned)
+
+            delete state.user.user.songsOwned[payload.id]
+            console.log("AFTER:" , state.user.user.songsOwned)
+
+
+
+            return {...state}
         case 'SET_EDIT_USER':
             return {
                 ...state,
@@ -56,6 +67,7 @@ export let userReducer = (state = initState, action) => {
                     saveSuccess: false
                 }
             }
+
         default:
             return state
     }
