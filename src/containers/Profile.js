@@ -37,16 +37,26 @@ const styles = theme => ({
   rowTwo : {
       position: 'absolute',
       top: 310,
-      height: 500,
+      height: 100,
       width: '100%',
       maxWidth: 960,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems : 'center',
+      alignContent: 'center'
+  },
+  rowThree: {
+    position: 'absolute',
+    top: 380,
+    height: 500,
+    width: '100%',
+    maxWidth: 960,
   },
 
   songList: {
       position: 'absolute',
       top: 30,
       bottom: 30,
-      backgroundColor: 'lightgrey',
       left: '10%',
       width: '80%',
   },
@@ -100,15 +110,33 @@ const styles = theme => ({
     padding: '8% 0',
   },
 
-  name: {
-    position: 'absolute',
-    top: 15, 
-    left: 5
-  },
   artistName: {
     position: 'absolute',
-    top: 45, 
+    top: 15,
+    left: 5,
+      fontWeight: 300,
+      fontSize: 52,
+      color: "#43484D",
+      letterSpacing: "-2px"
+  },
+  description: {
+    position: 'absolute',
+    top: 50, 
     left: 5
+
+  }, 
+  button: {
+    background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
+    "&:hover": {
+      border: "solid 3px white",
+      color: "white !important"
+    },
+    border: "solid 1px rgba(120,0,96,0.2)",
+    height: 48,
+    width: 300,
+    marginLeft: 20,
+    color: 'white !important',
+    fontSize: 16
   }
 })
 
@@ -116,8 +144,8 @@ export class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-        uploadModalOpen: false,
-        editProfileOpen: false
+      uploadModalOpen: false,
+      editProfileOpen: false
     }
   }
   componentDidMount = () => {
@@ -143,9 +171,17 @@ export class Profile extends Component {
     this.setState({ editProfileOpen: false })
   } 
 
+  withdrawFunds(){
+    //TODO: select songs from which to withdraw funds.
+  }
+
   render() {
-    const {classes, auth, match,user} = this.props
+    const {classes, auth, match,user, profile, drizzle, drizzleState} = this.props
+
     const songs = user.user.songs;
+    if (songs) {
+      console.log(songs[0]);
+    }
     if(!auth.uid){
       return <Redirect to='/' />
     }
@@ -153,32 +189,43 @@ export class Profile extends Component {
       <div className={classes.root}>
         <div className={classes.rowOne}>
           <div className={classes.topLeft}>
-            <div className={classes.avatar}><img className={classes.avatarPhoto} src='https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png' alt='no photo'></img></div>
+            <div className={classes.avatar}><img className={classes.avatarPhoto} src={user.user.photoUrl} alt='no photo'></img></div>
           </div>
           <div className={classes.topCenter}>
-            <h3 className={classes.artistName}>Artist Name: {user.user.artistName}</h3>
+          <Typography className={classes.artistName} variant="h4">
+              {user.user.artistName}
+          </Typography>
+            {/* <h3 className={classes.artistName}>{user.user.artistName}</h3> */}
+            {/* <Typography> </Typography> */}
+            <p className={classes.description} align='left'>{user.user.bio}</p>
             {(match.params.uid === auth.uid) ? 
               <div style={{display: 'inline', position: 'absolute', bottom: 5, left: 5}}>
                 <Button style={{backgroundColor: 'lightgrey', marginRight: 10}} onClick={this.handleOpenEditProfile}>Edit Profile</Button> 
                 <Button style={{backgroundColor: 'lightgrey'}} onClick={this.handleOpenUpload}>Upload Song</Button> 
               </div> : ''}
           </div>
-          <Card className={classes.topRight}>
-          </Card>
+
         </div>
-        <div className={classes.rowTwo}>
+        <div className ={classes.rowTwo}>
+          <Button className={classes.button} onClick={()=>{this.withdrawFunds()}} >Withdraw Earnings</Button>
+        </div>        
+        <div className={classes.rowThree}>
           <div className={classes.songList}> 
-              {/* <SongList songs= {songs} songsOwned={user.user.songsOwned} /> */}
+              <SongList songs= {songs} songsOwned={user.user.songsOwned} drizzle={drizzle} drizzleState={drizzleState}/>
           </div>
         </div> 
         <Modal className={classes.modal} open={this.state.uploadModalOpen} onClose={this.handleCloseUpload}>
             <DialogContent>
-                <SongUpload />
+                <SongUpload drizzle={drizzle} drizzleState={drizzleState}/>
             </DialogContent>
         </Modal>
         <Modal className={classes.modal} open={this.state.editProfileOpen} onClose={this.handleCloseEditProfile}>
             <DialogContent>
-                <EditProfile />
+                <EditProfile
+                accountOwner = {profile.accountOwner}
+                artistName = {profile.artistName}
+                biography = {profile.biography}
+                />
             </DialogContent>
         </Modal>
       </div>

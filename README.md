@@ -69,6 +69,8 @@ To test the contracts, please install ganache and truffle in your machine. Truff
 
 Testing the contracts require a little familiarity with Ethereum. We recommend taking this tutorial to get familiar with the blockchain technology: [Ethereum: Building Blockchain Decentralized Apps (DApps)](https://www.lynda.com/JavaScript-tutorials/Ethereum-Building-Blockchain-Decentralized-Apps-DApps/706935-2.html). We uploaded a document with some notes that you may find useful since the current version of Solidity has been upgraded. You can find the notes [here](https://github.com/nyu-software-engineering/music-through-blockchain/blob/smartContracts/EthereumTutorialNotes.md). They are also in a link below called "Ethereum Tutorial Notes".
 
+Check the [metamask and ganache instructions](https://github.com/nyu-software-engineering/music-through-blockchain/blob/smartContracts/metamask.md) to set them up.
+
 ### Alpha Tests with users
 We will also test the software with potential end-users consisting of artists, music aficionados, and our project's stakeholders. We will iterate and evolve from each of this interviews to bring the best possible product.
 
@@ -76,3 +78,4 @@ We will also test the software with potential end-users consisting of artists, m
  - [CONTRIBUTING.md](https://github.com/nyu-software-engineering/music-through-blockchain/blob/master/CONTRIBUTING.md)
  - [REQUIREMENTS.MD](https://github.com/nyu-software-engineering/music-through-blockchain/blob/master/REQUIREMENTS.md)
  - [Ethereum Tutorial Notes](https://github.com/nyu-software-engineering/music-through-blockchain/blob/smartContracts/EthereumTutorialNotes.md)
+ - [MetaMask.md](https://github.com/nyu-software-engineering/music-through-blockchain/blob/master/metamask.md)

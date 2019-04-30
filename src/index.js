@@ -28,7 +28,7 @@ const optionsDrizzle = {
     web3: {
         fallback : {
             type: "ws",
-            url: ""
+            url: "ws://localhost:8545"
         }
     }
 }

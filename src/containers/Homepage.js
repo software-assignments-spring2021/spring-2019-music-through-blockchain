@@ -58,7 +58,7 @@ export class Homepage extends Component {
   }
 
   render() {
-    const { classes, auth, song } = this.props
+    const { classes, auth, song, drizzle, drizzleState } = this.props
     console.log('homepage props: ', this.props)
     console.log('homepage state: ', this.state)
     const songs = song.info;
@@ -77,7 +77,7 @@ export class Homepage extends Component {
               useWindow={true}
               loader={<div key='load-more-progress'><CircularProgress size={30} thickness={5} style={{color: 'lightblue' }} /></div>}
               >
-              <SongBoxGrid songs={songs}/>
+              <SongBoxGrid songs={songs} drizzle = {drizzle} drizzleState = {drizzleState}/>
             </InfiniteScroll>
           </div>
         </div>

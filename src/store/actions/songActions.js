@@ -7,7 +7,11 @@ import { songService } from '../../server/songDbActions'
 /**
  * Upload song
  */
-export let dbUploadSong = (songInfo, image, imageName, song, songName, callBack) => {
+
+
+
+
+export let dbUploadSong = (songInfo, image, imageName, song, songName, artistPublicAddress, callBack) => {
     return (dispatch, getState, {getFirebase}) => {
       console.log('dbUploadSong called')
       const state = getState()
@@ -40,10 +44,10 @@ export const dbUpdateSong = (updatedSong, callBack) => {
 /**
  * Delete song
  */
-export const dbDeleteSong = (song) => {
+export const dbDeleteSong = (songId, ownerId) => {
     return (dispatch, getState, {getFirebase}) => {
-        return songService.deleteSong(song.id).then(() => {
-            dispatch(deleteSong(song.ownerId, song.id))
+        return songService.deleteSong(songId, ownerId).then(() => {
+            dispatch(deleteSong(songId, ownerId))
         })
         .catch((error) => {
             dispatch(showMessage(error.message))

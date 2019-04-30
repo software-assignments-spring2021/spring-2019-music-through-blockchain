@@ -26,6 +26,23 @@ const styles = (theme) => ({
         textAlign: 'center',
         display: 'block',
         margin: 'auto',
+    },
+    button: {
+        background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
+        width: 300,
+        color: 'white !important',
+        marginTop: 20,
+        fontSize: 16,
+        marginBottom: 10
+    },
+    input: {
+        marginBottom: 20
+    },
+    success: {
+        color: '#33cc33'
+    },
+    error: {
+        color: '#ff0000'
     }
 })
 
@@ -41,7 +58,9 @@ export class SongUploadComponent extends Component {
             artistNameInputError: '',
             songFileInput: '',
             songFileInputError: '',
-            songFile: null
+            songFile: null,
+            coverArtFileInputError: '',
+            contractError: ''
         }
         this.handleForm = this.handleForm.bind(this)
     }
@@ -70,6 +89,11 @@ export class SongUploadComponent extends Component {
                     songFileInputError: ''
                 })
                 break
+            case 'contractError':
+                this.setState({
+                    contractError: ''
+                })
+                break
             default:
 
         }
@@ -77,8 +101,9 @@ export class SongUploadComponent extends Component {
 
     handleForm = () => {
 
-        const { songNameInput, artistNameInput, priceInput, songFileInput}= this.state
+        const { songNameInput, artistNameInput, priceInput, songFileInput, file, songFile}= this.state
         const { upload } = this.props
+        const { drizzleState } = this.props;
 
         let error = false
 
@@ -100,27 +125,90 @@ export class SongUploadComponent extends Component {
             error = true
         }
 
+        if (!file) {
+            this.setState({
+                coverArtFileInputError: 'Please choose a song photo*'
+            })
+            error = true
+        }
+        else {
+            this.setState({
+                coverArtFileInputError: ''
+            })
+        }
+
+        if (!songFile) {
+            this.setState({
+                songFileInputError: 'Please choose an mp3 file to upload*'
+            })
+            error = true
+        }
+        else {
+            this.setState({
+                songFileInputError: ''
+            })
+        }
+
         if (!error) {
-            const songInfo = {
-                title: songNameInput,
-                artistName: artistNameInput,
+            this.uploadTransaction().then((resultItems) => {
+
+                //display the txHash, stored as txHash in resultItems, as a transaction receipt
+
+                const songInfo = {
+                    songPublicAddress: resultItems.newSongAddress,
+                    title: songNameInput,
+                    artistName: artistNameInput,
+                    price: priceInput
                 }
-            const callBack = () => {
-                this.props.history.push('/')
-                return <Redirect to='/' />
-            }
-            upload(
-                songInfo,
-                this.state.file,
-                this.state.file.name,
-                this.state.songFile,
-                this.state.songFile.name,
-                callBack
-            )
+
+                const artistPublicAddress = drizzleState.accounts[0];
+
+                const callBack = () => {
+                    this.props.history.push('/')
+                    return <Redirect to='/' />
+                }
+
+                upload(
+                    songInfo,
+                    this.state.file,
+                    this.state.file.name,
+                    this.state.songFile,
+                    this.state.songFile.name,
+                    artistPublicAddress, //------- This has to be added to the database to be later rendered to other functions to identify the songs
+                    callBack
+                )
+
+            }).catch((error) => {
+                console.log(error)
+            })
         }
         else {
             console.log('form input error')
         }
+    }
+
+    uploadTransaction = () => {
+        return new Promise((resolve, reject) => {
+            const { drizzle, drizzleState } = this.props;
+            const contract = drizzle.contracts.SongsContract;
+    
+            let newSongAddress = drizzle.web3.eth.accounts.create();
+
+            if(drizzleState.drizzleStatus.initialized){
+                contract.methods.registerSong(newSongAddress.address).send({from: drizzleState.accounts[0], gas: 4712388,},
+                    function(error, result){
+                        if(error){
+                            console.log(error);
+                            reject(error)
+                        } else{
+                            console.log("TX hash is " + result);
+                            console.log("The new Song's address is: " + newSongAddress.address);
+                            resolve({newSongAddress: newSongAddress.address, txHash: result});
+                        }
+                    }                
+                );
+            }
+        });
     }
 
     onImageChange = (e) => {
@@ -133,7 +221,7 @@ export class SongUploadComponent extends Component {
 
     render() {
         console.log("song upload props", this.props);
-        const { classes, auth } = this.props
+        const { classes, auth, drizzleState } = this.props
         if (!auth.uid){
             this.props.history.push('/')
             return <Redirect to='/' />
@@ -146,7 +234,7 @@ export class SongUploadComponent extends Component {
                         <Paper className={classes.paper} elevation={1} >
                             <div style={{ padding: '48px 40px 36px' }}>
                                 <div style={{ paddingLeft: '40px', paddingRight: '40px'}}>
-                                    <h2>bMusic Song Upload</h2>
+                                    <h2>Upload a Song</h2>
                                 </div>
                                 <TextField
                                     className={classes.textField}
@@ -171,8 +259,16 @@ export class SongUploadComponent extends Component {
                                 <br />
                                 <div>
                                     <div>
+                                        {this.state.songFileInputError ?
+                                            <div className={classes.error}>
+                                                {this.state.songFileInputError}
+                                            </div> :
+                                            <div>
+                                            </div>
+                                        }
                                         <div>Choose mp3 file to upload</div>
                                         <input
+                                               className={classes.input}
                                                onChange={this.onSongChange}
                                                error={this.state.songFileInputError.trim() !== ''}
                                                accept='.mp3'
@@ -182,18 +278,33 @@ export class SongUploadComponent extends Component {
                                         />
                                     </div>
                                     <div>
+                                        {this.state.coverArtFileInputError ?
+                                            <div className={classes.error}>
+                                                {this.state.coverArtFileInputError}
+                                            </div> :
+                                            <div>
+                                            </div>
+                                        }
                                         <div>Choose cover art to upload</div>
                                         <input
                                             onChange={this.onImageChange}
-                                            error={this.state.songFileInputError.trim() !== ''}
+                                            error={this.state.coverArtFileInputError.trim() !== ''}
+                                            accept='image/png, image/jpeg, image/gif'
                                             label='Choose cover art to upload'
                                             name='coverArtInput'
                                             type="file"
                                         />
                                     </div>
                                     <div>
-                                        <Button variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>
+                                        <Button className ={classes.button} variant='contained' color='primary' onClick={this.handleForm}>Upload Song</Button>
                                     </div>
+                                    {this.props.song.user.saveSuccess ?
+                                        <div className={classes.success}>
+                                            Uploaded Song Successfully ✔
+                                        </div> :
+                                        <div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </Paper>
@@ -208,13 +319,14 @@ export class SongUploadComponent extends Component {
 const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
-        profile: state.firebase.profile
+        profile: state.firebase.profile,
+        song: state.song
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        upload: (songInfo, image, imageName, song, songName, callBack) => { dispatch(dbUploadSong(songInfo, image, imageName, song, songName, callBack)) },
+        upload: (songInfo, image, imageName, song, songName, artistPublicAddress, callBack) => { dispatch(dbUploadSong(songInfo, image, imageName, song, songName, artistPublicAddress, callBack)) },
     }
 }
 
