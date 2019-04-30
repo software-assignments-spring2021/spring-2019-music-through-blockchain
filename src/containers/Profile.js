@@ -57,7 +57,6 @@ const styles = theme => ({
       position: 'absolute',
       top: 30,
       bottom: 30,
-      backgroundColor: 'lightgrey',
       left: '10%',
       width: '80%',
   },

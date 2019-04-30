@@ -11,6 +11,17 @@ import Paper from "@material-ui/core/Paper";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import {
+  dbDeleteSong,
+  dbPurchaseSong,
+  dbPutSongForSale,
+  dbRemoveSongForSale
+} from "../store/actions/songActions";
+
+import Modal from "@material-ui/core/Modal";
+import DialogContent from "@material-ui/core/DialogContent";
+
+import SongRow from "./SongRow";
 
 //USAGE:
 // <SongList songs={songs} userId={1}/>
@@ -87,10 +98,15 @@ const CustomTableCell = withStyles(theme => ({
 export class SongList extends Component {
   constructor(props) {
     super(props);
+    this.state = { shadow: 1, detailsOpen: false };
+    //this.handleCloseModal = this.handleCloseModal.bind(this);
+  }
+  componentWillMount() {
+    const { songs } = this.props;
   }
 
   render() {
-    const { classes, songs, songsOwned } = this.props;
+    const { classes, songs, songsOwned, deleteSong, auth, drizzle, drizzleState } = this.props;
     if (songs && songs.length > 0 && songsOwned) {
       return (
         <Grid container justify="center">
@@ -119,40 +135,7 @@ export class SongList extends Component {
               </TableHead>
               <TableBody>
                 {songs.map(song => (
-                  <TableRow
-                    key={song.id}
-                    className={classes.row}
-                    onClick={() => this.props.viewDetails(song.id)}
-                  >
-                    <TableCell>
-                      <div
-                        style={{
-                          width: 75,
-                          height: 75,
-                          backgroundColor: "lightgrey"
-                        }}
-                      >
-                        <img className={classes.image} src={song.imageUrl} />
-                      </div>
-                      <Typography className={classes.tablecell}>
-                        {song.name}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right" className={classes.tablecell}>
-                      {song.artistName || "anonymous"}
-                    </TableCell>
-                    <TableCell align="right" className={classes.tablecell}>
-                      {songsOwned[song.id].percentOwned || 0}%{" "}
-                    </TableCell>
-                    <TableCell align="right" className={classes.cell}>
-                      <Button
-                        className={classes.button}
-                        onClick={() => console.log("hello")}
-                      >
-                        Sell
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                  <SongRow song={song} songsOwned={songsOwned} auth={auth} drizzle={drizzle} drizzleState={drizzleState}/>
                 ))}
               </TableBody>
             </Table>
@@ -173,10 +156,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    viewDetails: id => {
-      console.log("hello");
-      ownProps.history.push(`/song/${id}`);
-    }
+    viewDetails: id => ownProps.history.push(`/song/${id}`)
   };
 };
 

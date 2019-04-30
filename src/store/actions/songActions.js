@@ -44,10 +44,10 @@ export const dbUpdateSong = (updatedSong, callBack) => {
 /**
  * Delete song
  */
-export const dbDeleteSong = (song) => {
+export const dbDeleteSong = (songId, ownerId) => {
     return (dispatch, getState, {getFirebase}) => {
-        return songService.deleteSong(song.id).then(() => {
-            dispatch(deleteSong(song.ownerId, song.id))
+        return songService.deleteSong(songId, ownerId).then(() => {
+            dispatch(deleteSong(songId, ownerId))
         })
         .catch((error) => {
             dispatch(showMessage(error.message))
