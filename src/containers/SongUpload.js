@@ -326,7 +326,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        upload: (songInfo, image, imageName, song, songName, artistPublicAddress, callBack) => { dispatch(dbUploadSong(songInfo, image, imageName, song, songName, artistPublicAddress, callBack)) },
+        upload: (songInfo, image, imageName, song, songName, artistPublicAddress, callBack) => { 
+            
+            dispatch(dbUploadSong(songInfo, image, imageName, song, songName, artistPublicAddress, callBack)) 
+        
+        },
     }
 }
 
