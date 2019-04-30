@@ -86,3 +86,14 @@ export const setEditedUserProfileImage = (user) => {
         payload: user
     }
 }
+
+/**
+ * Delete a song from user
+ */
+export const deleteSongProfile = (ownerId, id) => {
+    console.log('DELETE song profile called with' , ownerId, id)
+    return {
+      type: 'DELETE_SONG_PROFILE',
+      payload: { ownerId, id}
+    }
+  }

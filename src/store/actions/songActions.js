@@ -1,5 +1,5 @@
 import { showMessage } from './globalActions'
-
+import {deleteSongProfile} from '../actions/userActions'
 import { songService } from '../../server/songDbActions'
 
 /* _____________ CRUD DB Functions _____________ */
@@ -47,9 +47,11 @@ export const dbUpdateSong = (updatedSong, callBack) => {
 export const dbDeleteSong = (songId, ownerId) => {
     return (dispatch, getState, {getFirebase}) => {
         return songService.deleteSong(songId, ownerId).then(() => {
-            dispatch(deleteSong(songId, ownerId))
+            dispatch(deleteSongProfile(ownerId, songId))
+            dispatch(deleteSong(ownerId, songId))
         })
         .catch((error) => {
+          console.log('in error', error)
             dispatch(showMessage(error.message))
         })
     }
