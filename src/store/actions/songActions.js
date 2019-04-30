@@ -18,7 +18,6 @@ export let dbUploadSong = (songInfo, image, imageName, song, songName, artistPub
       const uid = state.firebase.auth.uid
       songInfo['ownerId'] = [uid]
 
-// ------------------------ TODO: Add the artistPublicAddress as passed from SongUpload.js to database ---------------------------------------
       return songService.uploadSong(uid, songInfo, image, imageName, song, songName).then((songData) => {
         dispatch(addSongs({[songData.id]: songData}))
         callBack()

@@ -158,7 +158,8 @@ export class SongUploadComponent extends Component {
                     songPublicAddress: resultItems.newSongAddress,
                     title: songNameInput,
                     artistName: artistNameInput,
-                    price: priceInput}
+                    price: priceInput
+                }
 
                 const artistPublicAddress = drizzleState.accounts[0];
 
@@ -173,8 +174,7 @@ export class SongUploadComponent extends Component {
                     this.state.file.name,
                     this.state.songFile,
                     this.state.songFile.name,
-                    artistPublicAddress,
-                    // newSongAddress, ------- This has to be added to the database to be later rendered to other functions to identify the songs
+                    artistPublicAddress, //------- This has to be added to the database to be later rendered to other functions to identify the songs
                     callBack
                 )
 

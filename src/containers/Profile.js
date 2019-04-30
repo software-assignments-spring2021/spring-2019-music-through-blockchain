@@ -145,8 +145,8 @@ export class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-        uploadModalOpen: false,
-        editProfileOpen: false
+      uploadModalOpen: false,
+      editProfileOpen: false
     }
   }
   componentDidMount = () => {
@@ -181,9 +181,7 @@ export class Profile extends Component {
 
     const songs = user.user.songs;
     if (songs) {
-      console.log(songs[0])
-
-      
+      console.log(songs[0]);
     }
     if(!auth.uid){
       return <Redirect to='/' />
@@ -214,7 +212,7 @@ export class Profile extends Component {
         </div>        
         <div className={classes.rowThree}>
           <div className={classes.songList}> 
-              <SongList songs= {songs} songsOwned={user.user.songsOwned} />
+              <SongList songs= {songs} songsOwned={user.user.songsOwned} drizzle={drizzle} drizzleState={drizzleState} />
           </div>
         </div> 
         <Modal className={classes.modal} open={this.state.uploadModalOpen} onClose={this.handleCloseUpload}>
