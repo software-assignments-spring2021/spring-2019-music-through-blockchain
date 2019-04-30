@@ -109,7 +109,7 @@ handleCloseModal = () => {
   }
 
   render() {
-    const { classes, song, songsOwned, deleteSong, auth} = this.props;
+    const { classes, song, songsOwned, deleteSong, auth, drizzle, drizzleState} = this.props;
     if (song) {
       console.log('SONGS', )
       return (    
@@ -156,7 +156,7 @@ handleCloseModal = () => {
         </TableCell>
         <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
           <DialogContent>
-              <SongDetails song={song} closeModal={this.handleCloseModal} songId={song.id} />
+              <SongDetails song={song} closeModal={this.handleCloseModal} songId={song.id} drizzle={drizzle} drizzleState={drizzleState} />
           </DialogContent>
         </Modal>
       </TableRow>

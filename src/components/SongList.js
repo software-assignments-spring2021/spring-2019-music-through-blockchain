@@ -106,7 +106,7 @@ export class SongList extends Component {
   }
 
   render() {
-    const { classes, songs, songsOwned, deleteSong, auth } = this.props;
+    const { classes, songs, songsOwned, deleteSong, auth, drizzle, drizzleState } = this.props;
     if (songs && songs.length > 0 && songsOwned) {
       return (
         <Grid container justify="center">
@@ -135,7 +135,7 @@ export class SongList extends Component {
               </TableHead>
               <TableBody>
                 {songs.map(song => (
-                  <SongRow song={song} songsOwned={songsOwned} auth={auth} />
+                  <SongRow song={song} songsOwned={songsOwned} auth={auth} drizzle={drizzle} drizzleState={drizzleState} />
                 ))}
               </TableBody>
             </Table>

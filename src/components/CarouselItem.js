@@ -143,7 +143,9 @@ export class CarouselItem extends Component {
         this.setState({ shadow: 1 })
     }
     handleOpenModal = () => {
-        this.setState({ detailsOpen: true })
+        this.setState({ 
+            detailsOpen: true
+        })
     }
     handleCloseModal = () => {
         this.setState({ detailsOpen: false })
@@ -151,7 +153,7 @@ export class CarouselItem extends Component {
 
     render() {
         const {songId, song, classes, theme, auth} = this.props
-        console.log(song, 'song in carousel')
+        console.log(song, 'song in carousel');
         const title = song['title']
         const artist = song['artistName']
         const coverArt = song['imageUrl']
@@ -183,8 +185,6 @@ export class CarouselItem extends Component {
               </Modal>   
                     
             </Card>
-
-         
          </div>
         )
     }

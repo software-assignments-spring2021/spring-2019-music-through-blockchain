@@ -172,7 +172,7 @@ export class SongUploadComponent extends Component {
                     this.state.songFile,
                     this.state.songFile.name,
                     artistPublicAddress,
-                    newSongAddress,
+                    // newSongAddress, ------- This has to be added to the database to be later rendered to other functions to identify the songs
                     callBack
                 )
 
