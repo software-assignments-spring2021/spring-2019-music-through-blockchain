@@ -97,3 +97,10 @@ export const deleteSongProfile = (ownerId, id) => {
       payload: { ownerId, id}
     }
   }
+
+export const uploadSongProfile = (song) => {
+    return {
+        type: 'UPLOAD_SONG_PROFILE',
+        payload: song
+    }
+}

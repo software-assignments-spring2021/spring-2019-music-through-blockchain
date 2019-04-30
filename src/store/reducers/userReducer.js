@@ -28,6 +28,17 @@ export let userReducer = (state = initState, action) => {
                     bio: payload.user.biography
             }
         }
+        case 'UPLOAD_SONG_PROFILE':
+        console.log('PAYLOAD:' , payload.song)
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    songs: state.songs.concat(payload.song),
+                    songsOwned: {...state.songsOwned, [payload.song.id]: 100}
+                }
+
+            }
         case 'DELETE_SONG_PROFILE':
             console.log('BEFORE', state.user.songsOwned)
             delete state.user.songsOwned[payload.id]

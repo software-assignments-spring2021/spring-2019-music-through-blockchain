@@ -1,5 +1,5 @@
 import { showMessage } from './globalActions'
-import {deleteSongProfile} from '../actions/userActions'
+import {deleteSongProfile, uploadSongProfile} from '../actions/userActions'
 import { songService } from '../../server/songDbActions'
 
 /* _____________ CRUD DB Functions _____________ */
@@ -19,6 +19,7 @@ export let dbUploadSong = (songInfo, image, imageName, song, songName, artistPub
       songInfo['ownerId'] = [uid]
 
       return songService.uploadSong(uid, songInfo, image, imageName, song, songName).then((songData) => {
+        dispatch(uploadSongProfile({song:songData}))
         dispatch(addSongs({[songData.id]: songData}))
         callBack()
       })
