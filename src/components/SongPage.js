@@ -149,17 +149,17 @@ export class SongPage extends Component {
       console.log("SongPage props: ", this.props);
       const song = this.props.song["info"][songId];
       console.log(this.props.song);
-      //const market = song['market']
-      const market = {
-        "1": {
-          price: 50,
-          percent: 50
-        },
-        "2": {
-          price: 50,
-          percent: 50
-        }
-      };
+      const market = song['market']
+      // const market = {
+      //   "1": {
+      //     price: 50,
+      //     percent: 50
+      //   },
+      //   "2": {
+      //     price: 50,
+      //     percent: 50
+      //   }
+      // };
       console.log(Object.keys(market));
       if (auth.uid) {
         if (!drizzleState.drizzleStatus.initialized && isLoaded) {
