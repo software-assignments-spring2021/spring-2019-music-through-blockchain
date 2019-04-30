@@ -98,7 +98,7 @@ export class RoyaltyList extends Component {
                   {r}
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
-                  {royalties[r].percent}
+                  {royalties[r].percent}%
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
                   {royalties[r].price}
