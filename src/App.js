@@ -63,8 +63,8 @@ class App extends Component {
             <Route path='/howto' component={HowTo} />
             <Route path='/profile/:uid' render={() => <ProfilePageWrapped drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/> } />
             <Route path='/create' render={() => <CreatePageWrapped drizzle={this.props.drizzle} drizzleState = {this.props.drizzle.store.getState()}/> } />
+              <Route path='/about' component={AboutComponent} />
             <Route component={NotFound} />
-            <Route path='/about' component={AboutComponent} />
           </Switch>
         </div>
       </BrowserRouter>
