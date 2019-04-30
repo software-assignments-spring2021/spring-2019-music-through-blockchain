@@ -99,7 +99,7 @@ export class SongList extends Component {
   constructor(props) {
     super(props);
     this.state = { shadow: 1, detailsOpen: false };
-    this.handleCloseModal = this.handleCloseModal.bind(this);
+    //this.handleCloseModal = this.handleCloseModal.bind(this);
   }
   componentWillMount() {
     const { songs } = this.props;
