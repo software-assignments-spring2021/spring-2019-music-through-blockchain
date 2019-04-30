@@ -203,7 +203,7 @@ export class SongUploadComponent extends Component {
                         } else{
                             console.log("TX hash is " + result);
                             console.log("The new Song's address is: " + newSongAddress.address);
-                            resolve({newSongAddres: newSongAddress.address, txHash: result});
+                            resolve({newSongAddress: newSongAddress.address, txHash: result});
                         }
                     }                
                 );
