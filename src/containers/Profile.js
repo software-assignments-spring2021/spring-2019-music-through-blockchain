@@ -144,8 +144,8 @@ export class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-        uploadModalOpen: false,
-        editProfileOpen: false
+      uploadModalOpen: false,
+      editProfileOpen: false
     }
   }
   componentDidMount = () => {
@@ -180,9 +180,7 @@ export class Profile extends Component {
 
     const songs = user.user.songs;
     if (songs) {
-      console.log(songs[0])
-
-      
+      console.log(songs[0]);
     }
     if(!auth.uid){
       return <Redirect to='/' />

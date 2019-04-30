@@ -153,7 +153,7 @@ export class CarouselItem extends Component {
 
     render() {
         const {songId, song, classes, theme, auth} = this.props
-        console.log(song, 'song in carousel');
+        console.log(song, 'song in carousel')
         const title = song['title']
         const artist = song['artistName']
         const coverArt = song['imageUrl']
