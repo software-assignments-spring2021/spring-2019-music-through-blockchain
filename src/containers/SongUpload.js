@@ -150,13 +150,16 @@ export class SongUploadComponent extends Component {
         }
 
         if (!error) {
-            this.uploadTransaction().then((newSongAddress) => {
+            this.uploadTransaction().then((resultItems) => {
+
+                //display the txHash, stored as txHash in resultItems, as a transaction receipt
 
                 const songInfo = {
-                    songPublicAddress: newSongAddress,
+                    songPublicAddress: resultItems.newSongAddress,
                     title: songNameInput,
                     artistName: artistNameInput,
-                    price: priceInput}
+                    price: priceInput
+                }
 
                 const artistPublicAddress = drizzleState.accounts[0];
 
@@ -171,8 +174,7 @@ export class SongUploadComponent extends Component {
                     this.state.file.name,
                     this.state.songFile,
                     this.state.songFile.name,
-                    artistPublicAddress,
-                    // newSongAddress, ------- This has to be added to the database to be later rendered to other functions to identify the songs
+                    artistPublicAddress, //------- This has to be added to the database to be later rendered to other functions to identify the songs
                     callBack
                 )
 
@@ -201,7 +203,7 @@ export class SongUploadComponent extends Component {
                         } else{
                             console.log("TX hash is " + result);
                             console.log("The new Song's address is: " + newSongAddress.address);
-                            resolve(newSongAddress.address)
+                            resolve({newSongAddres: newSongAddress.address, txHash: result});
                         }
                     }                
                 );
