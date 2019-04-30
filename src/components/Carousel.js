@@ -30,7 +30,7 @@ export class Carousel extends Component {
     }
 
     render() {
-    const { classes, theme, songs, drizzle, drizzleState } = this.props
+    const { classes, theme, songs } = this.props
     var settings = {
         dots: true,
         arrows: true,

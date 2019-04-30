@@ -185,8 +185,6 @@ export class CarouselItem extends Component {
               </Modal>   
                     
             </Card>
-
-         
          </div>
         )
     }

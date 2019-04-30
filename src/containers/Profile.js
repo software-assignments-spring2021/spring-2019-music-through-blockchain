@@ -211,7 +211,7 @@ export class Profile extends Component {
         </div>        
         <div className={classes.rowThree}>
           <div className={classes.songList}> 
-              <SongList songs= {songs} songsOwned={user.user.songsOwned} drizzle={drizzle} drizzleState={drizzleState} />
+              <SongList songs= {songs} songsOwned={user.user.songsOwned} drizzle={drizzle} drizzleState={drizzleState}/>
           </div>
         </div> 
         <Modal className={classes.modal} open={this.state.uploadModalOpen} onClose={this.handleCloseUpload}>
