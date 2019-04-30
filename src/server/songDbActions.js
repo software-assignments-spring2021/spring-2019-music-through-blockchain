@@ -78,6 +78,7 @@ export const songService = {
    */
   deleteSong: (songId, ownerId) => {
       return new Promise((resolve, reject) => {
+        console.log('delete song in db actions')
         const batch = db.batch()
         let songRef = db.doc(`songs/${songId}`)
         var userUpdate = {};
@@ -100,6 +101,7 @@ export const songService = {
           
         })
           .catch((error) => {
+            console.log('ERROR in db actions', error)
             reject()
           })
       })

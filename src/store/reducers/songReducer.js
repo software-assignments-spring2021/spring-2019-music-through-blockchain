@@ -21,6 +21,9 @@ const updateSong = (state, payload) => {
  * song reducer
  */
 export let songReducer = (state = initState, action) => {
+  console.log("SONG_REDUCER", state)
+  console.log("SONG_REDUCER action", action)
+
   const { payload } = action
   switch (action.type) {
     case 'CLEAR_ALL_DATA_SONG':
