@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { dbDeleteSong, dbPurchaseSong, dbPutSongForSale, dbRemoveSongForSale } from '../store/actions/songActions'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import Modal from '@material-ui/core/Modal'
 import DialogContent from '@material-ui/core/DialogContent';
@@ -45,6 +46,11 @@ const styles = theme => ({
     fontFamily: "Helvetica",
     color: "black !important",
     textTransform: "uppercase"
+  },
+  icon : {
+    height: 60,
+    width: 50,
+    marginLeft: 30
   },
   row: {
     "&:hover": {
@@ -97,8 +103,9 @@ export class SongRow extends Component {
     this.handleCloseModal = this.handleCloseModal.bind(this)
   }
   
-  handleOpenModal = () => {
+  handleOpenModal = (event) => {
     console.log('hello')
+    event.stopPropagation()
     this.setState({ detailsOpen: true })
 }
 handleCloseModal = () => {
@@ -116,6 +123,7 @@ handleCloseModal = () => {
         <TableRow
         key={song.id}
         className={classes.row}
+        onClick={() => this.props.viewDetails(song.id)}
       >
         <TableCell>
           <div
@@ -127,9 +135,7 @@ handleCloseModal = () => {
           >
             <img className={classes.image} src={song.imageUrl} />
           </div>
-          <Typography className={classes.tablecell} 
-                              onClick={() => this.props.viewDetails(song.id)}
-          >
+          <Typography className={classes.tablecell}>
             {song.name}
           </Typography>
         </TableCell>
@@ -140,18 +146,27 @@ handleCloseModal = () => {
           {(song.market[auth.uid] && songsOwned[song.id] ? songsOwned[song.id].percentOwned - song.market[auth.uid].percent : songsOwned[song.id].percentOwned) || 0}%
         </TableCell>
         <TableCell align="right" className={classes.cell}>
-          <Button
+        <Grid container direction='row' justify='space-evenly' alignItems='center'> 
+        <Grid item xs ={8} >
+        <Button
             className={classes.button}
             onClick={this.handleOpenModal}
           >
             Sell
           </Button>
-
-    {(auth && songsOwned[song.id].percentOwned === 100) ? 
-    <Button className={classes.deleteButton} onClick={() => deleteSong(song.id, song.ownerId)}>Delete</Button> 
+        </Grid>
+        <Grid item xs={4}>
+        {(auth && songsOwned[song.id].percentOwned === 100) ? 
+    <DeleteForeverIcon className={classes.icon}  onClick={(e) => {
+      e.stopPropagation() 
+      deleteSong(song.id, song.ownerId)
+    }}/>
     : 
     ''
     }
+            </Grid>
+        </Grid>
+        
 
         </TableCell>
         <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
@@ -160,6 +175,8 @@ handleCloseModal = () => {
           </DialogContent>
         </Modal>
       </TableRow>
+      
+      
       );
     } else {
       return <div> </div>;

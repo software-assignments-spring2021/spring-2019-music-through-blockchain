@@ -7,15 +7,16 @@ const initState = {
         'bio':null,
         'songs': [], 
         'saveSuccess': null
-    }
+    }, 
+    sellers: {}
 }
 
 export let userReducer = (state = initState, action) => {
-    console.log("USER_REDUCER", state)
-    console.log("USER_REDUCER action", action)
-
     const {payload} = action
     switch (action.type) {
+        case 'ADD_USERS':
+            return {...state, 'sellers': {...state.sellers, ...payload.users}}
+
         case 'SET_USER':
             return {
                 ...state,
@@ -29,7 +30,6 @@ export let userReducer = (state = initState, action) => {
             }
         }
         case 'UPLOAD_SONG_PROFILE':
-        console.log('PAYLOAD:' , payload.song)
             return {
                 ...state,
                 user: {
@@ -40,9 +40,7 @@ export let userReducer = (state = initState, action) => {
 
             }
         case 'DELETE_SONG_PROFILE':
-            console.log('BEFORE', state.user.songsOwned)
             delete state.user.songsOwned[payload.id]
-            console.log('AFTER', state.user.songsOwned)
             return {
                 ...state, 
                 user: {
