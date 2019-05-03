@@ -34,7 +34,7 @@ export let userReducer = (state = initState, action) => {
                 ...state,
                 user: {
                     ...state.user,
-                    songs: state.songs.concat(payload.song),
+                    songs: state.songs? state.songs.concat(payload.song) : [payload.song],
                     songsOwned: {...state.songsOwned, [payload.song.id]: 100}
                 }
 
