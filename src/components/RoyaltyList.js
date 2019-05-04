@@ -129,7 +129,7 @@ export class RoyaltyList extends Component {
   }
 
   render() {
-    const { classes, royalties } = this.props;
+    const { classes, royalties, priceUSD } = this.props;
 
     return (
       <div>
@@ -143,10 +143,10 @@ export class RoyaltyList extends Component {
                 Royalties Amount
               </TableCell>
               <TableCell className={classes.head} align="left">
-                Price per Royalty (ETH)
+                Total Price (ETH)
               </TableCell>
               <TableCell className={classes.head} align="left">
-                Total Price (ETH)
+                Total Price (USD)
               </TableCell>
             </TableRow>
           </TableHead>
@@ -157,18 +157,19 @@ export class RoyaltyList extends Component {
                   {r}
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
-                  {royalties[r].percent}
-                </TableCell>
-                <TableCell align="right" className={classes.cell}>
-                  {(royalties[r].price / royalties[r].percent).toFixed(4)}
+                  {royalties[r].percent}%
                 </TableCell>
                 <TableCell
                   align="right"
                   style={{ marginLeft: 20, paddingLeft: 50 }}
                   className={classes.cell}
                 >
-                  {royalties[r].price.toFixed(4)}
+                  {royalties[r].price.toFixed(6)}
                 </TableCell>
+                <TableCell style={{ marginLeft: 20, paddingLeft: 50 }} align="right" className={classes.cell}>
+                  ${(royalties[r].price * priceUSD).toFixed(2)}
+                </TableCell>
+                
                 <TableCell align="right" className={classes.cell}>
                   <Button className={classes.button} onClick={()=>{this.handleBuyRoyalties(royalties, r)}} >Buy</Button>
                 </TableCell>

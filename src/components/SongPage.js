@@ -161,7 +161,7 @@ export class SongPage extends Component {
       // };
       console.log(Object.keys(market));
       if (auth.uid) {
-        if (!drizzleState.drizzleStatus.initialized && isLoaded) {
+        if (!drizzleState.drizzleStatus.initialized || isLoaded) {
           return <p>Loading ...</p>;
         }
 
@@ -223,6 +223,7 @@ export class SongPage extends Component {
                       songId={songId}
                       drizzle={drizzle}
                       drizzleState={drizzleState}
+                      priceUSD = {priceUsd}
                     />
                   ) : (
                     "No Current Offers"
