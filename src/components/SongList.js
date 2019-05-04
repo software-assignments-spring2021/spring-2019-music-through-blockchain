@@ -128,7 +128,10 @@ export class SongList extends Component {
                     Artist
                   </TableCell>
                   <TableCell className={classes.head} align="left">
-                    % Royalty
+                    Royalties Owned
+                  </TableCell>
+                  <TableCell className={classes.head} align="left">
+                    Royalties Currently Offered
                   </TableCell>
                   <TableCell className={classes.head} align="left" />
                 </TableRow>

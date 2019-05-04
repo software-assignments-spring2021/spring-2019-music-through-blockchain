@@ -195,14 +195,6 @@ export class SongPage extends Component {
                   <p>All songs are only $1 ({songPrice.toFixed(6)} ETH)</p>
                   <Button
                     className={classes.button}
-                    onClick={() => {
-                      this.displaySongPrice();
-                    }}
-                  >
-                    See Song Price
-                  </Button>
-                  <Button
-                    className={classes.button}
                     onClick={this.scrollToBottom}
                   >
                     Purchase Song
