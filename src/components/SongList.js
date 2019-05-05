@@ -31,7 +31,8 @@ const styles = theme => ({
     width: "100%",
     marginTop: "20px",
     justify: "center",
-    overflowX: "auto"
+    overflowX: "auto",
+    backgroundColor: 'white',
   },
   table: {
     cellPadding: "0",
@@ -128,7 +129,10 @@ export class SongList extends Component {
                     Artist
                   </TableCell>
                   <TableCell className={classes.head} align="left">
-                    % Royalty
+                    Royalties Owned
+                  </TableCell>
+                  <TableCell className={classes.head} align="left">
+                    Royalties Currently Offered
                   </TableCell>
                   <TableCell className={classes.head} align="left" />
                 </TableRow>

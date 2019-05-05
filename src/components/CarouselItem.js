@@ -152,8 +152,7 @@ export class CarouselItem extends Component {
     } 
 
     render() {
-        const {songId, song, classes, theme, auth} = this.props
-        console.log(song, 'song in carousel')
+        const {songId, song, classes, theme, auth, drizzle, drizzleState} = this.props
         const title = song['title']
         const artist = song['artistName']
         const coverArt = song['imageUrl']
@@ -180,7 +179,7 @@ export class CarouselItem extends Component {
                 </Background>
                 <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
                   <DialogContent>
-                      <SongPreview song={song} closeModal={this.handleCloseModal} songId={song.id} />
+                      <SongPreview song={song} closeModal={this.handleCloseModal} songId={song.id} drizzle={drizzle} drizzleState={drizzleState} />
                   </DialogContent>
               </Modal>   
                     

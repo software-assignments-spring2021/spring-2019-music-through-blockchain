@@ -84,7 +84,7 @@ const styles = theme => ({
     margin: "auto"
   },
   paper: {
-    height: 420,
+    height: 550,
     width: 450,
     textAlign: "center",
     display: "block",
@@ -96,11 +96,35 @@ class SongDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loaded: false,
+      isLoaded: false,
       percentValue: 1,
       price: null,
-      priceInputError: ""
+      priceInputError: "",
+      priceUSD: 0,
+      priceInUSD: 0
     };
+  }
+
+  componentDidMount(){
+     //convert Eth to USD
+     const proxyurl = "https://cors-anywhere.herokuapp.com/";
+     const url = "https://api.coinmarketcap.com/v1/ticker/ethereum"; // site that doesn’t send Access-Control-*
+     fetch(proxyurl + url)
+     .then(res => {
+       return res.clone().json();
+     })
+     .then(
+       result => {
+         console.log("The result is:", result);
+         this.setState({
+           isLoaded: true,
+           priceUSD: result[0].price_usd
+         });
+       },
+       error => {
+         console.log(error);
+       }
+     ).catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"));
   }
 
   handleSlider = (event, percentValue) => {
@@ -110,12 +134,13 @@ class SongDetails extends Component {
   handlePriceChange = event => {
     const target = event.target;
     this.setState({
-      price: target.value
+      price: target.value,
+      priceInUSD: target.value * this.state.priceUSD
     });
   };
 
   handlePutForSale = () => {
-    const { sellSong, song, songId, auth } = this.props;
+    const { sellSong, song, songId, auth, drizzleState } = this.props;
     const ownerDetails = song["ownerDetails"];
     const { price, percentValue } = this.state;
     let sellAllShares = false;
@@ -141,7 +166,8 @@ class SongDetails extends Component {
         const callBack = () => {
           this.props.closeModal()
         }
-        sellSong(song, songId, percentValue, intPrice, sellAllShares, callBack)
+        const sellerAddress = drizzleState.accounts[0];
+        sellSong(song, songId, percentValue, intPrice, sellAllShares, sellerAddress, callBack)
       }).catch(error=>{
         console.log(error);
       });
@@ -226,7 +252,7 @@ handleRemoveFromSale = () =>{
 
 
   render() {
-    const { songId, song, classes, theme, auth } = this.props;
+    const { songId, song, classes, theme, auth, drizzleState } = this.props;
     const title = song["title"];
     const artist = song["artistName"];
     const coverArt = song["imageUrl"];
@@ -243,8 +269,7 @@ handleRemoveFromSale = () =>{
 
     console.log("song Details props: ", this.props);
     console.log("song ownerDetails", song["ownerDetails"]);
-
-    return (
+    return ( 
       <Grid container spacing={24} style={{ overflow: "hidden" }}>
         <Grid item xs={12} className={classes.contain}>
           <div>
@@ -272,7 +297,7 @@ handleRemoveFromSale = () =>{
                       }}
                     >
                       You are selling {market[auth.uid].percent}% for $
-                      {market[auth.uid].price}
+                      {(market[auth.uid].price*this.state.priceUSD).toLocaleString()}
                     </div>
                     <Button
                       style={{ position: "relative", top: 25 }}
@@ -314,7 +339,7 @@ handleRemoveFromSale = () =>{
                         helperText={this.state.priceInputError}
                         error={this.state.priceInputError.trim() !== ""}
                         name="priceInput"
-                        label="Price ($)"
+                        label="Price (ETH)"
                         type="number"
                       />
                       <Button
@@ -325,6 +350,15 @@ handleRemoveFromSale = () =>{
                       >
                         Sell Song
                       </Button>
+                      <Typography variant="p" style={{
+                          position: 'relative',
+                          width: 200,
+                          top: 40,
+                          left: 135
+                          
+                        }}>
+                        This is equivalent to ${(this.state.priceInUSD).toLocaleString()}
+                        </Typography>
                     </div>
                   </div>
                 )
@@ -358,9 +392,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     viewDetails: id => {
       ownProps.history.push(`/song/${id}`);
     },
-    sellSong: (song, songId, percent, price, sellAllShares, callBack) =>
+    sellSong: (song, songId, percent, price, sellAllShares, sellerAddress, callBack) =>
       dispatch(
-        dbPutSongForSale(song, songId, percent, price, sellAllShares, callBack)
+        dbPutSongForSale(song, songId, percent, price, sellAllShares, sellerAddress, callBack)
       ),
     removeForSale: (song, songId, callBack) =>
       dispatch(dbRemoveSongForSale(song, songId, callBack))

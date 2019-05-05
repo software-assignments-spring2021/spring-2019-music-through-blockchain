@@ -10,6 +10,9 @@ import { Grid } from '@material-ui/core'
 import { Redirect } from 'react-router-dom'
 
 const styles = (theme) => ({
+  root: {
+    height: 700
+  },
   textField: {
     minWidth: 280,
     marginTop: 20
@@ -160,7 +163,7 @@ export class SignupComponent extends Component {
     }
 
     return (
-
+      <div className={classes.root}>
       <Grid container spacing={24}>
         <Grid item xs={12} className={classes.contain}>
           <div>
@@ -227,6 +230,7 @@ export class SignupComponent extends Component {
           </div>
         </Grid>
       </Grid>
+      </div>
     )
   }
 }

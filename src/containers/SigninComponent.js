@@ -14,6 +14,9 @@ import {signIn} from '../store/actions/authActions'
 import Grid from '@material-ui/core/Grid/Grid'
 
 const styles = (theme) => ({
+  root: {
+    height: 700
+  },
   textField: {
     minWidth: 280,
     marginTop: 20
@@ -22,7 +25,7 @@ const styles = (theme) => ({
     margin: '0 auto'
   },
   paper: {
-    minHeight: 370,
+    minHeight: 420,
     maxWidth: 450,
     minWidth: 337,
     textAlign: 'center',
@@ -134,6 +137,7 @@ export class LoginComponent extends Component {
     }
 
     return (
+      <div className={classes.root}>
       <Grid container spacing={24}>
         <Grid item xs={12} className={classes.contain}>
           <div>
@@ -182,6 +186,7 @@ export class LoginComponent extends Component {
           </div>
         </Grid>
       </Grid>
+      </div>
     )
   }
 }
