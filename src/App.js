@@ -16,7 +16,7 @@ import SongUploadComponent from './containers/SongUpload'
 import LandingPage from './containers/LandingPage'
 import HowTo from './components/Howto'
 import EditProfileComponent from './components/EditProfile.js'
-import background from './img/background2.jpg'
+import background from './img/background.png'
 
 class App extends Component {
 
@@ -52,7 +52,7 @@ class App extends Component {
     const HomePageWrapped = withRouter(props => <Homepage {...props}/>);
     return (
       <BrowserRouter>
-        <div className="App" style={{backgroundImage:`url(${background})`}}>
+        <div className="App" style={{backgroundImage:`url(${background})`, position: 'relative', bottom: 30}}>
           <Navbar />
           <Master />
 
