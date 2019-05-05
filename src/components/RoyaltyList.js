@@ -65,15 +65,52 @@ export class RoyaltyList extends Component {
     this.setState({ color: event.target.checked ? "blue" : "default" });
   };
 
+  handleBuyRoyalties(royalties, sellerId){
+
+    const {song,songId} = this.props;
+
+    console.log("ROYALTIES", royalties);
+    console.log("song", song);
+    console.log("sellerId", sellerId);
+    //get the rest of the song info from props
+
+
+    const songAddress = song.songPublicAddress;
+    const sellerAddress = royalties[sellerId].sellerAddress;
+    const totalPrice = royalties[sellerId].price;
+
+    const royaltyPoints = royalties[sellerId].percent * 100;
+
+    console.log('Putting ', royalties[sellerId].percent, 'percent up for sale at $', totalPrice);
+    console.log(songAddress, " is the song and ", sellerAddress, " is the seller");
+
+    
+    this.buyRoyalties(songAddress, sellerAddress, totalPrice).then((txHash)=>{
+      //display txHash as receipt of the transaction
+      console.log('Putting ', royalties.percent, 'percent up for sale at $', totalPrice);
+      console.log(songAddress, " is the song and ", sellerAddress, " is the seller");
+      const callBack = () => {
+        this.props.closeModal()
+      }
+      this.props.purchaseSong(song, songId, sellerId);
+    }).catch(error=>{
+      console.log(error);
+    });
+
+    
+    return undefined;
+
+  }
+
   buyRoyalties(songAddress, sellerAddress, totalPrice){
-    const { drizzle, drizzleState, song, songId } = this.props;
-    const contract = drizzle.contracts.SongsContract;
 
-    songAddress = drizzleState.accounts[2];
-    sellerAddress = drizzleState.accounts[1];
-    totalPrice = 5;
+ 
 
-    if(drizzleState.drizzleStatus.initialized){
+    return new Promise((resolve, reject) => {
+      const { drizzle, drizzleState } = this.props;
+      const contract = drizzle.contracts.SongsContract;
+
+      if(drizzleState.drizzleStatus.initialized){
         
         contract.methods.buyRoyalties(songAddress, sellerAddress).send({ value: totalPrice * 1000000000000000000, from: drizzleState.accounts[0], gas: 4712388,}, 
             function(error, result){
@@ -83,14 +120,12 @@ export class RoyaltyList extends Component {
                 } else{
                     console.log("TX hash is " + result);
                     //display txHash as a transaction receipt
-                    this.props.purchaseSong(song, songId, sellerAddress);
                     return songAddress;
                 }
             }                
         );
-    }
-    return undefined;
-
+      }
+    });  
   }
 
   render() {
@@ -125,17 +160,17 @@ export class RoyaltyList extends Component {
                   {royalties[r].percent}%
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
-                  {royalties[r].price}
+                  {(royalties[r].price / royalties[r].percent).toFixed(4)}
                 </TableCell>
                 <TableCell
                   align="right"
                   style={{ marginLeft: 20, paddingLeft: 50 }}
                   className={classes.cell}
                 >
-                  {royalties[r].price * royalties[r].percent}
+                  {royalties[r].price.toFixed(4)}
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
-                  <Button className={classes.button} onClick={()=>{this.buyRoyalties(r.id, r.seller, r.totalPrice)}} >Buy</Button>
+                  <Button className={classes.button} onClick={()=>{this.handleBuyRoyalties(royalties, r)}} >Buy</Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -78,6 +78,7 @@ export const songService = {
    */
   deleteSong: (songId, ownerId) => {
       return new Promise((resolve, reject) => {
+        console.log('delete song in db actions')
         const batch = db.batch()
         let songRef = db.doc(`songs/${songId}`)
         var userUpdate = {};
@@ -100,6 +101,7 @@ export const songService = {
           
         })
           .catch((error) => {
+            console.log('ERROR in db actions', error)
             reject()
           })
       })
@@ -170,13 +172,14 @@ getSongOwners: (ownerIds, songId) => {
   /**
   * Put percent of song up for sale
   */
-  putSongForSale: (songId, userId, percent, price, sellAllShares) => {
+  putSongForSale: (songId, userId, percent, price, sellAllShares, sellerAddress) => {
     return new Promise((resolve, reject) => {
       let songRef = db.doc(`songs/${songId}`)
       var songUpdate = {};
       songUpdate[`market.${userId}.percent`] = percent;
       songUpdate[`market.${userId}.price`] = price;
       songUpdate[`market.${userId}.sellAllShares`] = sellAllShares;
+      songUpdate[`market.${userId}.sellerAddress`] = sellerAddress;
       songRef.update(songUpdate)
       resolve()
     })
@@ -197,6 +200,7 @@ getSongOwners: (ownerIds, songId) => {
   purchaseSong: (songId, sellerId, buyerId, sellAllShares) => {
     return new Promise((resolve, reject) => {
       let songRef = db.doc(`songs/${songId}`)
+      console.log("is selling all shares?", sellAllShares);
       if (sellAllShares) {
         songRef.update({
           ownerId: firebase.firestore.FieldValue.arrayRemove(sellerId)

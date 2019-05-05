@@ -1,5 +1,5 @@
 import { showMessage } from './globalActions'
-
+import {deleteSongProfile, uploadSongProfile} from '../actions/userActions'
 import { songService } from '../../server/songDbActions'
 
 /* _____________ CRUD DB Functions _____________ */
@@ -19,6 +19,7 @@ export let dbUploadSong = (songInfo, image, imageName, song, songName, artistPub
       songInfo['ownerId'] = [uid]
 
       return songService.uploadSong(uid, songInfo, image, imageName, song, songName).then((songData) => {
+        dispatch(uploadSongProfile({song:songData}))
         dispatch(addSongs({[songData.id]: songData}))
         callBack()
       })
@@ -47,9 +48,11 @@ export const dbUpdateSong = (updatedSong, callBack) => {
 export const dbDeleteSong = (songId, ownerId) => {
     return (dispatch, getState, {getFirebase}) => {
         return songService.deleteSong(songId, ownerId).then(() => {
-            dispatch(deleteSong(songId, ownerId))
+            dispatch(deleteSongProfile(ownerId, songId))
+            dispatch(deleteSong(ownerId, songId))
         })
         .catch((error) => {
+          console.log('in error', error)
             dispatch(showMessage(error.message))
         })
     }
@@ -162,13 +165,13 @@ export const dbGetSongById = (songId) => {
   }
 }
 
-export const dbPutSongForSale = (song, songId, percent, price, sellAllShares, callBack) => {
+export const dbPutSongForSale = (song, songId, percent, price, sellAllShares, sellerAddress, callBack) => {
   return (dispatch, getState, {getFirebase}) => {
     const state = getState()
     const uid = state.firebase.auth.uid
     if (uid) {
-      return songService.putSongForSale(songId, uid, percent, price, sellAllShares).then((result) => {
-        song['market'][uid] = {'price': price, 'percent': percent, 'sellAllShares': sellAllShares}
+      return songService.putSongForSale(songId, uid, percent, price, sellAllShares, sellerAddress).then((result) => {
+        song['market'][uid] = {'price': price, 'percent': percent, 'sellAllShares': sellAllShares, 'sellerAddress': sellerAddress}
         song.id = songId
         dispatch(updateSong(song))
         callBack()

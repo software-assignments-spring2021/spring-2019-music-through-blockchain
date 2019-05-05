@@ -128,14 +128,17 @@ export class SongList extends Component {
                     Artist
                   </TableCell>
                   <TableCell className={classes.head} align="left">
-                    % Royalty
+                    Royalties Owned
+                  </TableCell>
+                  <TableCell className={classes.head} align="left">
+                    Royalties Currently Offered
                   </TableCell>
                   <TableCell className={classes.head} align="left" />
                 </TableRow>
               </TableHead>
               <TableBody>
                 {songs.map(song => (
-                  <SongRow song={song} songsOwned={songsOwned} auth={auth} drizzle={drizzle} drizzleState={drizzleState}/>
+                  <SongRow key={song.id} song={song} songsOwned={songsOwned} auth={auth} drizzle={drizzle} drizzleState={drizzleState}/>
                 ))}
               </TableBody>
             </Table>
