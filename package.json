@@ -29,6 +29,7 @@
     "redux": "^4.0.1",
     "redux-firestore": "^0.7.0",
     "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
     "slick-carousel": "^1.8.1",
     "truffle": "^5.0.6",
     "web3": "^1.0.0-beta.47"
