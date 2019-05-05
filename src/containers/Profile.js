@@ -98,7 +98,7 @@ const styles = theme => ({
     top: 30,
     bottom: 30,
     left: "10%",
-    width: "80%"
+    width: "90%"
   },
 
   topLeft: {

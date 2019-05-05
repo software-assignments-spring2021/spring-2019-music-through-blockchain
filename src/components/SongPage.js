@@ -144,8 +144,8 @@ export class SongPage extends Component {
     } = this.props;
     const songId = match.params.songId;
     if (this.props.song && Object.keys(this.props.song["info"]).length > 0 && this.props.song['info'][songId]) {
-    const priceUsd = this.state.priceUsd;
-    if (this.props.song && Object.keys(this.props.song["info"]).length > 0) {
+      const priceUsd = this.state.priceUsd;
+
       console.log("SongPage props: ", this.props);
       const song = this.props.song["info"][songId];
       const market = song['market']
@@ -230,6 +230,7 @@ export class SongPage extends Component {
     }
   }
 }
+
 
 const mapStateToProps = state => {
   return {

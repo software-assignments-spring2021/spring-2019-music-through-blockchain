@@ -35,7 +35,7 @@ const styles = theme => ({
     border: "0",
     borderWidth: 0,
     borderColor: "red",
-    minWidth: 700,
+    minWidth: 900,
     borderStyle: "solid"
   },
   head: {
@@ -50,7 +50,11 @@ const styles = theme => ({
   icon : {
     height: 60,
     width: 50,
-    marginLeft: 30
+    marginLeft: 20,
+    "&:hover": {
+      color: "white !important"
+    }
+
   },
   row: {
     "&:hover": {
@@ -123,7 +127,7 @@ handleCloseModal = () => {
         <TableRow
         key={song.id}
         className={classes.row}
-        onClick={() => this.props.viewDetails(song.id)}
+        onClick={console.log('hello')}
       >
         <TableCell>
           <div
@@ -147,9 +151,9 @@ handleCloseModal = () => {
           {(song.market[auth.uid] && songsOwned[song.id] ? songsOwned[song.id].percentOwned - song.market[auth.uid].percent : songsOwned[song.id].percentOwned) || 100}%
 
         </TableCell>
-//         <TableCell align="right" className={classes.tablecell}>
-//           {(song.market[auth.uid] && songsOwned[song.id] ? song.market[auth.uid].percent : songsOwned[song.id].percent) || 0}%
-//         </TableCell>
+         <TableCell align="right" className={classes.tablecell}>
+           {(song.market[auth.uid] && songsOwned[song.id] ? song.market[auth.uid].percent : songsOwned[song.id].percent) || 0}%
+         </TableCell>
         <TableCell align="right" className={classes.cell}>
         <Grid container direction='row' justify='space-evenly' alignItems='center'> 
         <Grid item xs ={8} >
@@ -196,7 +200,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    viewDetails: id => {
+    viewDetails: (e, id) => {
+      e.stopPropagation()
       ownProps.history.push(`/song/${id}`);
     },
     deleteSong: (songId, ownerId) => {

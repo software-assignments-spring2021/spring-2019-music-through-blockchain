@@ -86,8 +86,11 @@ export class RoyaltyList extends Component {
     
     this.buyRoyalties(songAddress, sellerAddress, totalPrice).then((txHash)=>{
       //display txHash as receipt of the transaction
+      console.log("SONG in buyRoyalties", song)
       this.props.purchaseSong(song, songId, sellerId);
     }).catch(error=>{
+      console.log("SONG in buyRoyalties", song)
+
       console.log(error);
     });
   }
@@ -120,10 +123,8 @@ export class RoyaltyList extends Component {
 }
 
   render() {
-    const { song, songId, classes, royalties, priceUSD } = this.props;
+    const { song, songId, classes, royalties, priceUSD, user } = this.props;
 
-  render() {
-    const { classes, royalties, user,songId } = this.props;
     const names = user['sellers'][songId]
     return (
       <div>
@@ -165,7 +166,7 @@ export class RoyaltyList extends Component {
                 </TableCell>
                 
                 <TableCell align="right" className={classes.cell}>
-                  <Button className={classes.button} onClick={()=>{this.props.purchaseSong(song, songId, r)}} >Buy</Button>
+                  <Button className={classes.button} onClick={()=>{this.props.purchaseSong(song['info'], songId, r)}} >Buy</Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -174,7 +175,7 @@ export class RoyaltyList extends Component {
       </div>
     );
   }
-}
+  }
 
 // private map state for every compo
 
