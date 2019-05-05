@@ -12,6 +12,9 @@ import {SignupComponent} from "./SignupComponent";
 import {dbUploadSong} from '../store/actions/songActions'
 
 const styles = (theme) => ({
+    root: {
+        height: 700
+      },
     textField: {
         minWidth: 280,
         marginTop: 20
@@ -228,6 +231,7 @@ export class SongUploadComponent extends Component {
         }
 
         return (
+            <div className={classes.root}>
             <Grid container spacing={24} style={{display: 'inline', backgroundColor: 'grey'}}>
                 <Grid item xs={12} className={classes.contain}>
                     <div>
@@ -311,6 +315,7 @@ export class SongUploadComponent extends Component {
                     </div>
                 </Grid>
             </Grid>
+            </div>
         )
     }
 

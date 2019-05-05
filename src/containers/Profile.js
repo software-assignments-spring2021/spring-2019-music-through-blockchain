@@ -19,6 +19,7 @@ const styles = theme => ({
       position: 'relative',
       bottom: 42,
       width: 1100,
+      minHeight: 1000,
       margin: 'auto',
       justifyContent:'center',
       alignItems: 'center', 
@@ -27,6 +28,7 @@ const styles = theme => ({
 
   rowOne: {
       position: 'absolute',
+      backgroundColor: 'white',
       top: 65,
       width: '100%',
       maxWidth: 960,
