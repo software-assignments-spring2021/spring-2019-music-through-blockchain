@@ -16,7 +16,7 @@ import SongUploadComponent from './containers/SongUpload'
 import LandingPage from './containers/LandingPage'
 import HowTo from './components/Howto'
 import EditProfileComponent from './components/EditProfile.js'
-import background from './img/background.png'
+import background from './img/background2.jpg'
 
 class App extends Component {
 
