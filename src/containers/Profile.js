@@ -55,23 +55,27 @@ const styles = theme => ({
     color: "white !important",
     fontSize: 14
   },
-  root: {
-    display: "flex",
-    position: "relative",
-    bottom: 42,
-    width: 1100,
-    margin: "auto",
-    justifyContent: "center",
-    alignItems: "center"
+ 
+  root: {   
+      display: 'flex',
+      position: 'relative',
+      bottom: 42,
+      width: 1100,
+      minHeight: 1000,
+      margin: 'auto',
+      justifyContent:'center',
+      alignItems: 'center', 
+      
   },
 
   rowOne: {
-    position: "absolute",
-    top: 65,
-    width: "100%",
-    maxWidth: 960,
-    height: 240,
-    boxShadow: "0px 2px 4px 0px rgba(0,0,0,0.75)"
+      position: 'absolute',
+      backgroundColor: 'white',
+      top: 65,
+      width: '100%',
+      maxWidth: 960,
+      height: 240,
+      boxShadow: '0px 2px 4px 0px rgba(0,0,0,0.75)'
   },
 
   rowTwo: {
