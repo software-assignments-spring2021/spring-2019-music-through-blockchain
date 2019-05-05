@@ -67,7 +67,7 @@ export class Homepage extends Component {
     if(auth.uid){
       return (
         <div className={classes.root}>
-          <Carousel songs={songs}/>
+          <Carousel songs={songs} drizzle={drizzle} drizzleState={drizzleState}/>
           <h1 style={{position: 'relative', right: '40%', top: 10}}>Recent</h1>
           <div className={classes.centerCol}>
             <InfiniteScroll

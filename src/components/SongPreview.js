@@ -111,11 +111,81 @@ class SongDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loaded: false,
+      isLoaded: false,
       percentValue: 1,
       price: null,
-      priceInputError: ""
+      priceInputError: "",
+      priceUSD: 0
     };
+  }
+
+  componentDidMount(){
+    //convert Eth to USD
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = "https://api.coinmarketcap.com/v1/ticker/ethereum"; // site that doesn’t send Access-Control-*
+    fetch(proxyurl + url)
+    .then(res => {
+      return res.clone().json();
+    })
+    .then(
+      result => {
+        console.log("The result is:", result);
+        this.setState({
+          isLoaded: true,
+          priceUSD: result[0].price_usd
+        });
+      },
+      error => {
+        console.log(error);
+      }
+    ).catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"));
+  }
+  
+  handleBuyRoyalties(royalties, sellerId){
+
+    const {song,songId} = this.props;
+
+    console.log("ROYALTIES", royalties);
+    console.log("song", song);
+    console.log("sellerId", sellerId);
+    //get the rest of the song info from props
+
+
+    const songAddress = song.songPublicAddress;
+    const sellerAddress = royalties[sellerId].sellerAddress;
+    const totalPrice = royalties[sellerId].price;
+
+    console.log('Buying ', royalties[sellerId].percent, '% for $', totalPrice);
+    console.log(songAddress, " is the song and ", sellerAddress, " is the seller");
+
+    
+    this.buyRoyalties(songAddress, sellerAddress, totalPrice).then((txHash)=>{
+      this.props.purchaseSong(song, songId, sellerId);
+      //display txHash as receipt of the transaction
+    }).catch(error=>{
+      console.log(error);
+    });
+  }
+
+  buyRoyalties(songAddress, sellerAddress, totalPrice){
+    return new Promise((resolve, reject) => {
+      const { drizzle, drizzleState } = this.props;
+      const contract = drizzle.contracts.SongsContract;
+      if(drizzleState.drizzleStatus.initialized){
+        contract.methods.buyRoyalties(songAddress, sellerAddress).send({ value: totalPrice * 1000000000000000000, from: drizzleState.accounts[0], gas: 4712388,}, 
+            function(error, result){
+                if(error){
+                    console.log(error);
+                    return undefined;
+                } else{
+                    console.log("TX hash is " + result);
+                    //display txHash as a transaction receipt
+                    return songAddress;
+                }
+            }                
+        );
+      }
+    });  
   }
 
   render() {
@@ -136,6 +206,7 @@ class SongDetails extends Component {
 
     console.log("song Details props: ", this.props);
     console.log("song ownerDetails", song["ownerDetails"]);
+    console.log("Market", market);
 
     return (
       <Grid container spacing={24} style={{ overflow: "hidden" }}>
@@ -161,7 +232,7 @@ class SongDetails extends Component {
                           style={{ position: "relative", left: 0 }}
                         >
                           <div>
-                            Price: ${price * percent} for {percent}%
+                            Price: ${(price * this.state.priceUSD).toFixed(2).toLocaleString()} for {percent}%
                           </div>
                           <Button
                           className ={classes.buyButton}
