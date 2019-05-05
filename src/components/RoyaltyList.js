@@ -79,33 +79,19 @@ export class RoyaltyList extends Component {
     const sellerAddress = royalties[sellerId].sellerAddress;
     const totalPrice = royalties[sellerId].price;
 
-    const royaltyPoints = royalties[sellerId].percent * 100;
-
-    console.log('Putting ', royalties[sellerId].percent, 'percent up for sale at $', totalPrice);
+    console.log('Buying ', royalties[sellerId].percent, '% for $', totalPrice);
     console.log(songAddress, " is the song and ", sellerAddress, " is the seller");
 
     
     this.buyRoyalties(songAddress, sellerAddress, totalPrice).then((txHash)=>{
       //display txHash as receipt of the transaction
-      console.log('Putting ', royalties.percent, 'percent up for sale at $', totalPrice);
-      console.log(songAddress, " is the song and ", sellerAddress, " is the seller");
-      const callBack = () => {
-        this.props.closeModal()
-      }
       this.props.purchaseSong(song, songId, sellerId);
     }).catch(error=>{
       console.log(error);
     });
-
-    
-    return undefined;
-
   }
 
   buyRoyalties(songAddress, sellerAddress, totalPrice){
-
- 
-
     return new Promise((resolve, reject) => {
       const { drizzle, drizzleState } = this.props;
       const contract = drizzle.contracts.SongsContract;
@@ -129,7 +115,7 @@ export class RoyaltyList extends Component {
   }
 
   render() {
-    const { classes, royalties, priceUSD } = this.props;
+    const { song, songId, classes, royalties, priceUSD } = this.props;
 
     return (
       <div>
@@ -167,11 +153,11 @@ export class RoyaltyList extends Component {
                   {royalties[r].price.toFixed(6)}
                 </TableCell>
                 <TableCell style={{ marginLeft: 20, paddingLeft: 50 }} align="right" className={classes.cell}>
-                  ${(royalties[r].price * priceUSD).toFixed(2)}
+                  ${(royalties[r].price * priceUSD).toFixed(2).toLocaleString()}
                 </TableCell>
                 
                 <TableCell align="right" className={classes.cell}>
-                  <Button className={classes.button} onClick={()=>{this.handleBuyRoyalties(royalties, r)}} >Buy</Button>
+                  <Button className={classes.button} onClick={()=>{this.props.purchaseSong(song, songId, r)}} >Buy</Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -191,7 +191,7 @@ export class SongPage extends Component {
                   </div>
                 </div>
                 <div>
-                  <p>All songs are only 0.008 ETH (${(0.008 * priceUsd).toFixed(2)})</p>
+                  <p>All songs are only 0.008 ETH (${(0.008 * priceUsd).toFixed(2).toLocaleString()})</p>
                   <Button
                     className={classes.button}
                     onClick={this.scrollToBottom}

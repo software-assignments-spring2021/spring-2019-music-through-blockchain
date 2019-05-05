@@ -84,7 +84,7 @@ const styles = theme => ({
     margin: "auto"
   },
   paper: {
-    height: 420,
+    height: 550,
     width: 450,
     textAlign: "center",
     display: "block",
@@ -297,7 +297,7 @@ handleRemoveFromSale = () =>{
                       }}
                     >
                       You are selling {market[auth.uid].percent}% for $
-                      {market[auth.uid].price}
+                      {(market[auth.uid].price*this.state.priceUSD).toLocaleString()}
                     </div>
                     <Button
                       style={{ position: "relative", top: 25 }}
@@ -351,11 +351,13 @@ handleRemoveFromSale = () =>{
                         Sell Song
                       </Button>
                       <Typography variant="p" style={{
-                          position: "relative",
-                          width: 100,
-                          top: 20,
+                          position: 'relative',
+                          width: 200,
+                          top: 40,
+                          left: 135
+                          
                         }}>
-                        this is equivalent to ${(this.state.priceInUSD).toFixed(2)}
+                        This is equivalent to ${(this.state.priceInUSD).toLocaleString()}
                         </Typography>
                     </div>
                   </div>
