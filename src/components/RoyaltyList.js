@@ -18,7 +18,7 @@ const styles = theme => ({
     borderWidth: 0,
     borderColor: "red",
     minWidth: 700,
-    borderStyle: "solid"
+    borderStyle: "solid",
   },
   head: {
     textAlign: "center",
@@ -32,8 +32,10 @@ const styles = theme => ({
   row: {
     "&:hover": {
       backgroundImage: "linear-gradient(to right, #647DEE, #7F53AC) !important",
-      color: "white !important"
-    }
+      color: "white !important",
+    },
+    backgroundColor: 'white !important'
+
   },
   cell: {
     paddingLeft: 20,

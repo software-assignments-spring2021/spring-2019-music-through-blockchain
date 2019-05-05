@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import landingSongs from "../img/landingSongs.png";
 
 // import project components
 import SongBoxGrid from '../components/SongBoxGrid'
@@ -18,6 +19,22 @@ const styles = {
     margin: 'none',
     width: '100%',
     padding: "5% 0%"
+  },
+  landingSong1: {
+    width: 200,
+    height: 200,
+    position: 'relative',
+    top: 100,
+    right: 50,
+    display: 'inline-block'
+  },
+  landingSong2: {
+    width: 200,
+    height: 200,
+    position: 'relative',
+    left: 170,
+    bottom: 100,
+    display: 'inline-block'
   },
   infoSectionContainer2: {
     position: 'relative',
@@ -95,38 +112,6 @@ const styles = {
 export class LandingPage extends Component {
   render() {
     const { classes } = this.props
-    const songs = {
-      '1': {
-        artist: 'Artist 1',
-        title: 'song 1',
-        coverArt: coverArt
-      },
-      '2': {
-        artist: 'Tame Impala',
-        title: 'The Moment',
-        coverArt: coverArtTwo
-      },
-      '3': {
-        artist: 'Artist 3',
-        title: 'song 3',
-        coverArt: coverArt
-      },
-      '4': {
-        artist: 'Artist 4',
-        title: 'song 4',
-        coverArt: coverArtTwo
-      },
-      '5': {
-        artist: 'Artist 5',
-        title: 'song 5',
-        coverArt: coverArt
-      },
-      '6': {
-        artist: 'Artist 6',
-        title: 'song 6',
-        coverArt: coverArt
-      }
-    }
     return (
       <div className={classes.root}>
         <div  className={classes.infoSectionContainer}>
@@ -149,7 +134,9 @@ export class LandingPage extends Component {
             </div>
           </div>
           <div className={classes.infoSection}>
-            <SongBoxGrid songs={songs}/>
+            <img src={coverArt} className={classes.landingSong1}/>
+            <img src={coverArtTwo} className={classes.landingSong2}/>
+
           </div>
         </div>
         <div className={classes.infoSectionContainer2}>

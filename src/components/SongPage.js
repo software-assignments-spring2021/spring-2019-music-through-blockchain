@@ -77,7 +77,7 @@ const styles = theme => ({
     top: 0
   },
   grid: {
-    marginTop: 40
+    marginTop: 40,
   }
 });
 

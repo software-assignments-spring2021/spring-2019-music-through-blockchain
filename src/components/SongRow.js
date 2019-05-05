@@ -26,7 +26,7 @@ const styles = theme => ({
     width: "100%",
     marginTop: "20px",
     justify: "center",
-    overflowX: "auto"
+    overflowX: "auto",
   },
   table: {
     cellPadding: "0",
@@ -49,8 +49,8 @@ const styles = theme => ({
   row: {
     "&:hover": {
       backgroundImage: "linear-gradient(to right, #647DEE, #7F53AC) !important",
-      color: "white !important"
-    }
+      color: "white !important",
+    },
   },
   tablecell: {
     paddingLeft: 20,
