@@ -12,12 +12,52 @@ import EditProfile from '../components/EditProfile'
 import SongList from '../components/SongList'
 import { connect } from 'react-redux'
 import {songs} from './mock.js'
-
+import Table from "@material-ui/core/Table";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import Toolbar from "@material-ui/core/Toolbar";
+import Paper from "@material-ui/core/Paper";
+import Checkbox from "@material-ui/core/Checkbox";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import DeleteIcon from "@material-ui/icons/Delete";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import { lighten } from "@material-ui/core/styles/colorManipulator";
+import CustomTableHead from './TableHead'
+import CustomTableToolbar from './TableToolbar'
 import Grid from "@material-ui/core/Grid";
 import { TableBody } from '@material-ui/core';
+import purple from '@material-ui/core/colors/purple';
 
 const styles = theme => ({
+  paper: {
+    minHeight: 370,
+    maxWidth: 450,
+    minWidth: 337,
+    textAlign: 'center',
+    display: 'block',
+    margin: 'auto',
+},
+withdrawModalButton: {
+
+  background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
+  "&:hover": {
+    border: "solid 3px white",
+    color: "white !important"
+  },
+  border: "solid 1px rgba(120,0,96,0.2)",
+  width: '50%',
+  marginLeft: 20,
+  marginBottom: 20,
+  
+  color: 'white !important',
+  fontSize: 14
+},
   root: {   
+
       display: 'flex',
       position: 'relative',
       bottom: 42,
@@ -149,9 +189,13 @@ export class Profile extends Component {
     this.state = { 
       uploadModalOpen: false,
       editProfileOpen: false, 
-      isWithdrawing: false
+      isWithdrawing: false,
+      selected: [],
+      rowsPerPage: 5,
+      page: 1
     }
   }
+  
   componentDidMount = () => {
     const {loadProfile, match} = this.props;
 
@@ -178,13 +222,88 @@ export class Profile extends Component {
     this.setState({ isWithdrawing: false })
   } 
 
+  handleClick = (event, id) => {
+    const { selected } = this.state;
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+
+    this.setState({ selected: newSelected });
+  };
   withdrawFunds(){
     //TODO: select songs from which to withdraw funds.
+    console.log("OPEN MODAL")
     this.setState({isWithdrawing: true})
   }
+  isSelected = id => this.state.selected.indexOf(id) !== -1;
+
+  handleSelectAllClick = event => {
+    if (event.target.checked) {
+      console.log("check all")
+      this.setState(state => ({ selected: this.props.user.user.songs.map(n => n.id) }));
+      return;
+    }
+    this.setState({ selected: [] });
+  };
+  generateRows = songs => {
+    console.log("SONGS", songs)
+    const owned = this.props.user.user.songsOwned
+    const {classes} = this.props
+    const auth = this.props.auth;
+    let rows = songs.map((s)=> {
+      const isSelected = this.isSelected(s.id);
+      return (
+        <TableRow
+          hover
+          onClick={event => this.handleClick(event, s.id)}
+          role="checkbox"
+          aria-checked={isSelected}
+          tabIndex={-1}
+          key={s.id}
+          selected={isSelected}
+        >
+          <TableCell padding="checkbox">
+            <Checkbox  style={{color:'#7F53AC'}}
+  checked={isSelected} />
+          </TableCell>
+          <TableCell component="th" scope="row" padding="none">
+          {s.title}
+          </TableCell>
+          <TableCell align="right">
+          {s.market[auth.uid] && owned[s.id] ? owned[s.id].percentOwned - s.market[auth.uid].percent : owned[s.id].percentOwned} % 
+</TableCell>
+        </TableRow>
+      );
+    });
+   
+    return rows
+  }
+
+
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: event.target.value });
+  };
 
   render() {
     const {classes, auth, match,user, profile, drizzle, drizzleState} = this.props
+    const { order, orderBy, selected, rowsPerPage, page } = this.state;
+    //const emptyRows =rowsPerPage - Math.min(rowsPerPage, songs.length - page * rowsPerPage);
 
     const songs = user.user.songs;
     if (songs) {
@@ -236,58 +355,45 @@ export class Profile extends Component {
                 />
             </DialogContent>
         </Modal>
-        <Modal className={classes.withdrawEarnings} open={this.state.isWithdrawing} onClose={this.handleCloseWithdraw}>
+        <Modal className={classes.modal} open={this.state.isWithdrawing} onClose={this.handleCloseWithdraw}>
+        <DialogContent>
         <Grid container={true} alignContent='center'>
-        <Typography variant='h3' >
-        Withdraw Earnings
-        </Typography>
-        <Typography variant='body1' >
-        Select songs to withdraw earnings from
+
+                                <Paper className={classes.paper} elevation={1} >
+                            <div style={{ padding: '48px 40px 36px' }}>
+                                <div style={{ paddingLeft: '40px', paddingRight: '40px'}}>
+                                    <h2>Withdraw Earnings</h2>
+                                </div>
+                                <Typography variant='body1' >
+                              Select songs to withdraw earnings from
               
         </Typography>
-        
-        {/* <Table>
-          <TableBody>
-{songs
-  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-  .map(n => {
-    const isSelected = this.isSelected(n.id);
-    return (
-      <TableRow
-        hover
-        onClick={event => this.handleClick(event, n.id)}
-        role="checkbox"
-        aria-checked={isSelected}
-        tabIndex={-1}
-        key={n.id}
-        selected={isSelected}
-      >
-        <TableCell padding="checkbox">
-          <Checkbox checked={isSelected} />
-        </TableCell>
-        <TableCell component="th" scope="row" padding="none">
-          {n.name}
-        </TableCell>
-        <TableCell align="right">{n.calories}</TableCell>
-        <TableCell align="right">{n.fat}</TableCell>
-        <TableCell align="right">{n.carbs}</TableCell>
-        <TableCell align="right">{n.protein}</TableCell>
-      </TableRow>
-    );
-  })}
-{emptyRows > 0 && (
-  <TableRow style={{ height: 49 * emptyRows }}>
-    <TableCell colSpan={6} />
-  </TableRow>
-)}
-            </TableBody>
-          </Table> */}
-        
-        
-        
-        
-        </Grid>
+        <Table className={classes.table} aria-labelledby="tableTitle">
+        <CustomTableToolbar numSelected={selected.length} />
+        <div className={classes.tableWrapper}>
 
+            <CustomTableHead
+              numSelected={selected.length}
+              onSelectAllClick={this.handleSelectAllClick}
+              rowCount={songs.length}
+            />
+            <TableBody>
+            {this.generateRows(songs)}
+          </TableBody>
+          </div>
+          </Table>
+          </div>
+          <Button 
+          onClick={console.log(this.state.selected)} 
+          className = {classes.withdrawModalButton}
+          > 
+          Withdraw 
+          </Button>
+                        </Paper>
+        </Grid>
+     
+        </DialogContent>
+       
 
         </Modal>
       </div>

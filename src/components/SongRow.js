@@ -136,14 +136,14 @@ handleCloseModal = () => {
             <img className={classes.image} src={song.imageUrl} />
           </div>
           <Typography className={classes.tablecell}>
-            {song.name}
+            {song.title}
           </Typography>
         </TableCell>
         <TableCell align="right" className={classes.tablecell}>
           {song.artistName || "anonymous"}
         </TableCell>
         <TableCell align="right" className={classes.tablecell}>
-          {(song.market[auth.uid] && songsOwned[song.id] ? songsOwned[song.id].percentOwned - song.market[auth.uid].percent : songsOwned[song.id].percentOwned) || 0}%
+          {(song.market[auth.uid] && songsOwned[song.id] ? songsOwned[song.id].percentOwned - song.market[auth.uid].percent : songsOwned[song.id].percentOwned) || 100}%
         </TableCell>
         <TableCell align="right" className={classes.cell}>
         <Grid container direction='row' justify='space-evenly' alignItems='center'> 
