@@ -86,7 +86,7 @@ export class SongPage extends Component {
     super(props);
     this.state = {
       showSongPrice: false,
-      songPrice: 0,
+      priceUsd: 0,
       isLoaded: false
     };
   }
@@ -95,37 +95,36 @@ export class SongPage extends Component {
     window.scrollTo(0, 1000);
   };
 
-  //
+  convertEthtoUSD(){
+    
+  }
   componentDidMount() {
     const { drizzle, drizzleState, match } = this.props;
     const songId = match.params.songId;
     console.log("drizzle: ", drizzle);
     console.log("drizzleState", drizzleState);
     this.props.loadSong(songId);
-    //TODO: fetch this api
-    fetch("https://api.coinmarketcap.com/v1/ticker/ethereum")
-      .then(res => {
-        res.json();
-        console.log(res.json());
-      })
-      .then(
-        result => {
-          const price_song = 1.0 / 175.0; // result.items.price_usd;
-          this.setState({
-            isLoaded: true,
-            songPrice: price_song
-          });
-        },
-        error => {
-          const price_song = 1.0 / 175.0; //remove when API is fixed
-          this.setState({
-            isLoaded: true,
-            songPrice: price_song
-          });
 
-          console.log(error);
-        }
-      );
+    //convert Eth to USD
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = "https://api.coinmarketcap.com/v1/ticker/ethereum"; // site that doesn’t send Access-Control-*
+    fetch(proxyurl + url)
+    .then(res => {
+      return res.clone().json();
+    })
+    .then(
+      result => {
+        console.log("The result is:", result);
+        this.setState({
+          isLoaded: true,
+          priceUsd: result[0].price_usd
+        });
+      },
+      error => {
+        console.log(error);
+      }
+    ).catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"));
+
   }
 
   componentDidUpdate() {
@@ -144,13 +143,14 @@ export class SongPage extends Component {
       isLoaded
     } = this.props;
     const songId = match.params.songId;
-    const songPrice = this.state.songPrice;
     if (this.props.song && Object.keys(this.props.song["info"]).length > 0 && this.props.song['info'][songId]) {
+    const priceUsd = this.state.priceUsd;
+    if (this.props.song && Object.keys(this.props.song["info"]).length > 0) {
       console.log("SongPage props: ", this.props);
       const song = this.props.song["info"][songId];
       const market = song['market']
       if (auth.uid) {
-        if (!drizzleState.drizzleStatus.initialized && isLoaded) {
+        if (!drizzleState.drizzleStatus.initialized || isLoaded) {
           return <p>Loading ...</p>;
         }
 
@@ -180,15 +180,7 @@ export class SongPage extends Component {
                   </div>
                 </div>
                 <div>
-                  <p>All songs are only $1 ({songPrice.toFixed(6)} ETH)</p>
-                  <Button
-                    className={classes.button}
-                    onClick={() => {
-                      this.displaySongPrice();
-                    }}
-                  >
-                    See Song Price
-                  </Button>
+                  <p>All songs are only 0.008 ETH (${(0.008 * priceUsd).toFixed(2).toLocaleString()})</p>
                   <Button
                     className={classes.button}
                     onClick={this.scrollToBottom}
@@ -220,6 +212,7 @@ export class SongPage extends Component {
                       songId={songId}
                       drizzle={drizzle}
                       drizzleState={drizzleState}
+                      priceUSD = {priceUsd}
                     />
                   ) : (
                     "No Current Offers"
