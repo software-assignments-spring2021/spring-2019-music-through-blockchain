@@ -115,7 +115,7 @@ class SongDetails extends Component {
   };
 
   handlePutForSale = () => {
-    const { sellSong, song, songId, auth } = this.props;
+    const { sellSong, song, songId, auth, drizzleState } = this.props;
     const ownerDetails = song["ownerDetails"];
     const { price, percentValue } = this.state;
     let sellAllShares = false;
@@ -141,7 +141,8 @@ class SongDetails extends Component {
         const callBack = () => {
           this.props.closeModal()
         }
-        sellSong(song, songId, percentValue, intPrice, sellAllShares, callBack)
+        const sellerAddress = drizzleState.accounts[0];
+        sellSong(song, songId, percentValue, intPrice, sellAllShares, sellerAddress, callBack)
       }).catch(error=>{
         console.log(error);
       });
@@ -358,9 +359,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     viewDetails: id => {
       ownProps.history.push(`/song/${id}`);
     },
-    sellSong: (song, songId, percent, price, sellAllShares, callBack) =>
+    sellSong: (song, songId, percent, price, sellAllShares, sellerAddress, callBack) =>
       dispatch(
-        dbPutSongForSale(song, songId, percent, price, sellAllShares, callBack)
+        dbPutSongForSale(song, songId, percent, price, sellAllShares, sellerAddress, callBack)
       ),
     removeForSale: (song, songId, callBack) =>
       dispatch(dbRemoveSongForSale(song, songId, callBack))

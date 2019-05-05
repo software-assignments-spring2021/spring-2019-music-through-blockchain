@@ -165,13 +165,13 @@ export const dbGetSongById = (songId) => {
   }
 }
 
-export const dbPutSongForSale = (song, songId, percent, price, sellAllShares, callBack) => {
+export const dbPutSongForSale = (song, songId, percent, price, sellAllShares, sellerAddress, callBack) => {
   return (dispatch, getState, {getFirebase}) => {
     const state = getState()
     const uid = state.firebase.auth.uid
     if (uid) {
-      return songService.putSongForSale(songId, uid, percent, price, sellAllShares).then((result) => {
-        song['market'][uid] = {'price': price, 'percent': percent, 'sellAllShares': sellAllShares}
+      return songService.putSongForSale(songId, uid, percent, price, sellAllShares, sellerAddress).then((result) => {
+        song['market'][uid] = {'price': price, 'percent': percent, 'sellAllShares': sellAllShares, 'sellerAddress': sellerAddress}
         song.id = songId
         dispatch(updateSong(song))
         callBack()
