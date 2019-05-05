@@ -13,6 +13,9 @@ import SongList from '../components/SongList'
 import { connect } from 'react-redux'
 import {songs} from './mock.js'
 
+import Grid from "@material-ui/core/Grid";
+import { TableBody } from '@material-ui/core';
+
 const styles = theme => ({
   root: {   
       display: 'flex',
@@ -145,7 +148,8 @@ export class Profile extends Component {
     super(props);
     this.state = { 
       uploadModalOpen: false,
-      editProfileOpen: false
+      editProfileOpen: false, 
+      isWithdrawing: false
     }
   }
   componentDidMount = () => {
@@ -170,9 +174,13 @@ export class Profile extends Component {
   handleCloseEditProfile = () => {
     this.setState({ editProfileOpen: false })
   } 
+  handleCloseWithdraw = () => {
+    this.setState({ isWithdrawing: false })
+  } 
 
   withdrawFunds(){
     //TODO: select songs from which to withdraw funds.
+    this.setState({isWithdrawing: true})
   }
 
   render() {
@@ -227,6 +235,60 @@ export class Profile extends Component {
                 biography = {profile.biography}
                 />
             </DialogContent>
+        </Modal>
+        <Modal className={classes.withdrawEarnings} open={this.state.isWithdrawing} onClose={this.handleCloseWithdraw}>
+        <Grid container={true} alignContent='center'>
+        <Typography variant='h3' >
+        Withdraw Earnings
+        </Typography>
+        <Typography variant='body1' >
+        Select songs to withdraw earnings from
+              
+        </Typography>
+        
+        {/* <Table>
+          <TableBody>
+{songs
+  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+  .map(n => {
+    const isSelected = this.isSelected(n.id);
+    return (
+      <TableRow
+        hover
+        onClick={event => this.handleClick(event, n.id)}
+        role="checkbox"
+        aria-checked={isSelected}
+        tabIndex={-1}
+        key={n.id}
+        selected={isSelected}
+      >
+        <TableCell padding="checkbox">
+          <Checkbox checked={isSelected} />
+        </TableCell>
+        <TableCell component="th" scope="row" padding="none">
+          {n.name}
+        </TableCell>
+        <TableCell align="right">{n.calories}</TableCell>
+        <TableCell align="right">{n.fat}</TableCell>
+        <TableCell align="right">{n.carbs}</TableCell>
+        <TableCell align="right">{n.protein}</TableCell>
+      </TableRow>
+    );
+  })}
+{emptyRows > 0 && (
+  <TableRow style={{ height: 49 * emptyRows }}>
+    <TableCell colSpan={6} />
+  </TableRow>
+)}
+            </TableBody>
+          </Table> */}
+        
+        
+        
+        
+        </Grid>
+
+
         </Modal>
       </div>
     )

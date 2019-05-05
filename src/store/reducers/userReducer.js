@@ -30,12 +30,13 @@ export let userReducer = (state = initState, action) => {
             }
         }
         case 'UPLOAD_SONG_PROFILE':
+        console.log("STATE.songs" , state.songs)
             return {
                 ...state,
                 user: {
                     ...state.user,
-                    songs: state.songs? state.songs.concat(payload.song) : [payload.song],
-                    songsOwned: {...state.songsOwned, [payload.song.id]: 100}
+                    songs: [...state.user.songs, payload.song],
+                    songsOwned: {...state.user.songsOwned, [payload.song.id]: 100}
                 }
 
             }
