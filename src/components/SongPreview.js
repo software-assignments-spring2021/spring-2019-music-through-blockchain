@@ -150,7 +150,6 @@ class SongDetails extends Component {
     console.log("sellerId", sellerId);
     //get the rest of the song info from props
 
-
     const songAddress = song.songPublicAddress;
     const sellerAddress = royalties[sellerId].sellerAddress;
     const totalPrice = royalties[sellerId].price;
@@ -159,9 +158,10 @@ class SongDetails extends Component {
     console.log(songAddress, " is the song and ", sellerAddress, " is the seller");
 
     
-    this.buyRoyalties(songAddress, sellerAddress, totalPrice).then((txHash)=>{
-      this.props.purchaseSong(song, songId, sellerId);
+    this.buyRoyalties(songAddress, sellerAddress, totalPrice).then((results)=>{
       //display txHash as receipt of the transaction
+      console.log("The TX Hash is " + results.txHash);
+      this.props.purchaseSong(song, songId, sellerId);
     }).catch(error=>{
       console.log(error);
     });
@@ -175,12 +175,11 @@ class SongDetails extends Component {
         contract.methods.buyRoyalties(songAddress, sellerAddress).send({ value: totalPrice * 1000000000000000000, from: drizzleState.accounts[0], gas: 4712388,}, 
             function(error, result){
                 if(error){
-                    console.log(error);
-                    return undefined;
+                  reject(error);
                 } else{
-                    console.log("TX hash is " + result);
-                    //display txHash as a transaction receipt
-                    return songAddress;
+                  console.log("The transaction was succesful");
+                  const results ={txHash: result, songAddress: songAddress};
+                  resolve(results);
                 }
             }                
         );
@@ -232,7 +231,7 @@ class SongDetails extends Component {
                           style={{ position: "relative", left: 0 }}
                         >
                           <div>
-                            Price: ${(price * this.state.priceUSD).toFixed(2).toLocaleString()} for {percent}%
+                            Price: {price.toFixed(4)} ETH, which is ${(price * this.state.priceUSD).toFixed(2).toLocaleString()} for {percent}%
                           </div>
                           <Button
                           className ={classes.buyButton}
@@ -242,7 +241,7 @@ class SongDetails extends Component {
                             }}
                             variant="contained"
                             onClick={() =>
-                              this.props.purchaseSong(song, songId, key)
+                              this.handleBuyRoyalties(market, key)
                             }
                           >
                             Buy Song

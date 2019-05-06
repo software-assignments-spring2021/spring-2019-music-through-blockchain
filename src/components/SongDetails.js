@@ -296,7 +296,7 @@ handleRemoveFromSale = () =>{
                       }}
                     >
                       You are selling {market[auth.uid].percent}% for $
-                      {(market[auth.uid].price*this.state.priceUSD).toLocaleString()}
+                      {(market[auth.uid].price*this.state.priceUSD).toFixed(2).toLocaleString()}
                     </div>
                     <Button
                       style={{ position: "relative", top: 25 }}
