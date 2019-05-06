@@ -122,7 +122,7 @@ handleCloseModal = () => {
   render() {
     const { classes, song, songsOwned, deleteSong, auth, drizzle, drizzleState} = this.props;
     if (song) {
-      console.log('SONGS', )
+      console.log('song on state', song)
       return (    
         <TableRow
         key={song.id}
@@ -180,7 +180,7 @@ handleCloseModal = () => {
         </TableCell>
         <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
           <DialogContent>
-              <SongDetails song={song} closeModal={this.handleCloseModal} songId={song.id} drizzle={drizzle} drizzleState={drizzleState} />
+              <SongDetails song={song} totalPercent = {songsOwned[song.id].percentOwned} closeModal={this.handleCloseModal} songId={song.id} drizzle={drizzle} drizzleState={drizzleState} />
           </DialogContent>
         </Modal>
       </TableRow>
