@@ -19,6 +19,7 @@ const styles = theme => ({
       position: 'relative',
       bottom: 42,
       width: 1100,
+      top: 0.5,
       minHeight: 1000,
       margin: 'auto',
       justifyContent:'center',

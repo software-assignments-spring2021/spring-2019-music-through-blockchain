@@ -40,7 +40,15 @@ const styles = (theme) => ({
   link: {
     color: '#0095ff',
     display: 'inline-block'
-  }
+  },
+    button: {
+        background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
+        width: 150,
+        color: 'white !important',
+        marginTop: 20,
+        fontSize: 16,
+        marginBottom: 10
+    },
 })
 
 export class LoginComponent extends Component {
@@ -177,7 +185,7 @@ export class LoginComponent extends Component {
                   <br />
                   <div>
                     <div >
-                      <Button variant='contained' color='primary' onClick={this.handleForm} tabIndex={3} >Log In</Button>
+                      <Button className ={classes.button} variant='contained' color='primary' onClick={this.handleForm} tabIndex={3} >Log In</Button>
                     </div>
                   </div>
                 </div>
