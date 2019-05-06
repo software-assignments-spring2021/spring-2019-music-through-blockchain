@@ -78,7 +78,7 @@ export class RoyaltyList extends Component {
     //get the rest of the song info from props
 
 
-    const songAddress = song.songPublicAddress;
+    const songAddress = song['info'][songId].songPublicAddress;
     const sellerAddress = royalties[sellerId].sellerAddress;
     const totalPrice = royalties[sellerId].price;
 
@@ -86,13 +86,12 @@ export class RoyaltyList extends Component {
     console.log(songAddress, " is the song and ", sellerAddress, " is the seller");
 
     
-    this.buyRoyalties(songAddress, sellerAddress, totalPrice).then((txHash)=>{
+    this.buyRoyalties(songAddress, sellerAddress, totalPrice).then((results)=>{
       //display txHash as receipt of the transaction
-      console.log("SONG in buyRoyalties", song)
-      this.props.purchaseSong(song, songId, sellerId);
+      console.log("The TX Hash is " + results.txHash);
+      this.props.purchaseSong(song['info'][songId], songId, sellerId);
     }).catch(error=>{
-      console.log("SONG in buyRoyalties", song)
-
+      console.log("something went wrong in buy royalties");
       console.log(error);
     });
   }
@@ -107,12 +106,11 @@ export class RoyaltyList extends Component {
         contract.methods.buyRoyalties(songAddress, sellerAddress).send({ value: totalPrice * 1000000000000000000, from: drizzleState.accounts[0], gas: 4712388,}, 
             function(error, result){
                 if(error){
-                    console.log(error);
-                    return undefined;
+                  reject(error);
                 } else{
-                    console.log("TX hash is " + result);
-                    //display txHash as a transaction receipt
-                    return songAddress;
+                  console.log("The transaction was succesful");
+                  const results ={txHash: result, songAddress: songAddress};
+                  resolve(results);
                 }
             }                
         );
@@ -169,7 +167,7 @@ export class RoyaltyList extends Component {
                 
                 <TableCell align="right" className={classes.cell}>
                 
-                  <Button className={classes.button} onClick={()=>this.props.purchaseSong(song['info'][songId], songId, r)} >Buy</Button>
+                  <Button className={classes.button} onClick={()=>this.handleBuyRoyalties(royalties, r)} >Buy</Button>
                 </TableCell>
               </TableRow>
             ))}
