@@ -304,7 +304,7 @@ export class SongUploadComponent extends Component {
                                     </div>
                                     {this.props.song.user.saveSuccess ?
                                         <div className={classes.success}>
-                                            Uploaded Song Successfully ✔
+                                            {/*Uploaded Song Successfully ✔*/}
                                         </div> :
                                         <div>
                                         </div>
