@@ -166,7 +166,8 @@ export class RoyaltyList extends Component {
                 </TableCell>
                 
                 <TableCell align="right" className={classes.cell}>
-                  <Button className={classes.button} onClick={()=>{this.props.purchaseSong(song['info'], songId, r)}} >Buy</Button>
+                
+                  <Button className={classes.button} onClick={()=>this.props.purchaseSong(song['info'][songId], songId, r)} >Buy</Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -181,6 +182,7 @@ export class RoyaltyList extends Component {
 
 const mapStateToProps = state => {
   console.log("STATE", state)
+  //()=>{this.props.purchaseSong(song, songId, r)}
   return {
     ...state,
     user: state.user,
