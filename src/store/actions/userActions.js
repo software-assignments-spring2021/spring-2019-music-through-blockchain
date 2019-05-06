@@ -23,6 +23,27 @@ export const getUserInfo = (userId) => {
     }
   }
 
+/**
+ * given royalties list, retrieves the names of the sellers
+ */
+export const dbGetSellers = (royalties, songId) => {
+    
+  return (dispatch, getState, {getFirebase}) => {
+      const state = getState()
+      const uid = state.firebase.auth.uid
+      let users = {}  
+        return userService.getSellers(royalties).then((result) => {
+          users[songId]= result //result is [royaltiesId][name]
+          //users[songId] = sellers
+          dispatch(addUsers(users))
+        })
+        .catch((error) => {
+            console.log("ERROR", error)
+          dispatch(showMessage(error.message))
+        })
+    }
+  }
+
 export  const setUserProfile = (user) => {
     return {
         type: 'SET_USER',
@@ -104,3 +125,13 @@ export const uploadSongProfile = (song) => {
         payload: song
     }
 }
+/**
+ * Update a song
+ */
+export const addUsers = (users) => {
+    console.log("IN ACTION", users)
+    return {
+      type: 'ADD_USERS',
+      payload: {users} 
+    }
+  }

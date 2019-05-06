@@ -15,8 +15,10 @@ import {
   dbDeleteSong,
   dbPurchaseSong,
   dbPutSongForSale,
-  dbRemoveSongForSale
+  dbRemoveSongForSale,
+  dbGetSongs
 } from "../store/actions/songActions";
+
 
 import Modal from "@material-ui/core/Modal";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -31,7 +33,8 @@ const styles = theme => ({
     width: "100%",
     marginTop: "20px",
     justify: "center",
-    overflowX: "auto"
+    overflowX: "auto",
+    backgroundColor: 'white',
   },
   table: {
     cellPadding: "0",
@@ -39,7 +42,7 @@ const styles = theme => ({
     border: "0",
     borderWidth: 0,
     borderColor: "red",
-    minWidth: 700,
+    minWidth: '500',
     borderStyle: "solid"
   },
   head: {
@@ -100,14 +103,17 @@ export class SongList extends Component {
     super(props);
     this.state = { shadow: 1, detailsOpen: false };
     //this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.props.getAll()
   }
   componentWillMount() {
     const { songs } = this.props;
   }
 
+
   render() {
-    const { classes, songs, songsOwned, deleteSong, auth, drizzle, drizzleState } = this.props;
+    const { classes,allSongs,  songs, songsOwned, deleteSong, auth, drizzle, drizzleState } = this.props;
     if (songs && songs.length > 0 && songsOwned) {
+      console.log("songs on state", allSongs)
       return (
         <Grid container justify="center">
           <Paper className={classes.paper}>
@@ -128,14 +134,17 @@ export class SongList extends Component {
                     Artist
                   </TableCell>
                   <TableCell className={classes.head} align="left">
-                    % Royalty
+                    Royalties Owned
+                  </TableCell>
+                  <TableCell className={classes.head} align="left">
+                    Royalties Currently Offered
                   </TableCell>
                   <TableCell className={classes.head} align="left" />
                 </TableRow>
               </TableHead>
               <TableBody>
                 {songs.map(song => (
-                  <SongRow key={song.id} song={song} songsOwned={songsOwned} auth={auth} drizzle={drizzle} drizzleState={drizzleState}/>
+                  <SongRow key={song.id} song={allSongs[song.id]} songsOwned={songsOwned} auth={auth} drizzle={drizzle} drizzleState={drizzleState}/>
                 ))}
               </TableBody>
             </Table>
@@ -151,12 +160,14 @@ export class SongList extends Component {
 const mapStateToProps = state => {
   return {
     auth: state.firebase.auth,
-    profile: state.firebase.profile
+    profile: state.firebase.profile, 
+    allSongs: state.song.info
   };
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    viewDetails: id => ownProps.history.push(`/song/${id}`)
+    viewDetails: id => ownProps.history.push(`/song/${id}`),
+    getAll: () => dispatch(dbGetSongs()) 
   };
 };
 

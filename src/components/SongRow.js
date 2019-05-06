@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { dbDeleteSong, dbPurchaseSong, dbPutSongForSale, dbRemoveSongForSale } from '../store/actions/songActions'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import Modal from '@material-ui/core/Modal'
 import DialogContent from '@material-ui/core/DialogContent';
@@ -26,7 +27,7 @@ const styles = theme => ({
     width: "100%",
     marginTop: "20px",
     justify: "center",
-    overflowX: "auto"
+    overflowX: "auto",
   },
   table: {
     cellPadding: "0",
@@ -34,7 +35,7 @@ const styles = theme => ({
     border: "0",
     borderWidth: 0,
     borderColor: "red",
-    minWidth: 700,
+    minWidth: 900,
     borderStyle: "solid"
   },
   head: {
@@ -46,11 +47,20 @@ const styles = theme => ({
     color: "black !important",
     textTransform: "uppercase"
   },
+  icon : {
+    height: 60,
+    width: 50,
+    marginLeft: 20,
+    "&:hover": {
+      color: "white !important"
+    }
+
+  },
   row: {
     "&:hover": {
       backgroundImage: "linear-gradient(to right, #647DEE, #7F53AC) !important",
-      color: "white !important"
-    }
+      color: "white !important",
+    },
   },
   tablecell: {
     paddingLeft: 20,
@@ -97,8 +107,9 @@ export class SongRow extends Component {
     this.handleCloseModal = this.handleCloseModal.bind(this)
   }
   
-  handleOpenModal = () => {
+  handleOpenModal = (event) => {
     console.log('hello')
+    event.stopPropagation()
     this.setState({ detailsOpen: true })
 }
 handleCloseModal = () => {
@@ -111,11 +122,12 @@ handleCloseModal = () => {
   render() {
     const { classes, song, songsOwned, deleteSong, auth, drizzle, drizzleState} = this.props;
     if (song) {
-      console.log('SONGS', )
+      console.log('song on state', song)
       return (    
         <TableRow
         key={song.id}
         className={classes.row}
+        onClick={console.log('hello')}
       >
         <TableCell>
           <div
@@ -127,39 +139,53 @@ handleCloseModal = () => {
           >
             <img className={classes.image} src={song.imageUrl} />
           </div>
-          <Typography className={classes.tablecell} 
-                              onClick={() => this.props.viewDetails(song.id)}
-          >
-            {song.name}
+          <Typography className={classes.tablecell}>
+            {song.title}
           </Typography>
         </TableCell>
         <TableCell align="right" className={classes.tablecell}>
           {song.artistName || "anonymous"}
         </TableCell>
         <TableCell align="right" className={classes.tablecell}>
-          {(song.market[auth.uid] && songsOwned[song.id] ? songsOwned[song.id].percentOwned - song.market[auth.uid].percent : songsOwned[song.id].percentOwned) || 0}%
+
+          {(song.market[auth.uid] && songsOwned[song.id] ? songsOwned[song.id].percentOwned - song.market[auth.uid].percent : songsOwned[song.id].percentOwned) || 100}%
+
         </TableCell>
+         <TableCell align="right" className={classes.tablecell}>
+           {(song.market[auth.uid] && songsOwned[song.id] ? song.market[auth.uid].percent : songsOwned[song.id].percent) || 0}%
+         </TableCell>
         <TableCell align="right" className={classes.cell}>
-          <Button
+        <Grid container direction='row' justify='space-evenly' alignItems='center'> 
+        <Grid item xs ={8} >
+        <Button
             className={classes.button}
             onClick={this.handleOpenModal}
           >
             Sell
           </Button>
-
-    {(auth && songsOwned[song.id].percentOwned === 100) ? 
-    <Button className={classes.deleteButton} onClick={() => deleteSong(song.id, song.ownerId)}>Delete</Button> 
+        </Grid>
+        <Grid item xs={4}>
+        {(auth && songsOwned[song.id].percentOwned === 100) ? 
+    <DeleteForeverIcon className={classes.icon}  onClick={(e) => {
+      e.stopPropagation() 
+      deleteSong(song.id, song.ownerId)
+    }}/>
     : 
     ''
     }
+            </Grid>
+        </Grid>
+        
 
         </TableCell>
         <Modal className={classes.modal} open={this.state.detailsOpen} onClose={this.handleCloseModal}>
           <DialogContent>
-              <SongDetails song={song} closeModal={this.handleCloseModal} songId={song.id} drizzle={drizzle} drizzleState={drizzleState} />
+              <SongDetails song={song} totalPercent = {songsOwned[song.id].percentOwned} closeModal={this.handleCloseModal} songId={song.id} drizzle={drizzle} drizzleState={drizzleState} />
           </DialogContent>
         </Modal>
       </TableRow>
+      
+      
       );
     } else {
       return <div> </div>;
@@ -174,7 +200,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    viewDetails: id => {
+    viewDetails: (e, id) => {
+      e.stopPropagation()
       ownProps.history.push(`/song/${id}`);
     },
     deleteSong: (songId, ownerId) => {

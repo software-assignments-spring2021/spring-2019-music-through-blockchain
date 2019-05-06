@@ -172,13 +172,14 @@ getSongOwners: (ownerIds, songId) => {
   /**
   * Put percent of song up for sale
   */
-  putSongForSale: (songId, userId, percent, price, sellAllShares) => {
+  putSongForSale: (songId, userId, percent, price, sellAllShares, sellerAddress) => {
     return new Promise((resolve, reject) => {
       let songRef = db.doc(`songs/${songId}`)
       var songUpdate = {};
       songUpdate[`market.${userId}.percent`] = percent;
       songUpdate[`market.${userId}.price`] = price;
       songUpdate[`market.${userId}.sellAllShares`] = sellAllShares;
+      songUpdate[`market.${userId}.sellerAddress`] = sellerAddress;
       songRef.update(songUpdate)
       resolve()
     })
@@ -199,6 +200,7 @@ getSongOwners: (ownerIds, songId) => {
   purchaseSong: (songId, sellerId, buyerId, sellAllShares) => {
     return new Promise((resolve, reject) => {
       let songRef = db.doc(`songs/${songId}`)
+      console.log("is selling all shares?", sellAllShares);
       if (sellAllShares) {
         songRef.update({
           ownerId: firebase.firestore.FieldValue.arrayRemove(sellerId)

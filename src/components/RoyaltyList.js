@@ -7,6 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import { connect } from 'react-redux'
+import { dbGetSellers } from '../store/actions/userActions'
 
 import { dbPurchaseSong } from '../store/actions/songActions'
 
@@ -18,7 +19,7 @@ const styles = theme => ({
     borderWidth: 0,
     borderColor: "red",
     minWidth: 700,
-    borderStyle: "solid"
+    borderStyle: "solid",
   },
   head: {
     textAlign: "center",
@@ -32,8 +33,10 @@ const styles = theme => ({
   row: {
     "&:hover": {
       backgroundImage: "linear-gradient(to right, #647DEE, #7F53AC) !important",
-      color: "white !important"
-    }
+      color: "white !important",
+    },
+    backgroundColor: 'white !important'
+
   },
   cell: {
     paddingLeft: 20,
@@ -65,15 +68,41 @@ export class RoyaltyList extends Component {
     this.setState({ color: event.target.checked ? "blue" : "default" });
   };
 
+  handleBuyRoyalties(royalties, sellerId){
+
+    const {song,songId} = this.props;
+
+    console.log("ROYALTIES", royalties);
+    console.log("song", song);
+    console.log("sellerId", sellerId);
+    //get the rest of the song info from props
+
+
+    const songAddress = song.songPublicAddress;
+    const sellerAddress = royalties[sellerId].sellerAddress;
+    const totalPrice = royalties[sellerId].price;
+
+    console.log('Buying ', royalties[sellerId].percent, '% for $', totalPrice);
+    console.log(songAddress, " is the song and ", sellerAddress, " is the seller");
+
+    
+    this.buyRoyalties(songAddress, sellerAddress, totalPrice).then((txHash)=>{
+      //display txHash as receipt of the transaction
+      console.log("SONG in buyRoyalties", song)
+      this.props.purchaseSong(song, songId, sellerId);
+    }).catch(error=>{
+      console.log("SONG in buyRoyalties", song)
+
+      console.log(error);
+    });
+  }
+
   buyRoyalties(songAddress, sellerAddress, totalPrice){
-    const { drizzle, drizzleState, song, songId } = this.props;
-    const contract = drizzle.contracts.SongsContract;
+    return new Promise((resolve, reject) => {
+      const { drizzle, drizzleState } = this.props;
+      const contract = drizzle.contracts.SongsContract;
 
-    songAddress = drizzleState.accounts[2];
-    sellerAddress = drizzleState.accounts[1];
-    totalPrice = 5;
-
-    if(drizzleState.drizzleStatus.initialized){
+      if(drizzleState.drizzleStatus.initialized){
         
         contract.methods.buyRoyalties(songAddress, sellerAddress).send({ value: totalPrice * 1000000000000000000, from: drizzleState.accounts[0], gas: 4712388,}, 
             function(error, result){
@@ -83,35 +112,38 @@ export class RoyaltyList extends Component {
                 } else{
                     console.log("TX hash is " + result);
                     //display txHash as a transaction receipt
-                    this.props.purchaseSong(song, songId, sellerAddress);
                     return songAddress;
                 }
             }                
         );
-    }
-    return undefined;
-
+      }
+    });  
   }
+  componentWillMount() {
+    const {royalties, songId} = this.props
+    this.props.getSellers(royalties, songId)
+}
 
   render() {
-    const { classes, royalties } = this.props;
+    const { song, songId, classes, royalties, priceUSD, user } = this.props;
 
+    const names = user['sellers'][songId]
     return (
       <div>
         <Table className={classes.table}>
           <TableHead className={classes.head}>
             <TableRow>
               <TableCell className={classes.head} align="left">
-                Royalty Packages
+                Seller
               </TableCell>
               <TableCell className={classes.head} align="left">
-                Royalties Amount
-              </TableCell>
-              <TableCell className={classes.head} align="left">
-                Price per Royalty (ETH)
+                Royalties Percent (%)
               </TableCell>
               <TableCell className={classes.head} align="left">
                 Total Price (ETH)
+              </TableCell>
+              <TableCell className={classes.head} align="left">
+                Total Price (USD)
               </TableCell>
             </TableRow>
           </TableHead>
@@ -119,23 +151,25 @@ export class RoyaltyList extends Component {
             {Object.keys(royalties).map(r => (
               <TableRow hover className={classes.row} key={r} component="td">
                 <TableCell align="right" className={classes.cell}>
-                  {r}
+                  {names && names['sellers'] && names['sellers'][r]? names['sellers'][r].artistName : ''} 
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
-                  {royalties[r].percent}
-                </TableCell>
-                <TableCell align="right" className={classes.cell}>
-                  {royalties[r].price}
+                  {royalties[r].percent}%
                 </TableCell>
                 <TableCell
                   align="right"
                   style={{ marginLeft: 20, paddingLeft: 50 }}
                   className={classes.cell}
                 >
-                  {royalties[r].price * royalties[r].percent}
+                  {royalties[r].price.toFixed(6)}
                 </TableCell>
+                <TableCell style={{ marginLeft: 20, paddingLeft: 50 }} align="right" className={classes.cell}>
+                  ${(royalties[r].price * priceUSD).toFixed(2).toLocaleString()}
+                </TableCell>
+                
                 <TableCell align="right" className={classes.cell}>
-                  <Button className={classes.button} onClick={()=>{this.buyRoyalties(r.id, r.seller, r.totalPrice)}} >Buy</Button>
+                
+                  <Button className={classes.button} onClick={()=>this.props.purchaseSong(song['info'][songId], songId, r)} >Buy</Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -144,12 +178,24 @@ export class RoyaltyList extends Component {
       </div>
     );
   }
-}
+  }
 
+// private map state for every compo
+
+const mapStateToProps = state => {
+  console.log("STATE", state)
+  //()=>{this.props.purchaseSong(song, songId, r)}
+  return {
+    ...state,
+    user: state.user,
+    profile: state.firebase.profile
+    };
+};
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     purchaseSong: (song, songId, sellerId) => dispatch(dbPurchaseSong(song, songId, sellerId)),
+    getSellers: (royalties, songId) => dispatch(dbGetSellers(royalties, songId))
   }
 }
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(RoyaltyList));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(RoyaltyList));
