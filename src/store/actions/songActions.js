@@ -199,10 +199,10 @@ export const dbRemoveSongForSale = (song, songId, callBack) => {
 }
 
 export const dbPurchaseSong = (song, songId, sellerId) => {
+  console.log('purchase song args:: ', 'song: ', song)
   const sellAllShares = song['market'][sellerId].sellAllShares
 
   console.log('purchasing song')
-  console.log('purchase song args:: ', 'song: ', song, 'songId: ', songId, 'sellerId: ', sellerId, 'sellAllShares: ', sellAllShares)
 
   
   return (dispatch, getState, {getFirebase}) => {

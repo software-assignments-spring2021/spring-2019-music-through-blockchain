@@ -7,6 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import { connect } from 'react-redux'
+import { dbGetSellers } from '../store/actions/userActions'
 
 import { dbPurchaseSong } from '../store/actions/songActions'
 
@@ -87,8 +88,11 @@ export class RoyaltyList extends Component {
     
     this.buyRoyalties(songAddress, sellerAddress, totalPrice).then((txHash)=>{
       //display txHash as receipt of the transaction
+      console.log("SONG in buyRoyalties", song)
       this.props.purchaseSong(song, songId, sellerId);
     }).catch(error=>{
+      console.log("SONG in buyRoyalties", song)
+
       console.log(error);
     });
   }
@@ -115,20 +119,25 @@ export class RoyaltyList extends Component {
       }
     });  
   }
+  componentWillMount() {
+    const {royalties, songId} = this.props
+    this.props.getSellers(royalties, songId)
+}
 
   render() {
-    const { song, songId, classes, royalties, priceUSD } = this.props;
+    const { song, songId, classes, royalties, priceUSD, user } = this.props;
 
+    const names = user['sellers'][songId]
     return (
       <div>
         <Table className={classes.table}>
           <TableHead className={classes.head}>
             <TableRow>
               <TableCell className={classes.head} align="left">
-                Royalty Packages
+                Seller
               </TableCell>
               <TableCell className={classes.head} align="left">
-                Royalties Amount
+                Royalties Percent (%)
               </TableCell>
               <TableCell className={classes.head} align="left">
                 Total Price (ETH)
@@ -142,7 +151,7 @@ export class RoyaltyList extends Component {
             {Object.keys(royalties).map(r => (
               <TableRow hover className={classes.row} key={r} component="td">
                 <TableCell align="right" className={classes.cell}>
-                  {r}
+                  {names && names['sellers'] && names['sellers'][r]? names['sellers'][r].artistName : ''} 
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
                   {royalties[r].percent}%
@@ -159,7 +168,8 @@ export class RoyaltyList extends Component {
                 </TableCell>
                 
                 <TableCell align="right" className={classes.cell}>
-                  <Button className={classes.button} onClick={()=>{this.props.purchaseSong(song, songId, r)}} >Buy</Button>
+                
+                  <Button className={classes.button} onClick={()=>this.props.purchaseSong(song['info'][songId], songId, r)} >Buy</Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -168,12 +178,24 @@ export class RoyaltyList extends Component {
       </div>
     );
   }
-}
+  }
 
+// private map state for every compo
+
+const mapStateToProps = state => {
+  console.log("STATE", state)
+  //()=>{this.props.purchaseSong(song, songId, r)}
+  return {
+    ...state,
+    user: state.user,
+    profile: state.firebase.profile
+    };
+};
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     purchaseSong: (song, songId, sellerId) => dispatch(dbPurchaseSong(song, songId, sellerId)),
+    getSellers: (royalties, songId) => dispatch(dbGetSellers(royalties, songId))
   }
 }
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(RoyaltyList));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(RoyaltyList));
