@@ -140,11 +140,11 @@ class SongDetails extends Component {
   };
 
   handlePutForSale = () => {
-    const { sellSong, song, songId, auth, drizzleState } = this.props;
+    const { sellSong, song, songId, auth, drizzleState, totalPercent } = this.props;
     const ownerDetails = song["ownerDetails"];
     const { price, percentValue } = this.state;
     let sellAllShares = false;
-    if (song.market.percent === percentValue) {
+    if (totalPercent === percentValue) {
       sellAllShares = true;
     }
     let error = false;
@@ -267,7 +267,7 @@ handleRemoveFromSale = () =>{
       this.props.closeModal();
     };
 
-    console.log("song Details props: ", this.props.song);
+    console.log("song Details props: ", this.props);
     console.log("song ownerDetails", song["ownerDetails"]);
     return ( 
       <Grid container spacing={24} style={{ overflow: "hidden" }}>
@@ -282,11 +282,10 @@ handleRemoveFromSale = () =>{
               <hr />
               <img className={classes.coverArtFrame} src={coverArt} />
 
-              {auth? (
-                market && market[auth.uid] ? (
+              {auth && market && market[auth.uid]? (
                   <div style={{ position: "relative", right: 40, bottom: 60 }}>
                     <Typography>
-                      You own { totalPercent - market[auth.uid].percent}%
+                      You own { totalPercent}%
                     </Typography>
                     <div
                       style={{
@@ -310,14 +309,7 @@ handleRemoveFromSale = () =>{
                       Remove
                     </Button>
                   </div>
-                ) : (
-                  <div>
-                  
-                  </div>
-                )
               ) : (
-                ""
-              )}
                 <div className={classes.sellArea}>
                       <Typography variant="h5"> Sell Your Shares: </Typography>
                       <div style={{ position: "relative", left: 125, top: 40 }}>
@@ -327,7 +319,7 @@ handleRemoveFromSale = () =>{
                           aria-labelledby="label"
                           onChange={this.handleSlider}
                           value={this.state.percentValue}
-                          max={song.market[auth.uid].percent}
+                          max={totalPercent}
                           min={1}
                         />
                         <div style={{ position: "relative", bottom: 10 }}>
@@ -366,6 +358,7 @@ handleRemoveFromSale = () =>{
                         This is equivalent to ${(this.state.priceInUSD).toLocaleString()}
                         </Typography>
                     </div>
+              )}                    
               <Button
                 className={classes.button}
                 onClick={() => this.props.viewDetails(song.id)}
