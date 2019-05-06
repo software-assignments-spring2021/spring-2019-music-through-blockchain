@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import landingSongs from "../img/landingSongs.png";
 
 // import project components
 import SongBoxGrid from '../components/SongBoxGrid'
