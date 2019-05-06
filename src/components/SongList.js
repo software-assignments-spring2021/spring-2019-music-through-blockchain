@@ -33,8 +33,7 @@ const styles = theme => ({
     width: "100%",
     marginTop: "20px",
     justify: "center",
-    overflowX: "hidden",
-    marginRight:90,
+    overflowX: "auto",
     backgroundColor: 'white',
   },
   table: {

@@ -51,8 +51,6 @@ const styles = theme => ({
     height: 60,
     width: 50,
     marginLeft: 20,
-    marginRight: 30,
-    paddingRight:60,
     "&:hover": {
       color: "white !important"
     }
