@@ -141,7 +141,7 @@ handleCloseModal = () => {
           >
             <img className={classes.image} src={song.imageUrl} />
           </div>
-          <Typography className={classes.tablecell}>
+          <Typography style={{paddingRight: 100}} className={classes.tablecell}>
             {song.title}
           </Typography>
         </TableCell>
