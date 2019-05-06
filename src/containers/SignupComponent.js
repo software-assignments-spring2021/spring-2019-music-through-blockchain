@@ -27,7 +27,15 @@ const styles = (theme) => ({
     textAlign: 'center',
     display: 'block',
     margin: 'auto'
-  }
+  },
+    button: {
+        background: "linear-gradient(to right, #647DEE, #7F53AC) !important",
+        width: 150,
+        color: 'white !important',
+        marginTop: 20,
+        fontSize: 16,
+        marginBottom: 10
+    }
 })
 
 export class SignupComponent extends Component {
@@ -222,7 +230,7 @@ export class SignupComponent extends Component {
                 <br />
                 <div>
                   <div>
-                    <Button variant='contained' color='primary' onClick={this.handleForm}>Sign Up</Button>
+                    <Button className ={classes.button} variant='contained' color='primary' onClick={this.handleForm}>Sign Up</Button>
                   </div>
                 </div>
               </div>
