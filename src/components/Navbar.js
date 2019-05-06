@@ -4,13 +4,14 @@ import SignedInLinks from './SignedInLinks'
 import SignedOutLinks from './SignedOutLinks'
 import { connect } from 'react-redux'
 
+
 const Navbar = (props) => {
     const {auth, profile} = props;
     const links = auth.uid ? <SignedInLinks profile={profile}/> : <SignedOutLinks />
     return (
-        <nav style={{backgroundColor:'lightgrey', height:65, position: 'relative', width: '100%', bottom: 22}}>
+        <nav style={{ height:65, position: 'relative', width: '100%', bottom: 22}}>
             <h4>
-                <Link to='/' style={{position: 'absolute', left: 30, top: 20, fontSize: 20, textDecoration: 'none', color: 'blue', zIndex: 3}}>bMusic</Link>
+                <Link to='/' style={{position: 'absolute', left: 30, top: 50, fontSize: 30, textDecoration: 'none', color: '#282828', zIndex: 3}}>bMusic</Link>
                 {links}
             </h4>
         </nav>  

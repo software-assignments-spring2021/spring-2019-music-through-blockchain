@@ -270,12 +270,12 @@ export class SongUploadComponent extends Component {
                                             <div>
                                             </div>
                                         }
-                                        <div>Choose mp3 file to upload</div>
+                                        <div>Choose song file to upload</div>
                                         <input
                                                className={classes.input}
                                                onChange={this.onSongChange}
                                                error={this.state.songFileInputError.trim() !== ''}
-                                               accept='.mp3'
+                                               accept='.mp3, .m4a'
                                                label='Choose mp3 file to upload'
                                                name='songFileInput'
                                                type="file"
@@ -304,7 +304,7 @@ export class SongUploadComponent extends Component {
                                     </div>
                                     {this.props.song.user.saveSuccess ?
                                         <div className={classes.success}>
-                                            Uploaded Song Successfully ✔
+                                            {/*Uploaded Song Successfully ✔*/}
                                         </div> :
                                         <div>
                                         </div>

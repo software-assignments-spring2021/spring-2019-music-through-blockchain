@@ -61,6 +61,7 @@ const styles = theme => ({
       position: 'relative',
       bottom: 42,
       width: 1100,
+      top: 0.5,
       minHeight: 1000,
       margin: 'auto',
       justifyContent:'center',
@@ -191,6 +192,7 @@ export class Profile extends Component {
       editProfileOpen: false,
       isWithdrawing: false,
       selected: [],
+      publicAddresses: [],
       rowsPerPage: 5,
       page: 1
     };
@@ -221,28 +223,35 @@ export class Profile extends Component {
     this.setState({ isWithdrawing: false });
   };
 
-  handleClick = (event, id) => {
-    const { selected } = this.state;
+  handleClick = (event, id, publicAddress) => {
+    const { selected, publicAddresses } = this.state;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
+    let newPublicAddresses = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id);
+      newPublicAddresses = newPublicAddresses.concat(publicAddresses, publicAddress);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
+      newPublicAddresses = newPublicAddresses.concat(publicAddresses.slice(1));
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
+      newPublicAddresses = newPublicAddresses.concat(publicAddresses.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1)
       );
+      newPublicAddresses = newPublicAddresses.concat(
+        publicAddresses.slice(0, selectedIndex),
+        publicAddresses.slice(selectedIndex + 1)
+      );
     }
 
-    this.setState({ selected: newSelected });
+    this.setState({ selected: newSelected, publicAddresses: newPublicAddresses });
   };
-  withdrawFunds() {
-    //TODO: select songs from which to withdraw funds.
+  handleOpenWithdraw() {
     console.log("OPEN MODAL");
     this.setState({ isWithdrawing: true });
   }
@@ -252,11 +261,12 @@ export class Profile extends Component {
     if (event.target.checked) {
       console.log("check all");
       this.setState(state => ({
-        selected: this.props.user.user.songs.map(n => n.id)
+        selected: this.props.user.user.songs.map(n => n.id),
+        publicAddresses: this.props.user.user.songs.map(n => n.songPublicAddress)
       }));
       return;
     }
-    this.setState({ selected: [] });
+    this.setState({ selected: [], publicAddresses: [] });
   };
   generateRows = songs => {
     console.log("SONGS", songs);
@@ -268,7 +278,7 @@ export class Profile extends Component {
       return (
         <TableRow
           hover
-          onClick={event => this.handleClick(event, s.id)}
+          onClick={event => this.handleClick(event, s.id, s.songPublicAddress)}
           role="checkbox"
           aria-checked={isSelected}
           tabIndex={-1}
@@ -283,7 +293,7 @@ export class Profile extends Component {
           </TableCell>
           <TableCell align="right">
             {s.market[auth.uid] && owned[s.id]
-              ? owned[s.id].percentOwned - s.market[auth.uid].percent
+              ? owned[s.id].percentOwned
               : owned[s.id].percentOwned}{" "}
             %
           </TableCell>
@@ -301,6 +311,80 @@ export class Profile extends Component {
   handleChangeRowsPerPage = event => {
     this.setState({ rowsPerPage: event.target.value });
   };
+
+  handleWithdrawFunds(){
+
+    const songs = this.state.publicAddresses;
+    console.log("public addresses", this.state.publicAddresses);
+    console.log("songs ids selected", this.state.selected);
+
+    songs.forEach((songAddress)=>{
+      this.withdrawFunds(songAddress).then((result)=>{
+        console.log("You have successfully retrieved funds from ", songAddress);
+        console.log("Your TX Hash is ", result);
+      }).catch((error)=>{
+        console.log(error);
+      })
+
+/*
+      this.checkSongBalance(songAddress).then((songBalance)=>{
+        console.log("Your balance for this song is: " + songBalance);
+      }).catch((error)=>{
+        console.log(error);
+      });
+*/
+    });
+  }
+
+  withdrawFunds(songAddress){ 
+    return new Promise((resolve, reject) => {
+      const { drizzle, drizzleState } = this.props;
+      const contract = drizzle.contracts.SongsContract;
+
+      if(drizzleState.drizzleStatus.initialized){
+        
+        contract.methods.withdraw(songAddress).send({from: drizzleState.accounts[0], gas: 22680 }, 
+            function(error, result){
+                if(error){
+                  reject(error);
+                } else{
+                  console.log("The transaction was succesful");
+                  resolve(result);
+                }
+            }                
+        );
+      }
+    });
+  }
+
+  checkSongBalance(songAddress){
+    return new Promise((resolve, reject) => {
+      const { drizzle, drizzleState } = this.props;
+      const contract = drizzle.contracts.SongsContract;
+      console.log("drizzle obj", drizzle);
+      console.log("drizzleState obj", drizzleState);
+
+      if(drizzleState.drizzleStatus.initialized){
+
+        drizzle.web3.eth.estimateGas({
+          to: "0x2E0185e55d80FCdC0C0d456b7e10e0dEE3B5CdcB" ,//drizzle.contracts.SongsContract.address,
+          data: contract.methods.withdraw(songAddress).encodeABI()
+        }).then((result)=>{
+          console.log("the balance is: " + result);
+          resolve(result);
+        }).catch(error=>{
+          reject(error);
+        })
+        /*
+        contract.methods.checkSongBalance(songAddress).call({from: drizzleState.accounts[0], gas: 4712388}).then((result)=>{
+          console.log(result);
+          resolve(result);
+        }).catch(error=>{
+          reject(error);
+        })*/
+      }
+    });
+  }
 
   render() {
     const {
@@ -374,7 +458,7 @@ export class Profile extends Component {
           <Button
             className={classes.button}
             onClick={() => {
-              this.withdrawFunds();
+              this.handleOpenWithdraw();
             }}
           >
             Withdraw Earnings
@@ -449,7 +533,7 @@ export class Profile extends Component {
                   )}
                 </div>
                 <Button
-                  onClick={console.log(this.state.selected)}
+                  onClick={()=>{this.handleWithdrawFunds(songs)}}
                   className={classes.withdrawModalButton}
                 >
                   Withdraw
