@@ -22,6 +22,37 @@ function dataFetcher() {
 // - Import react components
 
 export const userService = {
+  getSellers: (ids) => {
+    console.log("GETSELLERNAMES", ids)
+    return new Promise((resolve, reject)=> {
+      let userMap = []
+      let promises = Object.keys(ids).map((id) => {
+        return new Promise((resolve, reject) => {
+          let userRef = db.doc(`users/${id}`)
+          userRef.get().then((doc) => {
+            let user = doc.data()
+            resolve(user)
+          })
+        })
+      })
+        Promise.all(promises).then((values) => {
+          let sellers = values.reduce((res, user)=> {
+             res[user.userId]= user
+             return res
+          }, {})
+          
+          resolve({sellers: sellers})
+        })
+        .catch(error => {
+          reject(error)
+        })
+  
+  
+    
+
+    })
+
+  },
   /**
    * Get user information for profile
    *

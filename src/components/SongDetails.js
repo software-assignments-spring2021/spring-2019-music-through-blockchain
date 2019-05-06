@@ -140,11 +140,11 @@ class SongDetails extends Component {
   };
 
   handlePutForSale = () => {
-    const { sellSong, song, songId, auth, drizzleState } = this.props;
+    const { sellSong, song, songId, auth, drizzleState, totalPercent } = this.props;
     const ownerDetails = song["ownerDetails"];
     const { price, percentValue } = this.state;
     let sellAllShares = false;
-    if (ownerDetails[auth.uid].percentOwned === percentValue) {
+    if (totalPercent === percentValue) {
       sellAllShares = true;
     }
     let error = false;
@@ -252,7 +252,7 @@ handleRemoveFromSale = () =>{
 
 
   render() {
-    const { songId, song, classes, theme, auth, drizzleState } = this.props;
+    const { songId, song, classes, theme, auth, drizzleState, totalPercent } = this.props;
     const title = song["title"];
     const artist = song["artistName"];
     const coverArt = song["imageUrl"];
@@ -282,11 +282,10 @@ handleRemoveFromSale = () =>{
               <hr />
               <img className={classes.coverArtFrame} src={coverArt} />
 
-              {auth && ownerDetails && ownerDetails[auth.uid] ? (
-                market && market[auth.uid] ? (
+              {auth && market && market[auth.uid]? (
                   <div style={{ position: "relative", right: 40, bottom: 60 }}>
                     <Typography>
-                      You own {ownerDetails[auth.uid].percentOwned}%
+                      You own { totalPercent}%
                     </Typography>
                     <div
                       style={{
@@ -297,7 +296,7 @@ handleRemoveFromSale = () =>{
                       }}
                     >
                       You are selling {market[auth.uid].percent}% for $
-                      {(market[auth.uid].price*this.state.priceUSD).toLocaleString()}
+                      {(market[auth.uid].price*this.state.priceUSD).toFixed(2).toLocaleString()}
                     </div>
                     <Button
                       style={{ position: "relative", top: 25 }}
@@ -310,9 +309,8 @@ handleRemoveFromSale = () =>{
                       Remove
                     </Button>
                   </div>
-                ) : (
-                  <div>
-                    <div className={classes.sellArea}>
+              ) : (
+                <div className={classes.sellArea}>
                       <Typography variant="h5"> Sell Your Shares: </Typography>
                       <div style={{ position: "relative", left: 125, top: 40 }}>
                         <Slider
@@ -321,7 +319,7 @@ handleRemoveFromSale = () =>{
                           aria-labelledby="label"
                           onChange={this.handleSlider}
                           value={this.state.percentValue}
-                          max={ownerDetails[auth.uid].percentOwned}
+                          max={totalPercent}
                           min={1}
                         />
                         <div style={{ position: "relative", bottom: 10 }}>
@@ -360,11 +358,7 @@ handleRemoveFromSale = () =>{
                         This is equivalent to ${(this.state.priceInUSD).toLocaleString()}
                         </Typography>
                     </div>
-                  </div>
-                )
-              ) : (
-                ""
-              )}
+              )}                    
               <Button
                 className={classes.button}
                 onClick={() => this.props.viewDetails(song.id)}

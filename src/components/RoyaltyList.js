@@ -7,6 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import { connect } from 'react-redux'
+import { dbGetSellers } from '../store/actions/userActions'
 
 import { dbPurchaseSong } from '../store/actions/songActions'
 
@@ -18,7 +19,7 @@ const styles = theme => ({
     borderWidth: 0,
     borderColor: "red",
     minWidth: 700,
-    borderStyle: "solid"
+    borderStyle: "solid",
   },
   head: {
     textAlign: "center",
@@ -32,8 +33,10 @@ const styles = theme => ({
   row: {
     "&:hover": {
       backgroundImage: "linear-gradient(to right, #647DEE, #7F53AC) !important",
-      color: "white !important"
-    }
+      color: "white !important",
+    },
+    backgroundColor: 'white !important'
+
   },
   cell: {
     paddingLeft: 20,
@@ -75,7 +78,7 @@ export class RoyaltyList extends Component {
     //get the rest of the song info from props
 
 
-    const songAddress = song.songPublicAddress;
+    const songAddress = song['info'][songId].songPublicAddress;
     const sellerAddress = royalties[sellerId].sellerAddress;
     const totalPrice = royalties[sellerId].price;
 
@@ -83,10 +86,12 @@ export class RoyaltyList extends Component {
     console.log(songAddress, " is the song and ", sellerAddress, " is the seller");
 
     
-    this.buyRoyalties(songAddress, sellerAddress, totalPrice).then((txHash)=>{
+    this.buyRoyalties(songAddress, sellerAddress, totalPrice).then((results)=>{
       //display txHash as receipt of the transaction
-      this.props.purchaseSong(song, songId, sellerId);
+      console.log("The TX Hash is " + results.txHash);
+      this.props.purchaseSong(song['info'][songId], songId, sellerId);
     }).catch(error=>{
+      console.log("something went wrong in buy royalties");
       console.log(error);
     });
   }
@@ -101,32 +106,36 @@ export class RoyaltyList extends Component {
         contract.methods.buyRoyalties(songAddress, sellerAddress).send({ value: totalPrice * 1000000000000000000, from: drizzleState.accounts[0], gas: 4712388,}, 
             function(error, result){
                 if(error){
-                    console.log(error);
-                    return undefined;
+                  reject(error);
                 } else{
-                    console.log("TX hash is " + result);
-                    //display txHash as a transaction receipt
-                    return songAddress;
+                  console.log("The transaction was succesful");
+                  const results ={txHash: result, songAddress: songAddress};
+                  resolve(results);
                 }
             }                
         );
       }
     });  
   }
+  componentWillMount() {
+    const {royalties, songId} = this.props
+    this.props.getSellers(royalties, songId)
+}
 
   render() {
-    const { song, songId, classes, royalties, priceUSD } = this.props;
+    const { song, songId, classes, royalties, priceUSD, user } = this.props;
 
+    const names = user['sellers'][songId]
     return (
       <div>
         <Table className={classes.table}>
           <TableHead className={classes.head}>
             <TableRow>
               <TableCell className={classes.head} align="left">
-                Royalty Packages
+                Seller
               </TableCell>
               <TableCell className={classes.head} align="left">
-                Royalties Amount
+                Royalties Percent (%)
               </TableCell>
               <TableCell className={classes.head} align="left">
                 Total Price (ETH)
@@ -140,7 +149,7 @@ export class RoyaltyList extends Component {
             {Object.keys(royalties).map(r => (
               <TableRow hover className={classes.row} key={r} component="td">
                 <TableCell align="right" className={classes.cell}>
-                  {r}
+                  {names && names['sellers'] && names['sellers'][r]? names['sellers'][r].artistName : ''} 
                 </TableCell>
                 <TableCell align="right" className={classes.cell}>
                   {royalties[r].percent}%
@@ -157,7 +166,8 @@ export class RoyaltyList extends Component {
                 </TableCell>
                 
                 <TableCell align="right" className={classes.cell}>
-                  <Button className={classes.button} onClick={()=>{this.props.purchaseSong(song, songId, r)}} >Buy</Button>
+                
+                  <Button className={classes.button} onClick={()=>this.handleBuyRoyalties(royalties, r)} >Buy</Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -166,12 +176,24 @@ export class RoyaltyList extends Component {
       </div>
     );
   }
-}
+  }
 
+// private map state for every compo
+
+const mapStateToProps = state => {
+  console.log("STATE", state)
+  //()=>{this.props.purchaseSong(song, songId, r)}
+  return {
+    ...state,
+    user: state.user,
+    profile: state.firebase.profile
+    };
+};
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     purchaseSong: (song, songId, sellerId) => dispatch(dbPurchaseSong(song, songId, sellerId)),
+    getSellers: (royalties, songId) => dispatch(dbGetSellers(royalties, songId))
   }
 }
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(RoyaltyList));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(RoyaltyList));
