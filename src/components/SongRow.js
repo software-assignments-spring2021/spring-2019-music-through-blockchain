@@ -148,7 +148,7 @@ handleCloseModal = () => {
         </TableCell>
         <TableCell align="right" className={classes.tablecell}>
 
-          {(song.market[auth.uid] && songsOwned[song.id] ? songsOwned[song.id].percentOwned - song.market[auth.uid].percent : songsOwned[song.id].percentOwned) || 100}%
+          {(song.market[auth.uid] && songsOwned[song.id] ? songsOwned[song.id].percentOwned : songsOwned[song.id].percentOwned) || 100}%
 
         </TableCell>
          <TableCell align="right" className={classes.tablecell}>

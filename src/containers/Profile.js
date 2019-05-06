@@ -293,7 +293,7 @@ export class Profile extends Component {
           </TableCell>
           <TableCell align="right">
             {s.market[auth.uid] && owned[s.id]
-              ? owned[s.id].percentOwned - s.market[auth.uid].percent
+              ? owned[s.id].percentOwned
               : owned[s.id].percentOwned}{" "}
             %
           </TableCell>
