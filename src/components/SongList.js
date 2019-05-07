@@ -35,6 +35,7 @@ const styles = theme => ({
     justify: "center",
     overflowX: "auto",
     backgroundColor: 'white',
+    marginLeft: 20
   },
   table: {
     cellPadding: "0",

@@ -50,7 +50,8 @@ const styles = theme => ({
   icon : {
     height: 60,
     width: 50,
-    marginLeft: 20,
+    marginLeft: 15,
+    marginRight:60,
     "&:hover": {
       color: "white !important"
     }

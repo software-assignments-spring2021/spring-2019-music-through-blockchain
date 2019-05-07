@@ -102,8 +102,8 @@ const styles = theme => ({
     position: "absolute",
     top: 30,
     bottom: 30,
-    left: "10%",
-    width: "90%"
+    width: "90%",
+    left: '5%'
   },
 
   topLeft: {

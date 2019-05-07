@@ -11,7 +11,9 @@ const styles = theme => ( {
     root: {
         width: '100%', 
         paddingBottom: 20, 
-        backgroundColor: 'lightgrey', 
+        backgroundColor: 'lightgrey',
+        boxShadow: '3px 4px 5px 0px rgba(33,33,33,1)',
+        borderRadius: 15,
         alignContent: 'center'
     },
     slider: {
