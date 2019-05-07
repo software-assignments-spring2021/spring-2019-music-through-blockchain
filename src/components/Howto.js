@@ -11,7 +11,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import withStyles from "@material-ui/core/styles/withStyles";
-import metaIcon from '../img/metamask.jpg'
+import metaIcon from '../img/metamask.png'
 import popup from '../img/popup.png'
 function MusicIcon(props) {
     return (
