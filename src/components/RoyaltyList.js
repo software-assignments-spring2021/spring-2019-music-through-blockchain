@@ -27,7 +27,7 @@ const styles = theme => ({
     fontWeight: 1000,
     fontSize: 12,
     fontFamily: "Helvetica",
-    color: "black !important",
+    color: "white !important",
     textTransform: "uppercase"
   },
   row: {

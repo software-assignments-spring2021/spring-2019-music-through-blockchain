@@ -42,6 +42,7 @@ const styles = theme => ({
       marginTop: '20px',
       align: 'left', 
       overflowX: 'auto', 
+      color:'white'
     }, 
     head: {
         marginBottom: 50,
@@ -130,16 +131,16 @@ class HowTo extends Component {
             <div className={classes.root}>
 
             <Grid container spacing={24} className={classes.grid}>
-            <Typography variant='h3' align='center' className={classes.head}>
+            <Typography style={{color:'white'}} variant='h3' align='center' className={classes.head}>
                     How To Get Started with bMusic
             </Typography>
             <Grid item xs={6}>
-            <Typography variant='h4' align='left' marginTop='20px' >Step 1</Typography>
+            <Typography variant='h4' align='left' marginTop='20px' style={{color:'#788CFF'}} >Step 1</Typography>
 
-            <Typography className = {this.props.classes.desc} variant ='h5' align='left' style={{marginBottom: 20}}>
+            <Typography className = {this.props.classes.desc} variant ='h5' align='left' style={{marginBottom: 20, color:'white'}}>
                 Download Metamask. 
             </Typography>
-            <Typography className = {this.props.classes.desc} variant ='h5' align='left' style={{marginBottom: 20}}>
+            <Typography  className = {this.props.classes.desc} variant ='h5' align='left' style={{marginBottom: 20, color:'white'}}>
                 You must be logged in MetaMask to navigate through bMusic offerings and purchase songs and royalties
             </Typography>
             </Grid>
@@ -154,7 +155,7 @@ class HowTo extends Component {
                   </div>
             </Grid>
             <Grid item xs={12}>
-            <Typography variant='h4' align='left'>Step 2</Typography>
+            <Typography variant='h4' align='left' style={{color:'#788CFF'}}>Step 2</Typography>
             <Typography className = {this.props.classes.desc} variant ='h5' align='left'>
                 {steps[1]}
             </Typography>
@@ -216,7 +217,7 @@ class HowTo extends Component {
     </List>
             </Grid>
             <Grid item xs={12}>
-            <Typography variant='h4' align='left' marginTop='20px' >Step 3</Typography>
+            <Typography variant='h4' align='left' marginTop='20px' style={{color:'#788CFF'}} >Step 3</Typography>
             <Typography className = {this.props.classes.desc} variant ='h5' align='left' style={{marginBottom: 20}}>
                 Confirm Purchase.
             </Typography>

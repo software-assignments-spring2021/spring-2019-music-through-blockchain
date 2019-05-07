@@ -11,7 +11,7 @@ const styles = theme => ( {
     root: {
         width: '100%', 
         paddingBottom: 20, 
-        backgroundColor: 'lightgrey',
+        backgroundColor: '#1F1945',
         boxShadow: '3px 4px 5px 0px rgba(33,33,33,1)',
         borderRadius: 15,
         alignContent: 'center'
@@ -19,7 +19,7 @@ const styles = theme => ( {
     slider: {
         position: 'relative',
         bottom: 10,
-        backgroundColor: 'lightgrey',
+        backgroundColor: '#1F1945',
         width: '90%',
         zIndex: 3,
         margin: 'auto'
@@ -46,7 +46,7 @@ export class Carousel extends Component {
     return (
         <div>
             <div className={classes.root}>
-                <h1 style={{position: 'relative', right: '40%', top: 10}}>Featured</h1>
+                <h1 style={{position: 'relative', right: '40%', top: 10, color:'white'}}>Featured</h1>
                 <Slider {...settings} className={classes.slider}>
                     {(songs && Object.keys(songs).length > 0) ? Object.keys(songs).map((songId) => (
                         <CarouselItem key={songId} song={songs[songId]} songId={songId} drizzle={drizzle} drizzleState={drizzleState}/>
