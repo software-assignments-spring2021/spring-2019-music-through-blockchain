@@ -44,7 +44,7 @@ const styles = theme => ({
   },
   artist: {
     fontSize: 12,
-    color: "#358ED7",
+    color: "#88F1FE",
     letterSpacing: "1px",
     textTransform: "uppercase",
     textDecoration: "none"
@@ -52,7 +52,7 @@ const styles = theme => ({
   songName: {
     fontWeight: 300,
     fontSize: 52,
-    color: "#43484D",
+    color: "#7E90F1",
     letterSpacing: "-2px"
   },
   button: {
@@ -65,7 +65,7 @@ const styles = theme => ({
   description: {
     textAlign: "center",
     fontSize: 16,
-    color: "#86939E",
+    color: "white",
     letterSpacing: "-1px",
     fontWeight: 300,
     lineHeight: "24px"
@@ -180,7 +180,7 @@ export class SongPage extends Component {
                   </div>
                 </div>
                 <div>
-                  <p>All songs are only 0.008 ETH (${(0.008 * priceUsd).toFixed(2).toLocaleString()})</p>
+                  <p className={classes.description}>All songs are only 0.008 ETH (${(0.008 * priceUsd).toFixed(2).toLocaleString()})</p>
                   <Button
                     className={classes.button}
                     onClick={this.scrollToBottom}
@@ -194,14 +194,15 @@ export class SongPage extends Component {
                   <Typography
                     variant="h4"
                     align="center"
-                    style={{ marginTop: 5 }}
+                    style={{ marginTop: 5, color: 'white' }}
+                    
                   >
                     Interested in investing in this song's royalties?
                   </Typography>
                   <Typography
                     variant="subtitle2"
                     align="center"
-                    style={{ marginTop: 25, marginBottom: 25 }}
+                    style={{ marginTop: 25, marginBottom: 25, color: 'white'}}
                   >
                     Buy royalty packages from current song owners
                   </Typography>

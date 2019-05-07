@@ -52,7 +52,7 @@ class App extends Component {
     const HomePageWrapped = withRouter(props => <Homepage {...props}/>);
     return (
       <BrowserRouter>
-        <div className="App" style={{backgroundImage:`url(${background})`, position: 'relative', bottom: 30}}>
+        <div className="App" style={{background:'#140D37', position: 'relative', bottom: 30}}>
           <Navbar />
           <Master />
 

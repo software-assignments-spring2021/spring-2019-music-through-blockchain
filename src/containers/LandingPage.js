@@ -39,7 +39,7 @@ const styles = {
     position: 'relative',
     display: 'flex',
     margin: 'none',
-    backgroundColor: '#f2f3f4',
+    backgroundColor:'#201943',
     width: "100%",
     padding: "5% 0%"
 
@@ -49,7 +49,7 @@ const styles = {
     "flex-direction": "column",
     margin: "0 5%",
     "align-content": "space-around",
-    "justify-content": "center"
+    "justify-content": "center", 
   },
   svg:{
     left: "5%",
@@ -79,7 +79,7 @@ const styles = {
   },
   subtitle: {
     fontSize: 25,
-    color: "#358ED7",
+    color: "white",
     letterSpacing: "1px",
     textTransform: "uppercase",
     textDecoration: "none"
@@ -87,7 +87,7 @@ const styles = {
   title: {
     fontWeight: 300,
     fontSize: 40,
-    color: "#43484D",
+    color: "#788DFF",
     letterSpacing: "-2px"
   },
   button: {
@@ -98,10 +98,12 @@ const styles = {
     fontSize: 16
 
   },
+
   description: {
     textAlign: "center",
     fontSize: 16,
-    color: "#86939E",
+    color: 'lightgrey',
+    //color: "#86939E",
     letterSpacing: "-1px",
     fontWeight: 300,
     lineHeight: "24px"

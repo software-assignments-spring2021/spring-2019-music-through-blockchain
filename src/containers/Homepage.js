@@ -68,7 +68,7 @@ export class Homepage extends Component {
       return (
         <div className={classes.root}>
           <Carousel songs={songs} drizzle={drizzle} drizzleState={drizzleState}/>
-          <h1 style={{position: 'relative', right: '40%', top: 10}}>Recent</h1>
+          <h1 style={{position: 'relative', right: '40%', top: 10, color: 'white'}}>Recent</h1>
           <div className={classes.centerCol}>
             <InfiniteScroll
               pageStart={0}
