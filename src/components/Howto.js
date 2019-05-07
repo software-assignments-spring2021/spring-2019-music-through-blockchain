@@ -166,7 +166,10 @@ class HowTo extends Component {
             component={this.styled}
       />          
       </ListItemIcon>
-          <ListItemText inset primary="Songs" />
+          <ListItemText 
+          disableTypography
+            primary={<Typography type="body2" style={{ color: 'white' }} > Songs </Typography>}
+            inset />
           {this.state.openSong ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={this.state.openSong} timeout="auto" unmountOnExit>
@@ -175,13 +178,17 @@ class HowTo extends Component {
               <ListItemIcon>
                 <MusicIcon component={this.styled} />
               </ListItemIcon>
-              <ListItemText inset primary="Upload Song" />
+              <ListItemText          disableTypography
+            primary={<Typography type="body2" style={{ color: 'white' }} > Upload Song </Typography>}
+            inset/>
             </ListItem>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
               <DollarIcon component={this.styled} />
               </ListItemIcon>
-              <ListItemText inset primary="Purchase Song" />
+              <ListItemText           disableTypography
+            primary={<Typography type="body2" style={{ color: 'white' }} > Purchase Song </Typography>}
+            inset/>
             </ListItem>
           </List>
         </Collapse>
@@ -189,7 +196,9 @@ class HowTo extends Component {
           <ListItemIcon>
             <RoyaltiesIcon component={this.styled} />
           </ListItemIcon>
-          <ListItemText inset primary="Royalties" />
+          <ListItemText           disableTypography
+            primary={<Typography type="body2" style={{ color: 'white' }} > Royalties </Typography>}
+            inset />
           {this.state.openRoyalties ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={this.state.openRoyalties} timeout="auto" unmountOnExit>
@@ -198,19 +207,25 @@ class HowTo extends Component {
               <ListItemIcon>
               <DollarIcon component={this.styled} />
               </ListItemIcon>
-              <ListItemText inset primary="Purchase Royalties" />
+              <ListItemText           disableTypography
+            primary={<Typography type="body2" style={{ color: 'white' }} > Purchase Royalties </Typography>}
+            inset />
             </ListItem>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
               <DollarIcon component={this.styled} />
               </ListItemIcon>
-              <ListItemText inset primary="Sell Royalties" />
+              <ListItemText inset           disableTypography
+            primary={<Typography type="body2" style={{ color: 'white' }} > Sell Royalties </Typography>}
+            inset/>
             </ListItem>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
               <RoyaltiesIcon component={this.styled} />
               </ListItemIcon>
-              <ListItemText inset primary="Withdraw Royalties" />
+              <ListItemText inset           disableTypography
+            primary={<Typography type="body2" style={{ color: 'white' }} > Withdraw Royalties </Typography>}
+            inset />
             </ListItem>
           </List>
         </Collapse>
