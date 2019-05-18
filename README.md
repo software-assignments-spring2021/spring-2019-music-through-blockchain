@@ -22,7 +22,7 @@ In order to contribute to this project, add any issues that you see in the code 
 
 To Install: 
 - clone the repository
-- make sure you have a package manager, either yarn or npm, installed and run the following:
+- make sure you have both package managers, yarn and npm, installed and run the following:
 
 ```
 // for yarn: 
@@ -32,11 +32,34 @@ yarn install
 npm install
 
 ```
+- make sure that truffle is also installed
+
+```
+npm install truffle -g
+```
+
+- download and install ganache from this website: [Ganache](https://truffleframework.com/ganache)
+- download and install metamask from this website: [MetaMask](https://metamask.io/)
+
+To Start the App:
+
+- run ganache in a quick start workspace
+- go to settings in ganache and change the port to 8545.
+- copy the mnemonic phrase as shown on the top part of the ganache window.
+- in the command line, start the app by inputting 
+
+```
+npm start
+```
+- when the tab opens, metamask will ask to login. If it is the first time running the app, paste the import a wallet by pasting the mnemonic phrase in metamask where it says seed phrase. 
+- create a new password for your wallet.
+- connect your metamask account with bMusic.
+- sign up to our website and start trading!
+
+
 To Build:
  
 ```
-// for yarn: 
-yarn start 
 
 // for npm:
 npm start
