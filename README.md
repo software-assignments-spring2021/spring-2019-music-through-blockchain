@@ -44,14 +44,14 @@ npm install truffle -g
 To Build and Start the App:
 
 - run ganache in a quick start workspace
-- go to settings in ganache, click on server and change the port to 8545.
+- go to settings in ganache, click on server, change the port to 8545, and then click on 'Save and Restart'.
 - copy the mnemonic phrase as shown on the top part of the ganache window.
-- in the command line, build and start the app by inputting 
-
+- Inside the main folder, go to the src folder and add the fbconfig file, which will be given to you by one of the owners of the app.
+- in the command line, build and start the app by inputting the following command:
 ```
 npm start
 ```
-- when the tab opens, metamask will ask to login. If it is the first time running the app, paste the import a wallet by pasting the mnemonic phrase in metamask where it says seed phrase. 
+- when the tab opens, metamask will ask to login. If it is the first time running the app, import a wallet by pasting the mnemonic phrase in metamask where it says seed phrase. 
 - create a new password for your wallet.
 - connect your metamask account with bMusic.
 - sign up to our website and start trading!
