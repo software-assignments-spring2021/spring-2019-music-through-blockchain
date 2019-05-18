@@ -44,7 +44,7 @@ npm install truffle -g
 To Build and Start the App:
 
 - run ganache in a quick start workspace
-- go to settings in ganache and change the port to 8545.
+- go to settings in ganache, click on server and change the port to 8545.
 - copy the mnemonic phrase as shown on the top part of the ganache window.
 - in the command line, build and start the app by inputting 
 
