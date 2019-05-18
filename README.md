@@ -41,12 +41,12 @@ npm install truffle -g
 - download and install ganache from this website: [Ganache](https://truffleframework.com/ganache)
 - download and install metamask from this website: [MetaMask](https://metamask.io/)
 
-To Start the App:
+To Build and Start the App:
 
 - run ganache in a quick start workspace
 - go to settings in ganache and change the port to 8545.
 - copy the mnemonic phrase as shown on the top part of the ganache window.
-- in the command line, start the app by inputting 
+- in the command line, build and start the app by inputting 
 
 ```
 npm start
@@ -55,15 +55,6 @@ npm start
 - create a new password for your wallet.
 - connect your metamask account with bMusic.
 - sign up to our website and start trading!
-
-
-To Build:
- 
-```
-
-// for npm:
-npm start
-```
 
 To Test Front - End:
 
