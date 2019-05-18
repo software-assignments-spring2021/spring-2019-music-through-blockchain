@@ -54,6 +54,8 @@ npm start
 - when the tab opens, metamask will ask to login. If it is the first time running the app, import a wallet by pasting the mnemonic phrase in metamask where it says seed phrase. 
 - create a new password for your wallet.
 - connect your metamask account with bMusic.
+- in metamask, go to "Settings" > "Advanced" > "New Network" and type in "http://localhost:8545" where it says "NEW RPC URL".  
+- You can also add a nickname to your network for your convenience. Click Save and you will automatically be connected to Ganache's local private blockchain.
 - sign up to our website and start trading!
 
 To Test Front - End:
