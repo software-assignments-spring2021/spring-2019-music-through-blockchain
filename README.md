@@ -18,7 +18,7 @@ The music industry has seen a big change in the last decade thanks to the massiv
 In order to contribute to this project, add any issues that you see in the code or the system through github. You can also contact us through our Slack channel: #group_bmusic.
 
 
-## Commands for Building and testing the project 
+## Commands for Installing, Starting, Building and Testing the project 
 
 To Install: 
 - clone the repository
